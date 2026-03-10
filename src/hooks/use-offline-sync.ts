@@ -1,0 +1,110 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { api } from "@/trpc/react";
+import {
+  getAllPendingTransactions,
+  getPendingCount,
+  removePendingTransaction,
+} from "@/lib/offline-db";
+import { PaymentMethod as ServerPaymentMethod } from "@/server/validations/transaction.validation";
+import { useBroadcastChannel } from "./use-broadcast-channel";
+
+export const useOfflineSync = () => {
+  const [pendingCount, setPendingCount] = useState(0);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const isSyncingRef = useRef(false);
+  const { postMessage } = useBroadcastChannel("pos-sync-channel");
+
+  const syncMutation = api.transaction.syncOfflineData.useMutation();
+
+  // Refresh jumlah pending dari IndexedDB
+  const refreshCount = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    const count = await getPendingCount();
+    setPendingCount(count);
+  }, []);
+
+  // Sinkronisasi semua pending ke server
+  const syncNow = useCallback(async () => {
+    if (isSyncingRef.current || !navigator.onLine) return;
+
+    const pending = await getAllPendingTransactions();
+    if (pending.length === 0) return;
+
+    isSyncingRef.current = true;
+    setIsSyncing(true);
+
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const trx of pending) {
+      try {
+        await syncMutation.mutateAsync([
+          {
+            invoiceNumber: trx.invoiceNumber,
+            date: new Date(trx.date),
+            totalAmount: trx.totalAmount,
+            paymentMethod: trx.paymentMethod as unknown as ServerPaymentMethod,
+            paidAmount: trx.paidAmount,
+            change: trx.change,
+            items: trx.items.map((item) => ({
+              productId: item.productId,
+              productName: item.productName,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              subTotal: item.subTotal,
+              note: item.note ?? null,
+            })),
+          },
+        ]);
+        await removePendingTransaction(trx.invoiceNumber);
+        successCount++;
+      } catch {
+        // Jika conflict (invoice duplikat), anggap sudah tersync
+        await removePendingTransaction(trx.invoiceNumber);
+        successCount++;
+      }
+    }
+
+    setIsSyncing(false);
+    isSyncingRef.current = false;
+    await refreshCount();
+
+    if (successCount > 0) {
+      postMessage({ type: "TRANSACTION_CREATED" });
+      toast.success(`Sinkronisasi Berhasil`, {
+        description: `${successCount} transaksi offline berhasil diunggah ke server.`,
+      });
+    }
+    if (failCount > 0) {
+      toast.error(
+        `${failCount} transaksi gagal disinkronkan, coba lagi nanti.`,
+      );
+    }
+  }, [syncMutation, refreshCount]);
+
+  // Auto-sync saat koneksi kembali online
+  useEffect(() => {
+    void refreshCount();
+
+    const handleOnline = () => {
+      void refreshCount();
+      void syncNow();
+    };
+
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, [refreshCount, syncNow]);
+
+  // Polling jumlah pending setiap 10 detik (kalau ada antrian)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      void refreshCount();
+    }, 10_000);
+    return () => clearInterval(interval);
+  }, [refreshCount]);
+
+  return { pendingCount, isSyncing, syncNow, refreshCount };
+};
