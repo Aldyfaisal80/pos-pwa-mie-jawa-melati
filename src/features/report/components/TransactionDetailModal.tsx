@@ -8,9 +8,10 @@ import { formatRupiah } from "@/lib/format";
 import { formatDateTime, getPaymentMethodLabel } from "../utils/report.utils";
 import type { RouterOutputs } from "@/trpc/react";
 
-type Transaction = NonNullable<
-  RouterOutputs["transaction"]["getTransactionReport"]
->[number];
+type Transaction = Exclude<
+  RouterOutputs["transaction"]["getTransactionReport"],
+  undefined
+>["transactions"][number];
 
 interface TransactionDetailModalProps {
   transaction: Transaction | null;

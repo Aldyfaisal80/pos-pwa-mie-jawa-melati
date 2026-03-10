@@ -6,12 +6,13 @@ import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Calendar, Download, Search } from "lucide-react";
+import { Calendar, Download, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { useTransactionReport } from "../hooks/useTransactionReport";
 import { TransactionTable } from "../components/TransactionTable";
 import { exportToCSV } from "../utils/report.utils";
 import { useLiveStats } from "@/features/dashboard/hooks/useLiveStats";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const ReportPage = () => {
   const [search, setSearch] = useState("");
@@ -21,14 +22,37 @@ export const ReportPage = () => {
   // Mengaktifkan sinkronisasi real-time hibrida (PWA Tab + PC Lain)
   useLiveStats();
 
-  const { data: transactions, isLoading } = useTransactionReport(
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isFetching } = useTransactionReport(
     startDate,
     endDate,
     search,
+    undefined,
+    limit,
+    page,
   );
 
+  const transactions = data?.transactions ?? [];
+  const totalCount = data?.totalCount ?? 0;
+  const totalPages = data?.totalPages ?? 1;
+  const currentPage = data?.currentPage ?? 1;
+  
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  // Reset pagination when search/filter changes
+  const handleFilterChange = (setter: React.Dispatch<React.SetStateAction<any>>, value: any) => {
+    setter(value);
+    setPage(1);
+  };
+
   const handleExport = () => {
-    if (!transactions?.length) {
+    if (!transactions.length) {
       toast.error("Tidak ada data untuk diekspor.");
       return;
     }
@@ -67,8 +91,29 @@ export const ReportPage = () => {
               className="pl-9"
               placeholder="Cari no. nota..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleFilterChange(setSearch, e.target.value)}
             />
+          </div>
+
+          {/* Limit / Items per page */}
+          <div className="relative min-w-25">
+            <Select
+              value={limit.toString()}
+              onValueChange={(val) => {
+                setLimit(Number(val));
+                setPage(1);
+              }}
+            >
+              <SelectTrigger className="w-full sm:w-30">
+                <SelectValue placeholder="Baris" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10 baris</SelectItem>
+                <SelectItem value="25">25 baris</SelectItem>
+                <SelectItem value="50">50 baris</SelectItem>
+                <SelectItem value="100">100 baris</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Tanggal mulai */}
@@ -92,7 +137,8 @@ export const ReportPage = () => {
               type="date"
               className="w-full pl-9 sm:w-40"
               onChange={(e) =>
-                setEndDate(
+                handleFilterChange(
+                  setEndDate,
                   e.target.value ? new Date(e.target.value) : undefined,
                 )
               }
@@ -101,17 +147,71 @@ export const ReportPage = () => {
         </div>
 
         {/* Tabel */}
-        <Card className="border-border overflow-hidden border shadow-sm">
-          <TransactionTable transactions={transactions} isLoading={isLoading} />
+        <Card className="border-border overflow-hidden border shadow-sm relative">
+          <TransactionTable transactions={transactions} isLoading={isLoading || isFetching} />
 
-          {/* Footer info */}
-          {!isLoading && !!transactions?.length && (
-            <div className="bg-muted/50 border-t px-4 py-3">
-              <span className="text-muted-foreground text-xs">
-                Menampilkan {transactions.length} transaksi
-              </span>
-            </div>
-          )}
+          {/* Footer info & Pagination Commands */}
+          <div className="bg-muted/50 border-t px-4 py-3 flex flex-col items-center justify-between gap-3 sm:flex-row">
+            <span className="text-muted-foreground text-xs">
+              Menampilkan {transactions.length} transaksi{" "}
+              {totalCount > 0 && `dari total ${totalCount} transaksi`}
+            </span>
+
+            {totalPages > 1 && (
+              <div className="flex gap-1 items-center">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1 || isLoading || isFetching}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                
+                <div className="flex items-center gap-1 mx-1">
+                  {Array.from({ length: totalPages }).map((_, i) => {
+                    const pageNum = i + 1;
+                    // Tampilkan maksimal 5 tombol halaman berdekatan
+                    if (
+                      pageNum === 1 || 
+                      pageNum === totalPages || 
+                      (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                    ) {
+                      return (
+                        <Button
+                          key={pageNum}
+                          variant={currentPage === pageNum ? "default" : "outline"}
+                          size="icon"
+                          className="h-8 w-8 text-xs"
+                          onClick={() => handlePageChange(pageNum)}
+                          disabled={isLoading || isFetching}
+                        >
+                          {pageNum}
+                        </Button>
+                      );
+                    } else if (
+                      pageNum === currentPage - 2 ||
+                      pageNum === currentPage + 2
+                    ) {
+                      return <span key={pageNum} className="text-xs text-muted-foreground px-1">...</span>;
+                    }
+                    return null;
+                  })}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages || isLoading || isFetching}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </div>
         </Card>
       </SectionContainer>
     </PageContainer>

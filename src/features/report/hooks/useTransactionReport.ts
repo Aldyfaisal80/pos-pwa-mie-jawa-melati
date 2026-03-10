@@ -7,6 +7,7 @@ export const useTransactionReport = (
   search?: string,
   paymentMethod?: PaymentMethod | "ALL",
   limit = 25,
+  page = 1,
 ) => {
   return api.transaction.getTransactionReport.useQuery({
     startDate,
@@ -14,5 +15,6 @@ export const useTransactionReport = (
     search: search || undefined,
     paymentMethod: paymentMethod === "ALL" ? undefined : paymentMethod,
     limit,
+    page,
   });
 };

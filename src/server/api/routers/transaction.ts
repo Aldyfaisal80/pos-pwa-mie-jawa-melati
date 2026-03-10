@@ -83,12 +83,29 @@ export const transactionRouter = createTRPCRouter({
           delete whereClause.date;
         }
 
-        return await ctx.db.transaction.findMany({
+        // Hitung total data kesuluruhan untuk kriteria filter ini
+        const totalCount = await ctx.db.transaction.count({
+          where: whereClause,
+        });
+
+        const skip = (input.page - 1) * input.limit;
+
+        const transactions = await ctx.db.transaction.findMany({
           where: whereClause,
           include: { items: true },
           orderBy: { date: "desc" },
+          skip,
           take: input.limit,
         });
+
+        const totalPages = Math.ceil(totalCount / input.limit);
+
+        return {
+          transactions,
+          totalCount,
+          totalPages,
+          currentPage: input.page,
+        };
       } catch (error) {
         errorFilter(error);
       }

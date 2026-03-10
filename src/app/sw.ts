@@ -15,9 +15,28 @@ declare global {
 
 declare const self: ServiceWorkerGlobalScope;
 
-const trpcCache: RuntimeCaching[] = [
+const runtimeCaching: RuntimeCaching[] = [
+  ...defaultCache,
+  // Cache HTML Pages explicitly so they load instantly when offline
   {
-    matcher: /\/api\/trpc\/.*$/,
+    matcher: ({ request }) => request.destination === "document",
+    handler: new NetworkFirst({
+      cacheName: "html-pages-cache",
+      plugins: [
+        {
+          cacheWillUpdate: async ({ response }) => {
+            if (response && response.status === 200) {
+              return response;
+            }
+            return null;
+          },
+        },
+      ],
+    }),
+  },
+  // Cache all tRPC Data 
+  {
+    matcher: ({ url }) => url.pathname.startsWith("/api/trpc/"),
     handler: new NetworkFirst({
       cacheName: "trpc-api-cache",
       plugins: [
@@ -39,7 +58,7 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: [...trpcCache, ...defaultCache],
+  runtimeCaching: runtimeCaching,
   fallbacks: {
     entries: [
       {

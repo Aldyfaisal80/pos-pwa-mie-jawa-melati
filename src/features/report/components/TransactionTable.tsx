@@ -34,9 +34,10 @@ import type { RouterOutputs } from "@/trpc/react";
 import { TransactionDetailModal } from "./TransactionDetailModal";
 import { useTransactionMutations } from "../hooks/useTransactionMutations";
 
-type Transaction = NonNullable<
-  RouterOutputs["transaction"]["getTransactionReport"]
->[number];
+type Transaction = Exclude<
+  RouterOutputs["transaction"]["getTransactionReport"],
+  undefined
+>["transactions"][number];
 
 interface TransactionTableProps {
   transactions: Transaction[] | undefined;

@@ -34,7 +34,8 @@ export const syncTransactionSchema = z.array(
 export const reportFilterSchema = z.object({
   startDate: z.date().optional(),
   endDate: z.date().optional(),
-  limit: z.number().optional(),
-  search: z.string().optional(),
   paymentMethod: z.nativeEnum(PaymentMethod).optional(),
+  search: z.string().optional(),
+  limit: z.number().min(1).max(100).default(25),
+  page: z.number().min(1).default(1),
 });
