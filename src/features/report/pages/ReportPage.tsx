@@ -122,11 +122,16 @@ export const ReportPage = () => {
             <Input
               type="date"
               className="w-full pl-9 sm:w-40"
-              onChange={(e) =>
-                setStartDate(
-                  e.target.value ? new Date(e.target.value) : undefined,
-                )
-              }
+              onChange={(e) => {
+                if (!e.target.value) {
+                  handleFilterChange(setStartDate, undefined);
+                  return;
+                }
+                // Parse manually to create LOCAL date (not UTC midnight)
+                const [year, month, day] = e.target.value.split("-").map(Number);
+                const localDate = new Date(year!, month! - 1, day!, 0, 0, 0, 0);
+                handleFilterChange(setStartDate, localDate);
+              }}
             />
           </div>
 
@@ -136,12 +141,16 @@ export const ReportPage = () => {
             <Input
               type="date"
               className="w-full pl-9 sm:w-40"
-              onChange={(e) =>
-                handleFilterChange(
-                  setEndDate,
-                  e.target.value ? new Date(e.target.value) : undefined,
-                )
-              }
+              onChange={(e) => {
+                if (!e.target.value) {
+                  handleFilterChange(setEndDate, undefined);
+                  return;
+                }
+                // Parse manually to create LOCAL date (not UTC midnight)
+                const [year, month, day] = e.target.value.split("-").map(Number);
+                const localDate = new Date(year!, month! - 1, day!, 23, 59, 59, 999);
+                handleFilterChange(setEndDate, localDate);
+              }}
             />
           </div>
         </div>

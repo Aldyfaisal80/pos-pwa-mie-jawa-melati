@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 import { useCategoryMutations } from "../hooks/useCategoryMutations";
 
 interface CategoryFormModalProps {
@@ -63,7 +64,14 @@ export const CategoryFormModal = ({
             Batal
           </Button>
           <Button onClick={handleSubmit} disabled={createCategory.isPending}>
-            {createCategory.isPending ? "Menyimpan..." : "Tambahkan"}
+            {createCategory.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Menyimpan...
+              </>
+            ) : (
+              "Tambahkan"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

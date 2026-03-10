@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
 import { CheckoutCartSummary } from "./CheckoutCartSummary";
@@ -92,8 +92,12 @@ export const CheckoutModal = ({
             disabled={!isValid || isPending}
             onClick={onProcess}
           >
-            <CheckCircle2 className="mr-2 h-5 w-5" />
-            {isPending ? "Menyimpan..." : "Selesaikan Transaksi"}
+            {isPending ? (
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            ) : (
+              <CheckCircle2 className="mr-2 h-5 w-5" />
+            )}
+            {isPending ? "Memproses Transaksi..." : "Selesaikan Transaksi"}
           </Button>
         </div>
       </DialogContent>

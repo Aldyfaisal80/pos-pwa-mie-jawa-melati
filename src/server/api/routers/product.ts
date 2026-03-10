@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Prisma } from "../../../../generated/prisma";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { errorFilter } from "@/server/filters/error.filter";
 import {
@@ -13,7 +14,7 @@ export const productRouter = createTRPCRouter({
     .input(filterProductSchema.optional())
     .query(async ({ ctx, input }) => {
       try {
-        const whereClause: any = {};
+        const whereClause: Prisma.ProductWhereInput = {};
         if (input?.onlyAvailable) whereClause.isAvailable = true;
         if (input?.categoryId) whereClause.categoryId = input.categoryId;
         if (input?.search) {

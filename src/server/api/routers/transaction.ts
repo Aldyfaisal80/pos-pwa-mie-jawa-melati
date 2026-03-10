@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Prisma } from "../../../../generated/prisma";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   syncTransactionSchema,
@@ -7,7 +8,7 @@ import {
 import { errorFilter } from "@/server/filters/error.filter";
 
 export const transactionRouter = createTRPCRouter({
-  // SINKRONISASI PWA (Batch Upload dari Offline)
+  // --- Sync Offline Transactions ---
   syncOfflineData: publicProcedure
     .input(syncTransactionSchema)
     .mutation(async ({ ctx, input }) => {
@@ -22,7 +23,7 @@ export const transactionRouter = createTRPCRouter({
                 paymentMethod: trx.paymentMethod,
                 paidAmount: trx.paidAmount,
                 change: trx.change,
-                isSynced: true, // Masuk server = synced
+                isSynced: true,
                 items: {
                   create: trx.items.map((item) => ({
                     productId: item.productId,
@@ -38,12 +39,11 @@ export const transactionRouter = createTRPCRouter({
           ),
         );
       } catch (error) {
-        // Jika invoice kembar, errorFilter akan deteksi P2002 dan return 409 CONFLICT
         errorFilter(error);
       }
     }),
 
-  // MENGHAPUS TRANSAKSI
+  // --- Delete Transaction ---
   deleteTransaction: publicProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
@@ -56,17 +56,20 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  // LAPORAN KEUANGAN
+  // --- Transaction Report (Paginated) ---
   getTransactionReport: publicProcedure
     .input(reportFilterSchema)
     .query(async ({ ctx, input }) => {
       try {
-        const start =
-          input.startDate ?? new Date(new Date().setHours(0, 0, 0, 0));
-        const end =
-          input.endDate ?? new Date(new Date().setHours(23, 59, 59, 999));
+        const startBase = input.startDate ?? new Date();
+        const start = new Date(startBase);
+        start.setHours(0, 0, 0, 0);
 
-        const whereClause: any = {
+        const endBase = input.endDate ?? new Date();
+        const end = new Date(endBase);
+        end.setHours(23, 59, 59, 999);
+
+        const whereClause: Prisma.TransactionWhereInput = {
           isSynced: true,
           date: { gte: start, lte: end },
         };
@@ -80,10 +83,8 @@ export const transactionRouter = createTRPCRouter({
             contains: input.search,
             mode: "insensitive",
           };
-          delete whereClause.date;
         }
 
-        // Hitung total data kesuluruhan untuk kriteria filter ini
         const totalCount = await ctx.db.transaction.count({
           where: whereClause,
         });
@@ -111,7 +112,7 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  // STATISTIK DASHBOARD
+  // --- Dashboard Statistics (Today) ---
   getDashboardStats: publicProcedure.query(async ({ ctx }) => {
     try {
       const today = new Date();
@@ -144,7 +145,7 @@ export const transactionRouter = createTRPCRouter({
     }
   }),
 
-  // GRAFIK PENDAPATAN (Periode Dinamis)
+  // --- Dynamic Revenue Chart ---
   getRevenueChart: publicProcedure
     .input(
       z.object({
@@ -155,7 +156,6 @@ export const transactionRouter = createTRPCRouter({
       try {
         const dayNames = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
-        // Buat array N hari terakhir (D-(N-1) sampai hari ini)
         const days = Array.from({ length: input.days }, (_, i) => {
           const d = new Date();
           d.setDate(d.getDate() - (input.days - 1 - i));
@@ -175,7 +175,6 @@ export const transactionRouter = createTRPCRouter({
           select: { date: true, totalAmount: true },
         });
 
-        // Untuk 30 hari, tampilkan label tanggal (dd/MM), selain itu nama hari
         const useDate = input.days > 14;
 
         const result = days.map((day) => {

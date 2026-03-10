@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, PackageOpen } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import { getCategoryIcon } from "../utils/getCategoryIcon";
 import type { Product } from "../types/product.types";
@@ -68,12 +68,16 @@ export const ProductTable = ({
             <TableSkeleton />
           ) : !products?.length ? (
             <TableRow>
-              <TableCell
-                colSpan={5}
-                className="text-muted-foreground py-8 text-center"
-              >
-                Belum ada data produk. Klik &quot;Tambah Produk&quot; untuk
-                memulai.
+              <TableCell colSpan={5} className="h-64 text-center">
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-full">
+                    <PackageOpen className="text-muted-foreground h-8 w-8" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-foreground font-medium">Belum ada data produk</p>
+                    <p className="text-muted-foreground text-sm">Klik &quot;Tambah Produk&quot; untuk memulai.</p>
+                  </div>
+                </div>
               </TableCell>
             </TableRow>
           ) : (

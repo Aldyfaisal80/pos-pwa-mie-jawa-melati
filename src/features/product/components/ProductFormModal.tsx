@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { useProductMutations } from "../hooks/useProductMutations";
 import { CategoryFormModal } from "./CategoryFormModal";
 import type {
@@ -222,7 +222,14 @@ export const ProductFormModal = ({
               Batal
             </Button>
             <Button onClick={handleSubmit} disabled={isLoading}>
-              {isLoading ? "Menyimpan..." : "Simpan Produk"}
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Menyimpan...
+                </>
+              ) : (
+                "Simpan Produk"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

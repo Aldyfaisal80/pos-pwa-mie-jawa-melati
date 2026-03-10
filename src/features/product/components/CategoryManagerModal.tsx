@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Loader2 } from "lucide-react";
 import { useCategories } from "../hooks/useCategories";
 import { useCategoryMutations } from "../hooks/useCategoryMutations";
 
@@ -71,7 +71,11 @@ export const CategoryManagerModal = ({
             disabled={createCategory.isPending || !newName.trim()}
             title="Tambah kategori"
           >
-            <Plus className="h-4 w-4" />
+            {createCategory.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Plus className="h-4 w-4" />
+            )}
           </Button>
         </div>
 
