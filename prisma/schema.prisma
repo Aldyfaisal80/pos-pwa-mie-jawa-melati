@@ -31,7 +31,7 @@ model Product {
     name        String
     description String?
     price       Decimal @db.Decimal(10, 2)
-    image       String? // URL gambar dari Supabase Storage
+    image       String?
 
     isAvailable Boolean @default(true)
 
@@ -77,7 +77,7 @@ model TransactionItem {
     quantity    Int
     unitPrice   Decimal @db.Decimal(10, 2)
     subTotal    Decimal @db.Decimal(12, 2)
-    note        String? // Catatan khusus (Pedas, Bungkus, dll)
+    note        String?
 
     @@index([transactionId])
 }
