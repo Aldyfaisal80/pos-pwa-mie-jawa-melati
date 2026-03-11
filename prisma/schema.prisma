@@ -11,15 +11,6 @@ datasource db {
 }
 
 
-
-// ==========================================
-// 💡 TIPS UMUM IMPLEMENTASI (FRONTEND/BACKEND):
-// 1. DECIMAL: Prisma mengembalikan Decimal sebagai Object. 
-//    Saat di frontend, konversi dulu: Number(value) atau value.toNumber().
-// 2. ERROR HANDLING: Selalu gunakan try-catch saat query database.
-// 3. TRANSFORMER: Pastikan tRPC menggunakan 'superjson' untuk handle Date & Decimal.
-// ==========================================
-
 enum PaymentMethod {
     CASH
     QRIS
@@ -33,8 +24,6 @@ model Category {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    // 💡 TIPS LOGIKA: Cek apakah kategori kosong sebelum menghapus.
 }
 
 model Product {
@@ -44,9 +33,6 @@ model Product {
     price       Decimal @db.Decimal(10, 2)
     image       String? // URL gambar dari Supabase Storage
 
-    // 💡 TIPS SOFT DELETE (SANGAT PENTING): 
-    // Jangan pernah melakukan hard delete jika produk sudah pernah terjual.
-    // Cukup lakukan update: isAvailable = false.
     isAvailable Boolean @default(true)
 
     categoryId Int
@@ -69,9 +55,6 @@ model Transaction {
     paidAmount    Decimal       @db.Decimal(12, 2)
     change        Decimal       @db.Decimal(12, 2)
 
-    // 💡 TIPS PWA (OFFLINE FIRST): 
-    // false = Tersimpan di IndexedDB browser (Offline).
-    // true  = Berhasil di-upload ke server Supabase (Online).
     isSynced Boolean @default(false)
 
     items TransactionItem[]
@@ -90,9 +73,6 @@ model TransactionItem {
     productId     String
     product       Product     @relation(fields: [productId], references: [id])
 
-    // 💡 TIPS SNAPSHOT (Laporan Keuangan Akurat): 
-    // Nilai di bawah ini harus DI-COPY dari Product saat transaksi terjadi.
-    // Ini menjaga akurasi laporan keuangan meski harga master berubah di masa depan.
     productName String
     quantity    Int
     unitPrice   Decimal @db.Decimal(10, 2)
@@ -102,7 +82,6 @@ model TransactionItem {
     @@index([transactionId])
 }
 
-// 💡 MEMENUHI TABEL UJI 3.8 POIN 7 (PENGATURAN PROFIL TOKO)
 model StoreConfig {
     id        Int     @id @default(1)
     name      String  @default("Mie Jawa Melati")
