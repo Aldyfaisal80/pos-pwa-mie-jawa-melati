@@ -229,6 +229,6 @@ export const CashierPage = () => {
           />
         </div>
       </SectionContainer>
-    </PageContainer>
+    </PageContainer> 
   );
 };
