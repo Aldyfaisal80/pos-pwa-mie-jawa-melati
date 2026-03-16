@@ -41,7 +41,8 @@ export const CheckoutModal = ({
 }: CheckoutModalProps) => {
   const changeAmount = Number(paymentAmount || "0") - cartTotal;
   const isValid =
-    paymentMethod !== "CASH" || Number(paymentAmount || "0") >= cartTotal;
+    cart.length > 0 &&
+    (paymentMethod !== "CASH" || Number(paymentAmount || "0") >= cartTotal);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

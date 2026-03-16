@@ -109,6 +109,13 @@ export const CashierPage = () => {
     });
   };
 
+  // Auto-close checkout modal when cart becomes empty
+  useEffect(() => {
+    if (cart.length === 0 && isCheckoutOpen) {
+      setIsCheckoutOpen(false);
+    }
+  }, [cart.length, isCheckoutOpen]);
+
   const handleFinish = () => {
     setIsReceiptOpen(false);
     clearCart();
