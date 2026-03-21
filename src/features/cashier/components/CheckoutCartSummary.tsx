@@ -46,25 +46,25 @@ export const CheckoutCartSummary = ({
           <div className="mt-2 flex items-center justify-between pl-7">
             <button
               onClick={() => onOpenNote(item.cartId)}
-              className="text-primary text-[11px] font-bold"
+              className="text-primary text-xs font-bold hover:underline"
             >
               {item.note ? "Ubah Catatan" : "+ Catatan"}
             </button>
-            <div className="bg-background flex h-6 items-center rounded border">
+            <div className="bg-background flex h-8 items-center rounded-lg border shadow-sm">
               <button
                 onClick={() => onUpdateQty(item.cartId, -1)}
-                className="text-muted-foreground hover:text-destructive px-2"
+                className="text-muted-foreground hover:text-destructive px-2 transition-colors hover:bg-muted/50 rounded-l-lg flex h-full items-center"
               >
-                <Minus className="h-3 w-3" />
+                <Minus className="h-4 w-4" />
               </button>
-              <span className="w-4 text-center text-[10px] font-bold">
+              <span className="w-6 text-center text-xs font-bold">
                 {item.qty}
               </span>
               <button
                 onClick={() => onUpdateQty(item.cartId, 1)}
-                className="text-muted-foreground px-2 hover:text-green-600"
+                className="text-muted-foreground px-2 hover:text-green-600 transition-colors hover:bg-muted/50 rounded-r-lg flex h-full items-center"
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="h-4 w-4" />
               </button>
             </div>
           </div>

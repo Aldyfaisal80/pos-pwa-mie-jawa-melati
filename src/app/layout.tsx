@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { AppProvider } from "@/components/layouts/AppProvider";
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#fafaf9",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -33,9 +33,9 @@ export const viewport: Viewport = {
   viewportFit: "cover", // enables safe-area-inset env() on iOS & Android
 };
 
-const geist = Geist({
+const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-sans",
 });
 
 export default function RootLayout({
@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable}`}
+      className={`${fontSans.variable}`}
       suppressHydrationWarning={true}
     >
       <body suppressHydrationWarning={true}>

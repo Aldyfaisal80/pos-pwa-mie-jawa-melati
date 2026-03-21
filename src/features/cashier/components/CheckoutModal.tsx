@@ -1,8 +1,9 @@
 "use client";
 
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
@@ -39,68 +40,88 @@ export const CheckoutModal = ({
   onProcess,
   isPending,
 }: CheckoutModalProps) => {
+  const isMobile = useIsMobile();
   const changeAmount = Number(paymentAmount || "0") - cartTotal;
   const isValid =
     cart.length > 0 &&
     (paymentMethod !== "CASH" || Number(paymentAmount || "0") >= cartTotal);
 
+  // Bagian konten yang sama untuk Modal maupun Drawer
+  const InnerContent = (
+    <>
+      <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto p-4 sm:max-h-[70vh]">
+        <CheckoutCartSummary
+          cart={cart}
+          onOpenNote={onOpenNote}
+          onUpdateQty={onUpdateQty}
+        />
+
+        <div className="text-center">
+          <p className="text-muted-foreground mb-1 text-sm">Total Tagihan</p>
+          <h2 className="text-4xl font-bold tracking-tight">
+            {formatRupiah(cartTotal)}
+          </h2>
+        </div>
+
+        <CheckoutPaymentMethods
+          paymentMethod={paymentMethod}
+          cartTotal={cartTotal}
+          onPaymentMethodChange={onPaymentMethodChange}
+          onPaymentAmountChange={onPaymentAmountChange}
+        />
+
+        {paymentMethod === "CASH" && (
+          <CheckoutCashInput
+            paymentAmount={paymentAmount}
+            changeAmount={changeAmount}
+            onPaymentAmountChange={onPaymentAmountChange}
+          />
+        )}
+      </div>
+
+      <div className="bg-background shrink-0 border-t p-4 sm:p-5">
+        <Button
+          className="h-14 w-full rounded-xl text-base font-bold shadow-lg shadow-primary/25 transition-transform active:scale-[0.98] hover:-translate-y-0.5"
+          disabled={!isValid || isPending}
+          onClick={onProcess}
+        >
+          {isPending ? (
+            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+          ) : (
+            <CheckCircle2 className="mr-2 h-6 w-6" />
+          )}
+          {isPending ? "Memproses Transaksi..." : "Selesaikan Transaksi"}
+        </Button>
+      </div>
+    </>
+  );
+
+  // Tampilan Mobile (Drawer)
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent className="bg-background flex max-h-[92dvh] flex-col">
+          <div className="border-b px-4 py-3 text-center">
+            <DrawerTitle className="text-xl font-bold">
+              Penyelesaian Pembayaran
+            </DrawerTitle>
+          </div>
+          {InnerContent}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  // Tampilan Desktop (Dialog)
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-background flex h-dvh w-full max-w-none flex-col border-0 p-0 sm:h-auto sm:max-w-112.5 sm:rounded-xl sm:border">
+      <DialogContent className="bg-background flex h-auto w-full flex-col p-0 sm:max-w-112.5">
         <div className="bg-muted/30 border-b p-4">
           <DialogTitle className="text-xl font-bold">
             Penyelesaian Pembayaran
           </DialogTitle>
         </div>
-
-        <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto p-4 sm:max-h-[70vh]">
-          {/* Rincian pesanan - Render using atomic component */}
-          <CheckoutCartSummary
-            cart={cart}
-            onOpenNote={onOpenNote}
-            onUpdateQty={onUpdateQty}
-          />
-
-          {/* Total */}
-          <div className="text-center">
-            <p className="text-muted-foreground mb-1 text-sm">Total Tagihan</p>
-            <h2 className="text-4xl font-bold tracking-tight">
-              {formatRupiah(cartTotal)}
-            </h2>
-          </div>
-
-          {/* Metode pembayaran - Render using atomic component */}
-          <CheckoutPaymentMethods
-            paymentMethod={paymentMethod}
-            cartTotal={cartTotal}
-            onPaymentMethodChange={onPaymentMethodChange}
-            onPaymentAmountChange={onPaymentAmountChange}
-          />
-
-          {/* Input nominal tunai - Render using atomic component */}
-          {paymentMethod === "CASH" && (
-            <CheckoutCashInput
-              paymentAmount={paymentAmount}
-              changeAmount={changeAmount}
-              onPaymentAmountChange={onPaymentAmountChange}
-            />
-          )}
-        </div>
-
-        <div className="bg-background shrink-0 border-t p-4">
-          <Button
-            className="h-12 w-full text-sm font-bold"
-            disabled={!isValid || isPending}
-            onClick={onProcess}
-          >
-            {isPending ? (
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            ) : (
-              <CheckCircle2 className="mr-2 h-5 w-5" />
-            )}
-            {isPending ? "Memproses Transaksi..." : "Selesaikan Transaksi"}
-          </Button>
-        </div>
+        {InnerContent}
       </DialogContent>
     </Dialog>
   );
