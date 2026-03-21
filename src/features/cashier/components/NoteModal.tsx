@@ -1,12 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -126,6 +132,7 @@ export const NoteModal = ({
   onOpenChange,
   onSave,
 }: NoteModalProps) => {
+  const isMobile = useIsMobile();
   const isDrink = isDrinkCategory(categoryName);
   const isMulti = qty > 1;
 
@@ -175,159 +182,196 @@ export const NoteModal = ({
     onOpenChange(false);
   };
 
+  const handleDrawerOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      // Auto-save on swipe down or click outside
+      handleSave();
+    } else {
+      onOpenChange(isOpen);
+    }
+  };
+
   const previewNote = buildNote(selectedTags, freeText);
   const charsLeft = MAX_FREE_TEXT - freeText.length;
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
-        <DialogHeader className="border-b px-4 py-3">
-          <DialogTitle className="text-base">
-            Catatan Pesanan
-            {productName && (
-              <span className="text-muted-foreground ml-2 text-sm font-normal">
-                — {productName}
-              </span>
-            )}
-          </DialogTitle>
-          <div className="flex items-center gap-2">
-            {categoryName && (
-              <p className="text-muted-foreground text-xs">
-                Kategori: <span className="font-medium">{categoryName}</span>
+  const InnerContent = (
+    <>
+      <div className="flex-1 space-y-4 overflow-y-auto px-4 py-3">
+        {/* Stepper for "Apply to how many portions?" */}
+        {isMulti && (
+          <div className="bg-primary/5 border-primary/20 flex items-center justify-between rounded-xl border p-3 shadow-sm">
+            <div>
+              <p className="text-primary text-sm font-semibold">
+                Terapkan untuk berapa porsi?
               </p>
-            )}
-            <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[11px] font-medium">
-              Total porsi baris ini: <b>{qty}</b>
-            </span>
-          </div>
-        </DialogHeader>
-
-        <div className="flex-1 space-y-4 overflow-y-auto px-4 py-3">
-          {/* Stepper for "Apply to how many portions?" */}
-          {isMulti && (
-            <div className="bg-primary/5 border-primary/20 flex items-center justify-between rounded-xl border p-3 shadow-sm">
-              <div>
-                <p className="text-primary text-sm font-semibold">
-                  Terapkan untuk berapa porsi?
-                </p>
-                <p className="text-muted-foreground mt-0.5 max-w-50 text-[11px] leading-tight">
-                  Jika angka kurang dari {qty}, keranjang akan{" "}
-                  <b>terpecah otomatis</b> menjadi 2 baris.
-                </p>
-              </div>
-              <div className="bg-background flex shrink-0 items-center gap-2 rounded-lg border px-2 py-1 shadow-sm">
-                <button
-                  onClick={() => setApplyQty(Math.max(1, applyQty - 1))}
-                  disabled={applyQty <= 1}
-                  className="bg-secondary/80 hover:bg-secondary disabled:hover:bg-secondary/80 flex h-8 w-8 items-center justify-center rounded transition-colors disabled:opacity-30"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="w-6 text-center text-sm font-bold">
-                  {applyQty}
-                </span>
-                <button
-                  onClick={() => setApplyQty(Math.min(qty, applyQty + 1))}
-                  disabled={applyQty >= qty}
-                  className="bg-secondary/80 hover:bg-secondary disabled:hover:bg-secondary/80 flex h-8 w-8 items-center justify-center rounded transition-colors disabled:opacity-30"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Active tag chips */}
-          {(selectedTags.size > 0 || freeText) && (
-            <div className="bg-muted/30 rounded-lg border p-3">
-              <div className="mb-2 flex items-center justify-between">
-                <p className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-                  Hasil Catatan (Struk)
-                </p>
-                <button
-                  onClick={handleClearAll}
-                  className="text-destructive text-[10px] font-medium hover:underline"
-                >
-                  Hapus semua
-                </button>
-              </div>
-              <div className="text-foreground bg-background border-border/50 rounded border p-2 text-sm font-medium wrap-break-word">
-                {previewNote || (
-                  <span className="text-muted-foreground font-normal italic">
-                    Tidak ada catatan
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Quick tag groups */}
-          <div className="space-y-4">
-            {relevantGroups.map((group) => (
-              <div key={group.label}>
-                <p className="text-muted-foreground mb-2 text-[10px] font-bold tracking-wider uppercase">
-                  {group.label}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {group.tags.map((tag) => {
-                    const isActive = selectedTags.has(tag);
-                    return (
-                      <button
-                        key={tag}
-                        onClick={() => toggleTag(tag)}
-                        className={`rounded-md border px-3 py-1.5 text-xs font-semibold shadow-sm transition-all select-none active:scale-95 ${
-                          isActive
-                            ? "bg-primary text-primary-foreground border-primary shadow-primary/20"
-                            : "bg-background border-border text-foreground hover:bg-muted"
-                        } `}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Free text */}
-          <div className="mt-4 border-t pt-2">
-            <div className="mb-1.5 flex items-center justify-between">
-              <p className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-                Catatan Bebas (Ketik Sendiri)
+              <p className="text-muted-foreground mt-0.5 max-w-50 text-[11px] leading-tight">
+                Jika angka kurang dari {qty}, keranjang akan{" "}
+                <b>terpecah otomatis</b> menjadi 2 baris.
               </p>
-              <span
-                className={`text-[10px] ${charsLeft <= 20 ? "text-destructive font-bold" : "text-muted-foreground"}`}
+            </div>
+            <div className="bg-background flex shrink-0 items-center gap-2 rounded-lg border px-2 py-1 shadow-sm">
+              <button
+                onClick={() => setApplyQty(Math.max(1, applyQty - 1))}
+                disabled={applyQty <= 1}
+                className="bg-secondary/80 hover:bg-secondary disabled:hover:bg-secondary/80 flex h-8 w-8 items-center justify-center rounded transition-colors disabled:opacity-30"
               >
-                {charsLeft} sisa
+                <Minus className="h-4 w-4" />
+              </button>
+              <span className="w-6 text-center text-sm font-bold">
+                {applyQty}
               </span>
+              <button
+                onClick={() => setApplyQty(Math.min(qty, applyQty + 1))}
+                disabled={applyQty >= qty}
+                className="bg-secondary/80 hover:bg-secondary disabled:hover:bg-secondary/80 flex h-8 w-8 items-center justify-center rounded transition-colors disabled:opacity-30"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
             </div>
-            <Textarea
-              value={freeText}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setFreeText(e.target.value.slice(0, MAX_FREE_TEXT))
-              }
-              placeholder="Ketik request khusus tambahan (opsional)..."
-              className="placeholder:text-muted-foreground/60 focus-visible:ring-primary/20 min-h-20 resize-none text-sm"
-            />
           </div>
+        )}
+
+        {/* Active tag chips */}
+        {(selectedTags.size > 0 || freeText) && (
+          <div className="bg-muted/30 rounded-lg border p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+                Hasil Catatan (Struk)
+              </p>
+              <button
+                onClick={handleClearAll}
+                className="text-destructive text-[10px] font-medium hover:underline"
+              >
+                Hapus semua
+              </button>
+            </div>
+            <div className="text-foreground bg-background border-border/50 rounded border p-2 text-sm font-medium wrap-break-word">
+              {previewNote || (
+                <span className="text-muted-foreground font-normal italic">
+                  Tidak ada catatan
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Quick tag groups */}
+        <div className="space-y-4">
+          {relevantGroups.map((group) => (
+            <div key={group.label}>
+              <p className="text-muted-foreground mb-2 text-[10px] font-bold tracking-wider uppercase">
+                {group.label}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {group.tags.map((tag) => {
+                  const isActive = selectedTags.has(tag);
+                  return (
+                    <button
+                      key={tag}
+                      onClick={() => toggleTag(tag)}
+                      className={`rounded-md border px-3 py-1.5 text-xs font-semibold shadow-sm transition-all select-none active:scale-95 ${
+                        isActive
+                          ? "bg-primary text-primary-foreground border-primary shadow-primary/20"
+                          : "bg-background border-border text-foreground hover:bg-muted"
+                      } `}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
 
-        <DialogFooter className="bg-muted/20 gap-2 border-t px-4 py-3">
+        {/* Free text */}
+        <div className="mt-4 border-t pt-2">
+          <div className="mb-1.5 flex items-center justify-between">
+            <p className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+              Catatan Bebas (Ketik Sendiri)
+            </p>
+            <span
+              className={`text-[10px] ${charsLeft <= 20 ? "text-destructive font-bold" : "text-muted-foreground"}`}
+            >
+              {charsLeft} sisa
+            </span>
+          </div>
+          <Textarea
+            value={freeText}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setFreeText(e.target.value.slice(0, MAX_FREE_TEXT))
+            }
+            placeholder="Ketik request khusus tambahan (opsional)..."
+            className="placeholder:text-muted-foreground/60 focus-visible:ring-primary/20 min-h-20 resize-none text-sm"
+          />
+        </div>
+      </div>
+
+      <div className="bg-background shrink-0 gap-2 border-t px-4 py-3 sm:px-5 pb-safe">
+        <div className="flex gap-2">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="flex-1 shadow-sm"
+            className="flex-1 shadow-sm h-12"
           >
             Batal
           </Button>
           <Button
             onClick={handleSave}
-            className="flex-1 font-semibold shadow-sm"
+            className="flex-1 font-semibold shadow-sm h-12"
           >
             Simpan Catatan
           </Button>
-        </DialogFooter>
+        </div>
+      </div>
+    </>
+  );
+
+  const HeaderContent = (
+    <>
+      <div className="text-base font-semibold leading-none tracking-tight">
+        Catatan Pesanan
+        {productName && (
+          <span className="text-muted-foreground ml-2 text-sm font-normal">
+            — {productName}
+          </span>
+        )}
+      </div>
+      <div className="flex items-center gap-2 mt-2 sm:mt-0">
+        {categoryName && (
+          <p className="text-muted-foreground text-xs">
+            Kategori: <span className="font-medium">{categoryName}</span>
+          </p>
+        )}
+        <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[11px] font-medium">
+          Total porsi baris ini: <b>{qty}</b>
+        </span>
+      </div>
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={handleDrawerOpenChange}>
+        <DrawerContent className="bg-background flex max-h-[92dvh] flex-col">
+          <DrawerHeader className="border-b px-4 py-3 text-left">
+            <DrawerTitle className="sr-only">Catatan Pesanan</DrawerTitle>
+            {HeaderContent}
+          </DrawerHeader>
+          {InnerContent}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={handleDrawerOpenChange}>
+      <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
+        <DialogHeader className="border-b px-4 py-4 text-left">
+          <DialogTitle className="sr-only">Catatan Pesanan</DialogTitle>
+          {HeaderContent}
+        </DialogHeader>
+        {InnerContent}
       </DialogContent>
     </Dialog>
   );
