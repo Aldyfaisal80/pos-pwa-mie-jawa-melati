@@ -59,3 +59,14 @@ export const exportToCSV = (
   a.click();
   URL.revokeObjectURL(url);
 };
+
+/**
+ * Parse a date input value (YYYY-MM-DD) into a local Date object.
+ * endOfDay=true sets time to 23:59:59.999 for range end dates.
+ */
+export const parseLocalDate = (value: string, endOfDay = false): Date => {
+  const [year, month, day] = value.split("-").map(Number);
+  return endOfDay
+    ? new Date(year!, month! - 1, day!, 23, 59, 59, 999)
+    : new Date(year!, month! - 1, day!, 0, 0, 0, 0);
+};

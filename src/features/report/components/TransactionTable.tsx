@@ -21,7 +21,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   ArrowDown,
@@ -58,6 +57,7 @@ interface TransactionTableProps {
   onSort: (column: ReportSortBy) => void;
 }
 
+// ── Skeleton ──────────────────────────────────────────────────────────────────
 const TableSkeleton = () => (
   <>
     {Array.from({ length: 5 }).map((_, i) => (
@@ -86,6 +86,7 @@ const TableSkeleton = () => (
   </>
 );
 
+// ── Sort helpers ──────────────────────────────────────────────────────────────
 const SortIcon = ({
   column,
   sortColumn,
@@ -95,10 +96,8 @@ const SortIcon = ({
   sortColumn: ReportSortBy;
   sortOrder: ReportSortOrder;
 }) => {
-  if (sortColumn !== column) {
+  if (sortColumn !== column)
     return <ArrowUpDown className="ml-1.5 h-3.5 w-3.5 opacity-50" />;
-  }
-
   return sortOrder === "asc" ? (
     <ArrowUp className="ml-1.5 h-3.5 w-3.5" />
   ) : (
@@ -127,15 +126,70 @@ const SortableHead = ({
   >
     <div className="flex items-center">
       {children}
-      <SortIcon
-        column={column}
-        sortColumn={sortColumn}
-        sortOrder={sortOrder}
-      />
+      <SortIcon column={column} sortColumn={sortColumn} sortOrder={sortOrder} />
     </div>
   </TableHead>
 );
 
+// ── Row ───────────────────────────────────────────────────────────────────────
+const TransactionRow = ({
+  trx,
+  onOpenDetail,
+  onDeleteRequest,
+}: {
+  trx: Transaction;
+  onOpenDetail: (trx: Transaction) => void;
+  onDeleteRequest: (id: string) => void;
+}) => {
+  const { date, time } = formatDateTime(trx.date);
+  return (
+    <TableRow className="hover:bg-muted/50 transition-colors">
+      <TableCell className="text-foreground font-mono text-xs font-medium md:text-sm">
+        {trx.invoiceNumber}
+      </TableCell>
+      <TableCell className="text-muted-foreground text-xs">
+        <div className="text-foreground font-medium">{date}</div>
+        <div>{time}</div>
+      </TableCell>
+      <TableCell className="hidden md:table-cell">
+        <Badge
+          variant="secondary"
+          className={`text-[10px] font-medium md:text-xs ${getPaymentMethodBadge(trx.paymentMethod)}`}
+        >
+          {getPaymentMethodLabel(trx.paymentMethod)}
+        </Badge>
+      </TableCell>
+      <TableCell className="text-foreground text-xs font-bold md:text-sm">
+        {formatRupiah(Number(trx.totalAmount))}
+      </TableCell>
+      <TableCell className="text-muted-foreground hidden text-xs sm:table-cell">
+        {trx.items.length} item
+      </TableCell>
+      <TableCell className="text-right">
+        <div className="flex justify-end gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground hover:text-foreground h-8 w-8"
+            onClick={() => onOpenDetail(trx)}
+          >
+            <Eye className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground hover:text-destructive h-8 w-8"
+            onClick={() => onDeleteRequest(trx.id)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+};
+
+// ── Main ──────────────────────────────────────────────────────────────────────
 export const TransactionTable = ({
   transactions,
   isLoading,
@@ -145,6 +199,10 @@ export const TransactionTable = ({
 }: TransactionTableProps) => {
   const [selectedTrx, setSelectedTrx] = useState<Transaction | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  // Single shared delete dialog — not per-row
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const pendingDeleteTrx = transactions?.find((t) => t.id === pendingDeleteId);
 
   const { deleteTransaction } = useTransactionMutations();
 
@@ -231,7 +289,7 @@ export const TransactionTable = ({
                   key={trx.id}
                   trx={trx}
                   onOpenDetail={handleOpenDetail}
-                  onDelete={() => deleteTransaction.mutate({ id: trx.id })}
+                  onDeleteRequest={setPendingDeleteId}
                 />
               ))
             )}
@@ -244,86 +302,45 @@ export const TransactionTable = ({
         open={isDetailOpen}
         onOpenChange={setIsDetailOpen}
       />
+
+      {/* Single shared AlertDialog — renders once, not per-row */}
+      <AlertDialog
+        open={pendingDeleteId !== null}
+        onOpenChange={(open) => {
+          if (!open && !deleteTransaction.isPending) setPendingDeleteId(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Transaksi?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini akan <strong>menghapus secara permanen</strong>{" "}
+              transaksi{" "}
+              <strong>{pendingDeleteTrx?.invoiceNumber ?? ""}</strong> beserta
+              semua item di dalamnya. Data tidak bisa dikembalikan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteTransaction.isPending}>
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={deleteTransaction.isPending}
+              onClick={(e) => {
+                e.preventDefault();
+                if (!pendingDeleteId || deleteTransaction.isPending) return;
+                deleteTransaction.mutate(
+                  { id: pendingDeleteId },
+                  { onSuccess: () => setPendingDeleteId(null) },
+                );
+              }}
+            >
+              {deleteTransaction.isPending ? "Menghapus..." : "Ya, Hapus"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
-  );
-};
-
-const TransactionRow = ({
-  trx,
-  onOpenDetail,
-  onDelete,
-}: {
-  trx: Transaction;
-  onOpenDetail: (trx: Transaction) => void;
-  onDelete: () => void;
-}) => {
-  const { date, time } = formatDateTime(trx.date);
-  return (
-    <TableRow className="hover:bg-muted/50 transition-colors">
-      <TableCell className="text-foreground font-mono text-xs font-medium md:text-sm">
-        {trx.invoiceNumber}
-      </TableCell>
-      <TableCell className="text-muted-foreground text-xs">
-        <div className="text-foreground font-medium">{date}</div>
-        <div>{time}</div>
-      </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <Badge
-          variant="secondary"
-          className={`text-[10px] font-medium md:text-xs ${getPaymentMethodBadge(trx.paymentMethod)}`}
-        >
-          {getPaymentMethodLabel(trx.paymentMethod)}
-        </Badge>
-      </TableCell>
-      <TableCell className="text-foreground text-xs font-bold md:text-sm">
-        {formatRupiah(Number(trx.totalAmount))}
-      </TableCell>
-      <TableCell className="text-muted-foreground hidden text-xs sm:table-cell">
-        {trx.items.length} item
-      </TableCell>
-      <TableCell className="text-right">
-        <div className="flex justify-end gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-muted-foreground hover:text-foreground h-8 w-8"
-            onClick={() => onOpenDetail(trx)}
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-destructive h-8 w-8"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Hapus Transaksi?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Tindakan ini akan <strong>menghapus secara permanen</strong>{" "}
-                  transaksi <strong>{trx.invoiceNumber}</strong> beserta semua
-                  item di dalamnya. Data tidak bisa dikembalikan.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Batal</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  onClick={onDelete}
-                >
-                  Ya, Hapus
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </TableCell>
-    </TableRow>
   );
 };

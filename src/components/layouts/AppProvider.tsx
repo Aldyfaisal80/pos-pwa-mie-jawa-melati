@@ -8,6 +8,7 @@ import { Providers } from "./providers/Providers";
 import { cn } from "@/lib/utils";
 import { SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "../fragments/AppSidebar";
+import { BottomTabBar } from "../fragments/BottomTabBar";
 
 type AppProviderProps = React.ComponentProps<"main">;
 
@@ -22,7 +23,6 @@ export const AppProvider = forwardRef<
 
   useEffect(() => {
     setIsMounted(true);
-    // Always force-close the sidebar on mobile — MobileMenu handles navigation there
     const isMobile = window.innerWidth < 1024;
     if (isMobile) {
       setIsSidebarOpen(false);
@@ -57,12 +57,15 @@ export const AppProvider = forwardRef<
                 onOpenChange={handleSidebarChange}
               >
                 <AppSidebar />
-                <div className="flex w-full min-w-0 flex-col overflow-hidden">
+                {/* pb-16 lg:pb-0 reserves space for the mobile bottom tab bar */}
+                <div className="flex w-full min-w-0 flex-col overflow-hidden pb-16 lg:pb-0">
                   {children}
                 </div>
               </SidebarProvider>
             </Suspense>
-            <Sooner position="bottom-right" />
+            {/* Mobile bottom tab navigation — hidden on desktop via lg:hidden */}
+            <BottomTabBar />
+            <Sooner position="top-right" />
           </>
         )}
       </Providers>

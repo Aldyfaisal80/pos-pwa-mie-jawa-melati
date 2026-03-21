@@ -46,3 +46,9 @@ yarn-error.log*
 
 # idea files
 .idea
+
+# agent files
+.agent
+
+# local docs / planning files
+/docs

@@ -1,7 +1,17 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { Button } from "@/components/ui/button";
@@ -41,6 +51,7 @@ export const CashierPage = () => {
   const [isNoteOpen, setIsNoteOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [isClearConfirmOpen, setIsClearConfirmOpen] = useState(false);
 
   // Note form
   const [activeNoteCartId, setActiveNoteCartId] = useState<string | null>(null);
@@ -54,7 +65,7 @@ export const CashierPage = () => {
   const [receiptData, setReceiptData] = useState({
     invoiceNumber: "",
     transactionDate: new Date(),
-    cart: [...cart],
+    cart: structuredClone(cart),
     cartTotal: 0,
     paymentMethod: "CASH" as PaymentMethod,
     paymentAmount: "",
@@ -75,18 +86,7 @@ export const CashierPage = () => {
     updateNote(cartId, "");
   };
 
-  const handleClearCart = () => {
-    toast("Kosongkan semua pesanan?", {
-      action: {
-        label: "Ya, Kosongkan",
-        onClick: () => clearCart(),
-      },
-      cancel: {
-        label: "Batal",
-        onClick: () => {},
-      },
-    });
-  };
+  const handleClearCart = () => setIsClearConfirmOpen(true);
 
   const handleProcess = () => {
     syncTransaction({
@@ -98,7 +98,7 @@ export const CashierPage = () => {
         setReceiptData({
           invoiceNumber,
           transactionDate: new Date(),
-          cart: [...cart],
+          cart: structuredClone(cart),
           cartTotal,
           paymentMethod,
           paymentAmount,
@@ -156,8 +156,8 @@ export const CashierPage = () => {
           {/* Keranjang Melayang (Mobile) */}
           {cartTotal > 0 && (
             <div
-              className="animate-in slide-in-from-bottom-5 fixed right-4 left-4 z-50 lg:hidden"
-              style={{ bottom: "max(1rem, env(safe-area-inset-bottom, 1rem))" }}
+              className="animate-in slide-in-from-bottom-5 fixed right-4 left-4 z-40 lg:hidden"
+              style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 4.5rem)" }}
             >
               <Button
                 className="flex h-auto w-full items-center justify-between rounded-2xl border border-white/10 p-4 shadow-2xl"
@@ -229,6 +229,31 @@ export const CashierPage = () => {
           />
         </div>
       </SectionContainer>
-    </PageContainer> 
+
+      {/* Konfirmasi Kosongkan Keranjang */}
+      <AlertDialog
+        open={isClearConfirmOpen}
+        onOpenChange={setIsClearConfirmOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Kosongkan semua pesanan?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Semua item di keranjang akan dihapus. Tindakan ini tidak bisa dibatalkan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => { clearCart(); setIsClearConfirmOpen(false); }}
+            >
+              Ya, Kosongkan
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </PageContainer>
+ 
   );
 };

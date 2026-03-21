@@ -7,6 +7,16 @@ import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Settings2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useProducts } from "../hooks/useProducts";
 import { useCategories } from "../hooks/useCategories";
 import { useProductMutations } from "../hooks/useProductMutations";
@@ -23,6 +33,7 @@ export const ProductPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isCategoryManagerOpen, setIsCategoryManagerOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   const handleAddClick = () => {
     setEditingProduct(null);
@@ -35,16 +46,24 @@ export const ProductPage = () => {
   };
 
   const handleDeleteClick = (id: string) => {
-    toast("Yakin ingin menonaktifkan produk ini?", {
-      action: {
-        label: "Ya",
-        onClick: () => deleteProduct.mutate({ id }),
+    setPendingDeleteId(id);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!pendingDeleteId) return;
+    deleteProduct.mutate(
+      { id: pendingDeleteId },
+      {
+        onSuccess: () => {
+          toast.success("Produk dinonaktifkan");
+          setPendingDeleteId(null);
+        },
+        onError: () => {
+          toast.error("Gagal menonaktifkan produk");
+          setPendingDeleteId(null);
+        },
       },
-      cancel: {
-        label: "Batal",
-        onClick: () => {},
-      },
-    });
+    );
   };
 
   const handleModalClose = (open: boolean) => {
@@ -94,6 +113,39 @@ export const ProductPage = () => {
           open={isCategoryManagerOpen}
           onOpenChange={setIsCategoryManagerOpen}
         />
+
+        {/* Konfirmasi Nonaktifkan Produk */}
+        <AlertDialog
+          open={pendingDeleteId !== null}
+          onOpenChange={(open) => {
+            if (!open && !deleteProduct.isPending) setPendingDeleteId(null);
+          }}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Nonaktifkan produk ini?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Produk tidak akan muncul di halaman kasir. Kamu bisa
+                mengaktifkannya kembali kapan saja.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={deleteProduct.isPending}>
+                Batal
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                disabled={deleteProduct.isPending}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleConfirmDelete();
+                }}
+              >
+                {deleteProduct.isPending ? "Memproses..." : "Ya, Nonaktifkan"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </SectionContainer>
     </PageContainer>
   );

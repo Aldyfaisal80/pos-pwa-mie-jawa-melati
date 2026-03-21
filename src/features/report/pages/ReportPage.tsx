@@ -1,257 +1,63 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Download } from "lucide-react";
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Calendar, Download, Search, ChevronLeft, ChevronRight } from "lucide-react";
-import { toast } from "sonner";
-import {
-  PaymentMethod,
-  ReportSortBy,
-  ReportSortOrder,
-  type PaymentMethod as ServerPaymentMethod,
-} from "@/server/validations";
-import { api } from "@/trpc/react";
-import { useTransactionReport } from "../hooks/useTransactionReport";
+import { useReportFilters } from "../hooks/useReportFilters";
 import { TransactionTable } from "../components/TransactionTable";
-import { exportToCSV } from "../utils/report.utils";
+import { ReportFilterBar } from "../components/ReportFilterBar";
+import { ReportPagination } from "../components/ReportPagination";
 import { useLiveStats } from "@/features/dashboard/hooks/useLiveStats";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const ReportPage = () => {
-  const [search, setSearch] = useState("");
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
-  const [paymentMethod, setPaymentMethod] = useState<
-    ServerPaymentMethod | "ALL"
-  >("ALL");
-  const [sortBy, setSortBy] = useState<ReportSortBy>(ReportSortBy.DATE);
-  const [sortOrder, setSortOrder] = useState<ReportSortOrder>(
-    ReportSortOrder.DESC,
-  );
-  const [isExporting, setIsExporting] = useState(false);
-
-  // Mengaktifkan sinkronisasi real-time hibrida (PWA Tab + PC Lain)
   useLiveStats();
 
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
-  const utils = api.useUtils();
-
-  const { data, isLoading, isFetching } = useTransactionReport(
-    startDate,
-    endDate,
-    search,
-    paymentMethod,
-    sortBy,
-    sortOrder,
-    limit,
-    page,
-  );
-
-  const transactions = data?.transactions ?? [];
-  const totalCount = data?.totalCount ?? 0;
-  const totalPages = data?.totalPages ?? 1;
-  const currentPage = page;
-
-  useEffect(() => {
-    if (totalPages > 0 && page > totalPages) {
-      setPage(totalPages);
-    }
-  }, [page, totalPages]);
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setPage(newPage);
-    }
-  };
-
-  // Reset pagination when search/filter changes
-  const handleFilterChange = (setter: React.Dispatch<React.SetStateAction<any>>, value: any) => {
-    setter(value);
-    setPage(1);
-  };
-
-  const handleSortChange = (column: ReportSortBy) => {
-    setPage(1);
-    if (sortBy === column) {
-      setSortOrder((prev) =>
-        prev === ReportSortOrder.ASC
-          ? ReportSortOrder.DESC
-          : ReportSortOrder.ASC,
-      );
-      return;
-    }
-
-    setSortBy(column);
-    setSortOrder(
-      column === ReportSortBy.DATE
-        ? ReportSortOrder.DESC
-        : ReportSortOrder.ASC,
-    );
-  };
-
-  const handleExport = async () => {
-    if (!totalCount) {
-      toast.error("Tidak ada data untuk diekspor.");
-      return;
-    }
-
-    setIsExporting(true);
-
-    try {
-      const exportRows =
-        (await utils.transaction.exportTransactionReport.fetch({
-          startDate,
-          endDate,
-          search: search || undefined,
-          paymentMethod: paymentMethod === "ALL" ? undefined : paymentMethod,
-          sortBy,
-          sortOrder,
-        })) ?? [];
-
-      if (!exportRows.length) {
-        toast.error("Tidak ada data untuk diekspor.");
-        return;
-      }
-
-      exportToCSV(exportRows);
-      toast.success("Export Berhasil", {
-        description: `${exportRows.length} baris laporan berhasil diunduh.`,
-      });
-    } catch (error) {
-      toast.error("Gagal export laporan.", {
-        description: error instanceof Error ? error.message : undefined,
-      });
-    } finally {
-      setIsExporting(false);
-    }
-  };
+  const {
+    search, startDate: _sd, endDate: _ed, paymentMethod,
+    sortBy, sortOrder, limit, page,
+    setSearch, setStartDate, setEndDate, setPaymentMethod, setLimit,
+    handleSortChange, handlePageChange, handleExport,
+    transactions, totalCount, totalPages,
+    isLoading, isFetching, isExporting,
+  } = useReportFilters();
 
   return (
     <PageContainer title="Laporan Pendapatan" withHeader>
       <SectionContainer padded>
-        {/* Header Aksi */}
+        {/* Header */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-foreground text-lg font-bold md:text-xl">
             Riwayat Transaksi
           </h2>
-          <div className="flex gap-2">
-            <Button
-              onClick={handleExport}
-              size="sm"
-              disabled={isExporting || isFetching || isLoading}
-              className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
-            >
-              <Download className="h-4 w-4" />
-              <span className="hidden md:inline">
-                {isExporting ? "Mengekspor..." : "Export CSV"}
-              </span>
-            </Button>
-          </div>
+          <Button
+            onClick={handleExport}
+            size="sm"
+            disabled={isExporting || isFetching || isLoading}
+            className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
+          >
+            <Download className="h-4 w-4" />
+            <span className="hidden md:inline">
+              {isExporting ? "Mengekspor..." : "Export CSV"}
+            </span>
+          </Button>
         </div>
 
-        {/* Filter Bar */}
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-          {/* Cari invoice */}
-          <div className="relative min-w-50 flex-1">
-            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-            <Input
-              className="pl-9"
-              placeholder="Cari no. nota..."
-              value={search}
-              onChange={(e) => handleFilterChange(setSearch, e.target.value)}
-            />
-          </div>
+        {/* Filter */}
+        <ReportFilterBar
+          search={search}
+          limit={limit}
+          paymentMethod={paymentMethod}
+          onSearchChange={setSearch}
+          onLimitChange={setLimit}
+          onPaymentMethodChange={setPaymentMethod}
+          onStartDateChange={setStartDate}
+          onEndDateChange={setEndDate}
+        />
 
-          {/* Limit / Items per page */}
-          <div className="relative min-w-25">
-            <Select
-              value={limit.toString()}
-              onValueChange={(val) => {
-                setLimit(Number(val));
-                setPage(1);
-              }}
-            >
-              <SelectTrigger className="w-full sm:w-30">
-                <SelectValue placeholder="Baris" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10 baris</SelectItem>
-                <SelectItem value="25">25 baris</SelectItem>
-                <SelectItem value="50">50 baris</SelectItem>
-                <SelectItem value="100">100 baris</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Metode pembayaran */}
-          <div className="relative min-w-35">
-            <Select
-              value={paymentMethod}
-              onValueChange={(val) =>
-                handleFilterChange(
-                  setPaymentMethod,
-                  val as ServerPaymentMethod | "ALL",
-                )
-              }
-            >
-              <SelectTrigger className="w-full sm:w-40">
-                <SelectValue placeholder="Metode" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">Semua Metode</SelectItem>
-                <SelectItem value={PaymentMethod.CASH}>Tunai</SelectItem>
-                <SelectItem value={PaymentMethod.QRIS}>QRIS</SelectItem>
-                <SelectItem value={PaymentMethod.TRANSFER}>Transfer</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Tanggal mulai */}
-          <div className="relative">
-            <Calendar className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-            <Input
-              type="date"
-              className="w-full pl-9 sm:w-40"
-              onChange={(e) => {
-                if (!e.target.value) {
-                  handleFilterChange(setStartDate, undefined);
-                  return;
-                }
-                // Parse manually to create LOCAL date (not UTC midnight)
-                const [year, month, day] = e.target.value.split("-").map(Number);
-                const localDate = new Date(year!, month! - 1, day!, 0, 0, 0, 0);
-                handleFilterChange(setStartDate, localDate);
-              }}
-            />
-          </div>
-
-          {/* Tanggal akhir */}
-          <div className="relative">
-            <Calendar className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-            <Input
-              type="date"
-              className="w-full pl-9 sm:w-40"
-              onChange={(e) => {
-                if (!e.target.value) {
-                  handleFilterChange(setEndDate, undefined);
-                  return;
-                }
-                // Parse manually to create LOCAL date (not UTC midnight)
-                const [year, month, day] = e.target.value.split("-").map(Number);
-                const localDate = new Date(year!, month! - 1, day!, 23, 59, 59, 999);
-                handleFilterChange(setEndDate, localDate);
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Tabel */}
-        <Card className="border-border overflow-hidden border shadow-sm relative">
+        {/* Tabel + Footer */}
+        <Card className="border-border relative overflow-hidden border shadow-sm">
           <TransactionTable
             transactions={transactions}
             isLoading={isLoading}
@@ -260,67 +66,18 @@ export const ReportPage = () => {
             onSort={handleSortChange}
           />
 
-          {/* Footer info & Pagination Commands */}
-          <div className="bg-muted/50 border-t px-4 py-3 flex flex-col items-center justify-between gap-3 sm:flex-row">
+          <div className="bg-muted/50 flex flex-col items-center justify-between gap-3 border-t px-4 py-3 sm:flex-row">
             <span className="text-muted-foreground text-xs">
               Menampilkan {transactions.length} transaksi{" "}
               {totalCount > 0 && `dari total ${totalCount} transaksi`}
             </span>
-
-            {totalPages > 1 && (
-              <div className="flex gap-1 items-center">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1 || isLoading || isFetching}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                
-                <div className="flex items-center gap-1 mx-1">
-                  {Array.from({ length: totalPages }).map((_, i) => {
-                    const pageNum = i + 1;
-                    // Tampilkan maksimal 5 tombol halaman berdekatan
-                    if (
-                      pageNum === 1 || 
-                      pageNum === totalPages || 
-                      (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                    ) {
-                      return (
-                        <Button
-                          key={pageNum}
-                          variant={currentPage === pageNum ? "default" : "outline"}
-                          size="icon"
-                          className="h-8 w-8 text-xs"
-                          onClick={() => handlePageChange(pageNum)}
-                          disabled={isLoading || isFetching}
-                        >
-                          {pageNum}
-                        </Button>
-                      );
-                    } else if (
-                      pageNum === currentPage - 2 ||
-                      pageNum === currentPage + 2
-                    ) {
-                      return <span key={pageNum} className="text-xs text-muted-foreground px-1">...</span>;
-                    }
-                    return null;
-                  })}
-                </div>
-
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages || isLoading || isFetching}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
+            <ReportPagination
+              currentPage={page}
+              totalPages={totalPages}
+              isLoading={isLoading}
+              isFetching={isFetching}
+              onPageChange={handlePageChange}
+            />
           </div>
         </Card>
       </SectionContainer>

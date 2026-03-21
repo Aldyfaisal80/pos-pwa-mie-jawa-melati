@@ -423,8 +423,8 @@ test("soft delete produk membuatnya tidak tampil di kasir", async ({ page }) => 
   await expect(row).toBeVisible();
 
   await row.locator("button").nth(1).click();
-  await expect(page.getByText("Yakin ingin menonaktifkan produk ini?")).toBeVisible();
-  await page.getByRole("button", { name: "Ya" }).click();
+  await expect(page.getByText("Nonaktifkan produk ini?")).toBeVisible();
+  await page.getByRole("button", { name: "Ya, Nonaktifkan" }).click();
 
   await expect(page.getByText("Produk dihapus (tidak tersedia).")).toBeVisible();
   await expect(row.getByText("Tidak Tersedia")).toBeVisible();

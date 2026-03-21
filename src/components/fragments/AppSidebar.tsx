@@ -14,13 +14,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+
 import { navItems } from "../config/navigation";
 import { api } from "@/trpc/react";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
-  const isOnline = useNetworkStatus();
+
   const { data: store } = api.store.getProfile.useQuery();
 
   return (
@@ -76,28 +76,17 @@ export const AppSidebar = () => {
         </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter className="border-t p-4">
-        <div className="flex items-center gap-3 overflow-hidden rounded-xl border border-transparent p-1 transition">
+      <SidebarFooter className="border-t p-3">
+        <div className="flex items-center gap-3 overflow-hidden rounded-xl p-1">
           <img
             src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff"
             alt="Profil Admin"
-            className="border-background h-10 w-10 shrink-0 rounded-full border-2 shadow-sm"
+            className="border-background h-9 w-9 shrink-0 rounded-full border-2 shadow-sm"
           />
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <p className="truncate text-sm leading-tight font-bold">Admin</p>
-            <p
-              className={`mt-0.5 flex items-center gap-1 text-xs font-medium ${
-                isOnline
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-muted-foreground"
-              }`}
-            >
-              <span
-                className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                  isOnline ? "animate-pulse bg-green-500" : "bg-gray-400"
-                }`}
-              />
-              {isOnline ? "Online" : "Offline"}
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              Administrator
             </p>
           </div>
         </div>
@@ -105,3 +94,4 @@ export const AppSidebar = () => {
     </ShadcnSidebar>
   );
 };
+
