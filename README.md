@@ -1,99 +1,171 @@
-# Post PWA (Point of Sales Offline-First PWA)
+# Post PWA — Point of Sales Offline-First PWA
 
-A modern, offline-first Point of Sales (POS) application built as a Progressive Web App (PWA) using the powerful [T3 Stack](https://create.t3.gg/).
+A modern, offline-first Point of Sales (POS) application built as a Progressive Web App (PWA) using the [T3 Stack](https://create.t3.gg/).
 
-This application is designed to function seamlessly even without an internet connection, automatically queuing transactions in the browser's IndexedDB and syncing them to the backend server (Supabase) once the connection is restored.
+Process orders offline, sync automatically when back online, and manage your business from any device.
+
+---
 
 ## 🚀 Key Features
 
-- **Offline-First Cashier System**: Process orders and add products to the cart even when completely offline.
-- **Background Syncing**: Transactions made offline are automatically synchronized to the server when the device comes back online.
-- **PWA Ready**: Installable on Desktop, iOS, and Android. Works like a native application with icon and offline caching support (via Serwist).
-- **Responsive UI/UX**: Beautifully designed utilizing Tailwind CSS and Shadcn UI.
-- **Data Persistence**: Uses IndexedDB for local caching and PostgreSQL (via Supabase) for remote database storage.
+- **Offline-First Cashier** — Process orders, manage cart, and complete transactions without internet
+- **Background Sync** — Offline transactions queue in IndexedDB and auto-sync to Supabase
+- **PWA Ready** — Installable on Desktop, iOS, and Android with full offline caching (Serwist)
+- **Product Management** — CRUD with categories, image upload (Supabase Storage), and soft delete
+- **Transaction Reports** — Filterable, sortable, paginated reports with CSV export
+- **Dashboard Analytics** — Today's revenue, transaction count, top products chart
+- **Store Settings** — Configurable store name, address, phone, and logo
+- **Responsive UI** — Mobile-first with bottom sheet drawers (Vaul) and dark mode support
+
+---
 
 ## 🛠️ Tech Stack
 
-This project is built using modern, type-safe web technologies:
+| Layer | Technology |
+|-------|-----------|
+| Framework | [Next.js 16](https://nextjs.org) (App Router) |
+| API & Type Safety | [tRPC 11](https://trpc.io) + [Zod 4](https://zod.dev) |
+| Database ORM | [Prisma 7](https://prisma.io) |
+| Database | [Supabase](https://supabase.com/) (PostgreSQL) |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) + [Shadcn UI](https://ui.shadcn.com/) |
+| PWA Engine | [Serwist](https://serwist.build/) |
+| Data Fetching | [TanStack React Query 5](https://tanstack.com/query/latest) |
+| Charts | [Recharts](https://recharts.org) |
+| Mobile UX | [Vaul](https://vaul.emilkowal.ski/) (Drawer) |
 
-- **Framework**: [Next.js (App Router)](https://nextjs.org) (v15+)
-- **API & Type Safety**: [tRPC](https://trpc.io) & [Zod](https://zod.dev)
-- **Database ORM**: [Prisma](https://prisma.io)
-- **Database Provider**: [Supabase](https://supabase.com/) (PostgreSQL)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) & [Shadcn UI](https://ui.shadcn.com/)
-- **PWA Engine**: [Serwist](https://serwist.build/) (Service Worker Toolkit)
-- **State Management & Data Fetching**: [TanStack React Query](https://tanstack.com/query/latest)
+---
 
 ## 📦 Getting Started
 
 ### Prerequisites
-- Node.js (v20+ recommended)
-- npm or pnpm
-- A Supabase project (or local PostgreSQL instance)
+
+- Node.js v20+
+- npm v11+
+- A Supabase project or local PostgreSQL instance
 
 ### Installation
 
-1. Clone the repository:
-   ```bash
-   git clone <your-repo-url>
-   cd post-pwa
-   ```
+```bash
+# 1. Clone the repository
+git clone <your-repo-url>
+cd post-pwa
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+# 2. Install dependencies
+npm install
 
-3. Configure Environment Variables:
-   Copy `.env.example` to `.env` and fill in your Supabase connection strings:
-   ```bash
-   cp .env.example .env
-   ```
-   *Note: Update `DATABASE_URL` and `DIRECT_URL` (if using Supabase) in your `.env` file.*
+# 3. Configure environment variables
+cp .env.example .env
+# Edit .env → set DATABASE_URL to your PostgreSQL connection string
 
-4. Setup Database Schema:
-   ```bash
-   npm run db:push
-   ```
-   *(Optional)* Run the seed script to populate initial dummy data:
-   ```bash
-   npm run prisma:seed
-   ```
+# 4. Push database schema
+npm run db:push
 
-5. Run the Development Server:
-   ```bash
-   npm run dev
-   ```
+# 5. (Optional) Seed sample data
+npm run db:seed:local
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 6. Start development server
+npm run dev
+```
 
-## 📱 PWA Features Validation Tutorial
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-To personally test the PWA capabilities and see the offline-first functionality in action, follow these steps:
+---
 
-### Step 1: Prep the Production Build
-PWA service workers only run optimally in production mode.
+## 📁 Project Structure
+
+```
+post-pwa/
+├── src/
+│   ├── app/                # Next.js App Router (routes & API)
+│   ├── components/         # Shared UI (elements, form, fragments, icons, ui)
+│   ├── features/           # Feature modules
+│   │   ├── cashier/        #   POS cashier (cart, checkout, receipt)
+│   │   ├── dashboard/      #   Analytics & charts
+│   │   ├── product/        #   Product & category management
+│   │   ├── report/         #   Transaction reports & export
+│   │   └── storeSettings/  #   Store configuration
+│   ├── hooks/              # Global custom hooks
+│   ├── lib/                # Utilities (offline-db, formatting)
+│   ├── server/             # Backend (tRPC routers, validations, services)
+│   ├── styles/             # Global CSS
+│   └── trpc/               # Client tRPC setup
+├── prisma/                 # Database schema & migrations
+├── tests/                  # Playwright E2E tests
+└── docs/                   # Project documentation
+```
+
+---
+
+## 📜 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run preview` | Build + start combined |
+| `npm run check` | Lint + typecheck combined |
+| `npm run lint` | Run ESLint |
+| `npm run lint:fix` | ESLint with auto-fix |
+| `npm run typecheck` | TypeScript type checking |
+| `npm run format:check` | Check Prettier formatting |
+| `npm run format:write` | Auto-format with Prettier |
+| `npm run test:blackbox` | Run Playwright E2E tests |
+| `npm run db:push` | Push Prisma schema to DB |
+| `npm run db:push:local` | Push to local dev DB |
+| `npm run db:push:prod` | Push to production DB |
+| `npm run db:reset:local` | Reset + re-seed local DB |
+| `npm run db:seed:local` | Seed local database |
+| `npm run db:studio` | Open Prisma Studio GUI |
+
+---
+
+## 📱 PWA Features Validation
+
+To test the PWA capabilities and offline-first functionality:
+
+### Step 1: Build for Production
+
+PWA service workers only run in production mode:
+
 ```bash
 npm run build
 npm run start
 ```
 
-### Step 2: Open and Install
-1. Open your browser (Chrome/Edge) and go to `http://localhost:3000`.
-2. Look at the right side of the URL address bar and click the **Install App** icon to install it as a standalone Desktop PWA.
-3. Open the installed PWA from your desktop shortcut (optional but recommended for the full native experience).
+### Step 2: Install the App
 
-### Step 3: Test the Offline Flow
-1. In the PWA, open the Developer Tools (F12) -> go to the **Application** tab -> **Service Workers** -> check the **Offline** box. (Alternatively, just turn off your computer's Wi-Fi).
-2. Notice how the UI immediately adapts (e.g., showing an offline indicator).
-3. Perform a transaction: Add 2 items to the cart and process a payment. 
-4. Because you are offline, the transaction is completely saved locally to IndexedDB, and the pending sync counter will go up (e.g., "1 Pending Sync").
-5. Refresh the page to prove that the application still loads normally without internet (served from cache).
+1. Open `http://localhost:3000` in Chrome/Edge
+2. Click the **Install App** icon in the URL bar
+3. Open the installed PWA from your desktop shortcut
+
+### Step 3: Test Offline Mode
+
+1. Open DevTools (F12) → **Application** → **Service Workers** → check **Offline**
+2. Notice the UI adapts (offline indicator appears)
+3. Add items to cart and process a transaction
+4. The transaction saves to IndexedDB — pending sync counter goes up
+5. Refresh the page — app loads normally from cache
 
 ### Step 4: Sync to Cloud
-1. Uncheck the **Offline** box in Developer Tools (or turn your Wi-Fi back on).
-2. Watch the system automatically detect the connection. The pending queue will synchronize your local transactions directly to the Supabase database.
-3. Check your `Report` page to see the synced data!
+
+1. Uncheck **Offline** in DevTools (or restore Wi-Fi)
+2. Watch automatic sync — pending queue synchronizes to Supabase
+3. Check the **Report** page to see synced data
+
+---
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Architecture](./docs/ARCHITECTURE.md) | System overview, data flow, design decisions |
+| [API Reference](./docs/API.md) | All tRPC procedures with input/output schemas |
+| [Database Schema](./docs/DATABASE.md) | ER diagram, model reference, indexes |
+| [Changelog](./CHANGELOG.md) | Version history (Keep a Changelog) |
+| [Contributing](./CONTRIBUTING.md) | Development setup & contribution guide |
+
+---
 
 ## 📝 License
 

@@ -1,0 +1,39 @@
+# Post PWA — Offline-First Point of Sales
+> A modern, offline-first POS progressive web app for small businesses, built on the T3 Stack.
+
+## Core Files
+- [src/app/layout.tsx]: Root layout — providers, sidebar, theme
+- [src/app/sw.ts]: Serwist service worker — asset caching & offline
+- [src/server/api/root.ts]: tRPC router aggregation (product, category, transaction, store)
+- [src/server/api/routers/]: tRPC procedure handlers
+- [src/server/validations/]: Zod input schemas
+- [src/lib/offline-db.ts]: IndexedDB wrapper for offline transactions
+- [src/hooks/use-offline-sync.ts]: Background sync orchestrator
+- [prisma/schema.prisma]: Database schema (Category, Product, Transaction, TransactionItem, StoreConfig)
+
+## Features
+- [src/features/cashier/]: POS cashier — cart, checkout, receipt, notes
+- [src/features/product/]: Product & category CRUD management
+- [src/features/report/]: Transaction report with filters, pagination, export
+- [src/features/dashboard/]: Today's stats, revenue chart, top products
+- [src/features/storeSettings/]: Store profile configuration
+
+## Key Concepts
+- **Offline-First**: Transactions save to IndexedDB, batch sync to Supabase on reconnect
+- **Feature Modules**: Each feature is self-contained (components/hooks/pages/types/utils)
+- **tRPC + Zod**: End-to-end type safety from DB to UI, no REST endpoints
+- **Soft Delete**: Products marked `isAvailable=false`, never truly deleted (report integrity)
+- **Responsive Drawer/Dialog**: Vaul bottom sheets on mobile, standard dialogs on desktop
+
+## Tech Stack
+- Next.js 16 (App Router) + tRPC 11 + Prisma 7 + Supabase (PostgreSQL)
+- Tailwind CSS v4 + Shadcn UI + Radix UI + Vaul + Recharts
+- Serwist (PWA/Service Worker) + IndexedDB + TanStack React Query 5
+- Playwright (E2E testing)
+
+## Documentation
+- [docs/ARCHITECTURE.md]: System architecture, data flow, ADRs
+- [docs/API.md]: Complete tRPC API reference
+- [docs/DATABASE.md]: Schema docs with ER diagram
+- [CHANGELOG.md]: Version history
+- [CONTRIBUTING.md]: Contribution guidelines
