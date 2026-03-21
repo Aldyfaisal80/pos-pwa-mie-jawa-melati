@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -42,27 +42,13 @@ export const ProductFormModal = ({
   editingProduct,
   categories,
 }: ProductFormModalProps) => {
-  const [formData, setFormData] = useState<ProductFormData>(() =>
-    editingProduct
-      ? {
-          name: editingProduct.name,
-          description: editingProduct.description ?? "",
-          categoryId: String(editingProduct.categoryId),
-          price: String(editingProduct.price),
-          image: editingProduct.image ?? "",
-          isAvailable: editingProduct.isAvailable,
-        }
-      : defaultProductFormData,
-  );
+  const [formData, setFormData] = useState<ProductFormData>(defaultProductFormData);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   const { createProduct, updateProduct } = useProductMutations();
   const isLoading = createProduct.isPending || updateProduct.isPending;
 
-  // Sync form ketika editingProduct berubah
-  const [lastEditingId, setLastEditingId] = useState<string | null>(null);
-  if ((editingProduct?.id ?? null) !== lastEditingId) {
-    setLastEditingId(editingProduct?.id ?? null);
+  useEffect(() => {
     setFormData(
       editingProduct
         ? {
@@ -75,7 +61,7 @@ export const ProductFormModal = ({
           }
         : defaultProductFormData,
     );
-  }
+  }, [editingProduct, open]);
 
   const handleSubmit = () => {
     if (!formData.name.trim() || !formData.categoryId || !formData.price) {

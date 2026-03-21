@@ -11,6 +11,16 @@ import {
 import { PaymentMethod as ServerPaymentMethod } from "@/server/validations/transaction.validation";
 import { useBroadcastChannel } from "./use-broadcast-channel";
 
+const isDuplicateInvoiceError = (error: unknown) => {
+  if (!(error instanceof Error)) return false;
+
+  const message = error.message.toLowerCase();
+  return (
+    message.includes("unique constraint failed") &&
+    message.includes("invoicenumber")
+  );
+};
+
 export const useOfflineSync = () => {
   const [pendingCount, setPendingCount] = useState(0);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -61,10 +71,14 @@ export const useOfflineSync = () => {
         ]);
         await removePendingTransaction(trx.invoiceNumber);
         successCount++;
-      } catch {
-        // Jika conflict (invoice duplikat), anggap sudah tersync
-        await removePendingTransaction(trx.invoiceNumber);
-        successCount++;
+      } catch (error) {
+        if (isDuplicateInvoiceError(error)) {
+          await removePendingTransaction(trx.invoiceNumber);
+          successCount++;
+          continue;
+        }
+
+        failCount++;
       }
     }
 

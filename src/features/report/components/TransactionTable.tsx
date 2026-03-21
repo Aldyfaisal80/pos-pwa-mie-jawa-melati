@@ -23,7 +23,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowDown, ArrowUp, ArrowUpDown, Eye, Trash2, Receipt } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Eye,
+  Trash2,
+  Receipt,
+} from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import {
   formatDateTime,
@@ -33,7 +40,10 @@ import {
 import type { RouterOutputs } from "@/trpc/react";
 import { TransactionDetailModal } from "./TransactionDetailModal";
 import { useTransactionMutations } from "../hooks/useTransactionMutations";
-import { useMemo } from "react";
+import {
+  ReportSortBy,
+  type ReportSortOrder,
+} from "@/server/validations/transaction.validation";
 
 export type Transaction = Exclude<
   RouterOutputs["transaction"]["getTransactionReport"],
@@ -43,15 +53,10 @@ export type Transaction = Exclude<
 interface TransactionTableProps {
   transactions: Transaction[] | undefined;
   isLoading: boolean;
+  sortColumn: ReportSortBy;
+  sortOrder: ReportSortOrder;
+  onSort: (column: ReportSortBy) => void;
 }
-
-type SortColumn =
-  | "invoiceNumber"
-  | "date"
-  | "paymentMethod"
-  | "totalAmount"
-  | "itemCount";
-type SortOrder = "asc" | "desc";
 
 const TableSkeleton = () => (
   <>
@@ -81,37 +86,19 @@ const TableSkeleton = () => (
   </>
 );
 
-export const TransactionTable = ({
-  transactions,
-  isLoading,
-}: TransactionTableProps) => {
-  const [sortColumn, setSortColumn] = useState<SortColumn>("date");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
-  const [selectedTrx, setSelectedTrx] = useState<Transaction | null>(null);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-
-  const { deleteTransaction } = useTransactionMutations();
-
-  const handleSort = (column: SortColumn) => {
-    if (sortColumn === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortColumn(column);
-      setSortOrder("desc");
-    }
-  };
-
 const SortIcon = ({
   column,
   sortColumn,
   sortOrder,
 }: {
-  column: SortColumn;
-  sortColumn: SortColumn;
-  sortOrder: SortOrder;
+  column: ReportSortBy;
+  sortColumn: ReportSortBy;
+  sortOrder: ReportSortOrder;
 }) => {
-  if (sortColumn !== column)
+  if (sortColumn !== column) {
     return <ArrowUpDown className="ml-1.5 h-3.5 w-3.5 opacity-50" />;
+  }
+
   return sortOrder === "asc" ? (
     <ArrowUp className="ml-1.5 h-3.5 w-3.5" />
   ) : (
@@ -127,10 +114,10 @@ const SortableHead = ({
   className,
   children,
 }: {
-  column: SortColumn;
-  sortColumn: SortColumn;
-  sortOrder: SortOrder;
-  onSort: (column: SortColumn) => void;
+  column: ReportSortBy;
+  sortColumn: ReportSortBy;
+  sortOrder: ReportSortOrder;
+  onSort: (column: ReportSortBy) => void;
   className?: string;
   children: React.ReactNode;
 }) => (
@@ -149,29 +136,17 @@ const SortableHead = ({
   </TableHead>
 );
 
-  const sortedTransactions = useMemo(() => {
-    return [...(transactions ?? [])].sort((a, b) => {
-      let cmp = 0;
-      switch (sortColumn) {
-        case "invoiceNumber":
-          cmp = a.invoiceNumber.localeCompare(b.invoiceNumber);
-          break;
-        case "date":
-          cmp = new Date(a.date).getTime() - new Date(b.date).getTime();
-          break;
-        case "paymentMethod":
-          cmp = a.paymentMethod.localeCompare(b.paymentMethod);
-          break;
-        case "totalAmount":
-          cmp = Number(a.totalAmount) - Number(b.totalAmount);
-          break;
-        case "itemCount":
-          cmp = a.items.length - b.items.length;
-          break;
-      }
-      return sortOrder === "asc" ? cmp : -cmp;
-    });
-  }, [transactions, sortColumn, sortOrder]);
+export const TransactionTable = ({
+  transactions,
+  isLoading,
+  sortColumn,
+  sortOrder,
+  onSort,
+}: TransactionTableProps) => {
+  const [selectedTrx, setSelectedTrx] = useState<Transaction | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  const { deleteTransaction } = useTransactionMutations();
 
   const handleOpenDetail = (trx: Transaction) => {
     setSelectedTrx(trx);
@@ -185,43 +160,43 @@ const SortableHead = ({
           <TableHeader className="bg-muted/50">
             <TableRow>
               <SortableHead
-                column="invoiceNumber"
+                column={ReportSortBy.INVOICE_NUMBER}
                 sortColumn={sortColumn}
                 sortOrder={sortOrder}
-                onSort={handleSort}
+                onSort={onSort}
               >
                 No. Nota
               </SortableHead>
               <SortableHead
-                column="date"
+                column={ReportSortBy.DATE}
                 sortColumn={sortColumn}
                 sortOrder={sortOrder}
-                onSort={handleSort}
+                onSort={onSort}
               >
                 Waktu
               </SortableHead>
               <SortableHead
-                column="paymentMethod"
+                column={ReportSortBy.PAYMENT_METHOD}
                 sortColumn={sortColumn}
                 sortOrder={sortOrder}
-                onSort={handleSort}
+                onSort={onSort}
                 className="hidden md:table-cell"
               >
                 Metode
               </SortableHead>
               <SortableHead
-                column="totalAmount"
+                column={ReportSortBy.TOTAL_AMOUNT}
                 sortColumn={sortColumn}
                 sortOrder={sortOrder}
-                onSort={handleSort}
+                onSort={onSort}
               >
                 Total
               </SortableHead>
               <SortableHead
-                column="itemCount"
+                column={ReportSortBy.ITEM_COUNT}
                 sortColumn={sortColumn}
                 sortOrder={sortOrder}
-                onSort={handleSort}
+                onSort={onSort}
                 className="hidden sm:table-cell"
               >
                 Items
@@ -240,14 +215,18 @@ const SortableHead = ({
                       <Receipt className="text-muted-foreground h-8 w-8" />
                     </div>
                     <div className="space-y-1">
-                      <p className="text-foreground font-medium">Bebas Transaksi!</p>
-                      <p className="text-muted-foreground text-sm">Belum ada transaksi pada periode atau filter ini.</p>
+                      <p className="text-foreground font-medium">
+                        Bebas Transaksi!
+                      </p>
+                      <p className="text-muted-foreground text-sm">
+                        Belum ada transaksi pada periode atau filter ini.
+                      </p>
                     </div>
                   </div>
                 </TableCell>
               </TableRow>
             ) : (
-              sortedTransactions.map((trx) => (
+              transactions.map((trx) => (
                 <TransactionRow
                   key={trx.id}
                   trx={trx}
@@ -260,7 +239,6 @@ const SortableHead = ({
         </Table>
       </div>
 
-      {/* Detail Modal */}
       <TransactionDetailModal
         transaction={selectedTrx}
         open={isDetailOpen}
@@ -305,7 +283,6 @@ const TransactionRow = ({
       </TableCell>
       <TableCell className="text-right">
         <div className="flex justify-end gap-1">
-          {/* Tombol Detail */}
           <Button
             variant="ghost"
             size="icon"
@@ -315,7 +292,6 @@ const TransactionRow = ({
             <Eye className="h-4 w-4" />
           </Button>
 
-          {/* Tombol Hapus dengan Konfirmasi */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button

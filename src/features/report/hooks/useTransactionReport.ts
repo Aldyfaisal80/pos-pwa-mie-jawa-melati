@@ -1,4 +1,8 @@
-import { type PaymentMethod } from "@/server/validations";
+import {
+  type PaymentMethod,
+  type ReportSortBy,
+  type ReportSortOrder,
+} from "@/server/validations";
 import { api } from "@/trpc/react";
 
 export const useTransactionReport = (
@@ -6,15 +10,24 @@ export const useTransactionReport = (
   endDate?: Date,
   search?: string,
   paymentMethod?: PaymentMethod | "ALL",
+  sortBy?: ReportSortBy,
+  sortOrder?: ReportSortOrder,
   limit = 25,
   page = 1,
 ) => {
-  return api.transaction.getTransactionReport.useQuery({
-    startDate,
-    endDate,
-    search: search || undefined,
-    paymentMethod: paymentMethod === "ALL" ? undefined : paymentMethod,
-    limit,
-    page,
-  });
+  return api.transaction.getTransactionReport.useQuery(
+    {
+      startDate,
+      endDate,
+      search: search || undefined,
+      paymentMethod: paymentMethod === "ALL" ? undefined : paymentMethod,
+      sortBy,
+      sortOrder,
+      limit,
+      page,
+    },
+    {
+      placeholderData: (previousData) => previousData,
+    },
+  );
 };

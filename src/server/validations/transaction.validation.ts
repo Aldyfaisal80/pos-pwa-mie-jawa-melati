@@ -7,6 +7,19 @@ export enum PaymentMethod {
   TRANSFER = "TRANSFER",
 }
 
+export enum ReportSortBy {
+  INVOICE_NUMBER = "invoiceNumber",
+  DATE = "date",
+  PAYMENT_METHOD = "paymentMethod",
+  TOTAL_AMOUNT = "totalAmount",
+  ITEM_COUNT = "itemCount",
+}
+
+export enum ReportSortOrder {
+  ASC = "asc",
+  DESC = "desc",
+}
+
 // Validasi Item dalam keranjang
 const transactionItemSchema = z.object({
   productId: z.string().uuid(),
@@ -36,6 +49,13 @@ export const reportFilterSchema = z.object({
   endDate: z.date().optional(),
   paymentMethod: z.nativeEnum(PaymentMethod).optional(),
   search: z.string().optional(),
+  sortBy: z.nativeEnum(ReportSortBy).default(ReportSortBy.DATE),
+  sortOrder: z.nativeEnum(ReportSortOrder).default(ReportSortOrder.DESC),
   limit: z.number().min(1).max(100).default(25),
   page: z.number().min(1).default(1),
+});
+
+export const exportReportSchema = reportFilterSchema.omit({
+  limit: true,
+  page: true,
 });

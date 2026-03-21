@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { Card } from "@/components/ui/card";
@@ -8,6 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, Download, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import {
+  PaymentMethod,
+  ReportSortBy,
+  ReportSortOrder,
+  type PaymentMethod as ServerPaymentMethod,
+} from "@/server/validations";
+import { api } from "@/trpc/react";
 import { useTransactionReport } from "../hooks/useTransactionReport";
 import { TransactionTable } from "../components/TransactionTable";
 import { exportToCSV } from "../utils/report.utils";
@@ -18,18 +25,29 @@ export const ReportPage = () => {
   const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [paymentMethod, setPaymentMethod] = useState<
+    ServerPaymentMethod | "ALL"
+  >("ALL");
+  const [sortBy, setSortBy] = useState<ReportSortBy>(ReportSortBy.DATE);
+  const [sortOrder, setSortOrder] = useState<ReportSortOrder>(
+    ReportSortOrder.DESC,
+  );
+  const [isExporting, setIsExporting] = useState(false);
 
   // Mengaktifkan sinkronisasi real-time hibrida (PWA Tab + PC Lain)
   useLiveStats();
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const utils = api.useUtils();
 
   const { data, isLoading, isFetching } = useTransactionReport(
     startDate,
     endDate,
     search,
-    undefined,
+    paymentMethod,
+    sortBy,
+    sortOrder,
     limit,
     page,
   );
@@ -37,8 +55,14 @@ export const ReportPage = () => {
   const transactions = data?.transactions ?? [];
   const totalCount = data?.totalCount ?? 0;
   const totalPages = data?.totalPages ?? 1;
-  const currentPage = data?.currentPage ?? 1;
-  
+  const currentPage = page;
+
+  useEffect(() => {
+    if (totalPages > 0 && page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
@@ -51,15 +75,60 @@ export const ReportPage = () => {
     setPage(1);
   };
 
-  const handleExport = () => {
-    if (!transactions.length) {
+  const handleSortChange = (column: ReportSortBy) => {
+    setPage(1);
+    if (sortBy === column) {
+      setSortOrder((prev) =>
+        prev === ReportSortOrder.ASC
+          ? ReportSortOrder.DESC
+          : ReportSortOrder.ASC,
+      );
+      return;
+    }
+
+    setSortBy(column);
+    setSortOrder(
+      column === ReportSortBy.DATE
+        ? ReportSortOrder.DESC
+        : ReportSortOrder.ASC,
+    );
+  };
+
+  const handleExport = async () => {
+    if (!totalCount) {
       toast.error("Tidak ada data untuk diekspor.");
       return;
     }
-    exportToCSV(transactions);
-    toast.success("Export Berhasil", {
-      description: "File laporan.csv berhasil diunduh.",
-    });
+
+    setIsExporting(true);
+
+    try {
+      const exportRows =
+        (await utils.transaction.exportTransactionReport.fetch({
+          startDate,
+          endDate,
+          search: search || undefined,
+          paymentMethod: paymentMethod === "ALL" ? undefined : paymentMethod,
+          sortBy,
+          sortOrder,
+        })) ?? [];
+
+      if (!exportRows.length) {
+        toast.error("Tidak ada data untuk diekspor.");
+        return;
+      }
+
+      exportToCSV(exportRows);
+      toast.success("Export Berhasil", {
+        description: `${exportRows.length} baris laporan berhasil diunduh.`,
+      });
+    } catch (error) {
+      toast.error("Gagal export laporan.", {
+        description: error instanceof Error ? error.message : undefined,
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -74,10 +143,13 @@ export const ReportPage = () => {
             <Button
               onClick={handleExport}
               size="sm"
+              disabled={isExporting || isFetching || isLoading}
               className="flex items-center gap-2 bg-green-600 text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
             >
               <Download className="h-4 w-4" />
-              <span className="hidden md:inline">Export CSV</span>
+              <span className="hidden md:inline">
+                {isExporting ? "Mengekspor..." : "Export CSV"}
+              </span>
             </Button>
           </div>
         </div>
@@ -112,6 +184,29 @@ export const ReportPage = () => {
                 <SelectItem value="25">25 baris</SelectItem>
                 <SelectItem value="50">50 baris</SelectItem>
                 <SelectItem value="100">100 baris</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Metode pembayaran */}
+          <div className="relative min-w-35">
+            <Select
+              value={paymentMethod}
+              onValueChange={(val) =>
+                handleFilterChange(
+                  setPaymentMethod,
+                  val as ServerPaymentMethod | "ALL",
+                )
+              }
+            >
+              <SelectTrigger className="w-full sm:w-40">
+                <SelectValue placeholder="Metode" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">Semua Metode</SelectItem>
+                <SelectItem value={PaymentMethod.CASH}>Tunai</SelectItem>
+                <SelectItem value={PaymentMethod.QRIS}>QRIS</SelectItem>
+                <SelectItem value={PaymentMethod.TRANSFER}>Transfer</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -157,7 +252,13 @@ export const ReportPage = () => {
 
         {/* Tabel */}
         <Card className="border-border overflow-hidden border shadow-sm relative">
-          <TransactionTable transactions={transactions} isLoading={isLoading || isFetching} />
+          <TransactionTable
+            transactions={transactions}
+            isLoading={isLoading}
+            sortColumn={sortBy}
+            sortOrder={sortOrder}
+            onSort={handleSortChange}
+          />
 
           {/* Footer info & Pagination Commands */}
           <div className="bg-muted/50 border-t px-4 py-3 flex flex-col items-center justify-between gap-3 sm:flex-row">

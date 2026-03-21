@@ -4,8 +4,73 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   syncTransactionSchema,
   reportFilterSchema,
+  exportReportSchema,
+  ReportSortBy,
 } from "@/server/validations";
 import { errorFilter } from "@/server/filters/error.filter";
+
+const buildReportWhereClause = (
+  input: {
+    startDate?: Date;
+    endDate?: Date;
+    paymentMethod?: string;
+    search?: string;
+  },
+): Prisma.TransactionWhereInput => {
+  const whereClause: Prisma.TransactionWhereInput = {
+    isSynced: true,
+  };
+
+  if (input.startDate || input.endDate) {
+    const dateFilter: Prisma.DateTimeFilter = {};
+
+    if (input.startDate) {
+      const start = new Date(input.startDate);
+      start.setHours(0, 0, 0, 0);
+      dateFilter.gte = start;
+    }
+
+    if (input.endDate) {
+      const end = new Date(input.endDate);
+      end.setHours(23, 59, 59, 999);
+      dateFilter.lte = end;
+    }
+
+    whereClause.date = dateFilter;
+  }
+
+  if (input.paymentMethod) {
+    whereClause.paymentMethod = input.paymentMethod as never;
+  }
+
+  if (input.search) {
+    whereClause.invoiceNumber = {
+      contains: input.search,
+      mode: "insensitive",
+    };
+  }
+
+  return whereClause;
+};
+
+const buildReportOrderBy = (
+  sortBy: ReportSortBy,
+  sortOrder: "asc" | "desc",
+): Prisma.TransactionOrderByWithRelationInput => {
+  switch (sortBy) {
+    case ReportSortBy.INVOICE_NUMBER:
+      return { invoiceNumber: sortOrder };
+    case ReportSortBy.PAYMENT_METHOD:
+      return { paymentMethod: sortOrder };
+    case ReportSortBy.TOTAL_AMOUNT:
+      return { totalAmount: sortOrder };
+    case ReportSortBy.ITEM_COUNT:
+      return { items: { _count: sortOrder } };
+    case ReportSortBy.DATE:
+    default:
+      return { date: sortOrder };
+  }
+};
 
 export const transactionRouter = createTRPCRouter({
   // --- Sync Offline Transactions ---
@@ -61,29 +126,8 @@ export const transactionRouter = createTRPCRouter({
     .input(reportFilterSchema)
     .query(async ({ ctx, input }) => {
       try {
-        const startBase = input.startDate ?? new Date();
-        const start = new Date(startBase);
-        start.setHours(0, 0, 0, 0);
-
-        const endBase = input.endDate ?? new Date();
-        const end = new Date(endBase);
-        end.setHours(23, 59, 59, 999);
-
-        const whereClause: Prisma.TransactionWhereInput = {
-          isSynced: true,
-          date: { gte: start, lte: end },
-        };
-
-        if (input.paymentMethod) {
-          whereClause.paymentMethod = input.paymentMethod;
-        }
-
-        if (input.search) {
-          whereClause.invoiceNumber = {
-            contains: input.search,
-            mode: "insensitive",
-          };
-        }
+        const whereClause = buildReportWhereClause(input);
+        const orderBy = buildReportOrderBy(input.sortBy, input.sortOrder);
 
         const totalCount = await ctx.db.transaction.count({
           where: whereClause,
@@ -94,7 +138,7 @@ export const transactionRouter = createTRPCRouter({
         const transactions = await ctx.db.transaction.findMany({
           where: whereClause,
           include: { items: true },
-          orderBy: { date: "desc" },
+          orderBy,
           skip,
           take: input.limit,
         });
@@ -107,6 +151,28 @@ export const transactionRouter = createTRPCRouter({
           totalPages,
           currentPage: input.page,
         };
+      } catch (error) {
+        errorFilter(error);
+      }
+    }),
+
+  exportTransactionReport: publicProcedure
+    .input(exportReportSchema)
+    .query(async ({ ctx, input }) => {
+      try {
+        const whereClause = buildReportWhereClause(input);
+        const orderBy = buildReportOrderBy(input.sortBy, input.sortOrder);
+
+        return await ctx.db.transaction.findMany({
+          where: whereClause,
+          orderBy,
+          select: {
+            invoiceNumber: true,
+            date: true,
+            paymentMethod: true,
+            totalAmount: true,
+          },
+        });
       } catch (error) {
         errorFilter(error);
       }

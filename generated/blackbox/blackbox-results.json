@@ -1,0 +1,269 @@
+{
+  "metadata": {
+    "app": "post-pwa",
+    "suite": "blackbox-advanced",
+    "generatedAt": "2026-03-21T05:21:30.890Z",
+    "baseUrl": "http://localhost:3000",
+    "browser": "chromium"
+  },
+  "summary": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0
+  },
+  "sharedState": {
+    "initialTransactionCount": 32,
+    "originalStoreName": "Mie Jawa Melati",
+    "updatedStoreName": "Blackbox Store 1774070446540",
+    "createdCategoryName": "Blackbox Category 1774070451737",
+    "createdProductName": "Blackbox Product 1774070453422 Updated",
+    "onlineInvoice": "INV-20260321-1461",
+    "offlineInvoice": "INV-20260321-3355"
+  },
+  "cases": [
+    {
+      "id": "dashboard-menampilkan-statistik-harian",
+      "title": "dashboard menampilkan statistik harian",
+      "status": "passed",
+      "durationMs": 2564,
+      "data": {
+        "omzetHariIni": "Rp 778.500",
+        "totalTransaksiHariIni": 32,
+        "menuTerlaris": "Sego Mie Godog"
+      },
+      "errors": []
+    },
+    {
+      "id": "dashboard-dapat-mengganti-periode-grafik-pendapatan",
+      "title": "dashboard dapat mengganti periode grafik pendapatan",
+      "status": "passed",
+      "durationMs": 861,
+      "data": {
+        "defaultPeriod": 7,
+        "updatedPeriod": 30,
+        "titleUpdated": true
+      },
+      "errors": []
+    },
+    {
+      "id": "pengaturan-toko-memvalidasi-nama-wajib",
+      "title": "pengaturan toko memvalidasi nama wajib",
+      "status": "passed",
+      "durationMs": 1539,
+      "data": {
+        "validationMessage": "Nama toko wajib diisi.",
+        "validationTriggered": true
+      },
+      "errors": []
+    },
+    {
+      "id": "pengaturan-toko-dapat-disimpan-dan-dipulihkan",
+      "title": "pengaturan toko dapat disimpan dan dipulihkan",
+      "status": "passed",
+      "durationMs": 3007,
+      "data": {
+        "originalName": "Mie Jawa Melati",
+        "updatedName": "Blackbox Store 1774070446540",
+        "persistedAfterReload": true,
+        "restoredToOriginal": true
+      },
+      "errors": []
+    },
+    {
+      "id": "kategori-aktif-tidak-bisa-dihapus",
+      "title": "kategori aktif tidak bisa dihapus",
+      "status": "passed",
+      "durationMs": 2280,
+      "data": {
+        "categoryName": "Makanan",
+        "deletePrevented": true,
+        "businessRuleValidated": true
+      },
+      "errors": []
+    },
+    {
+      "id": "kategori-baru-dapat-ditambahkan",
+      "title": "kategori baru dapat ditambahkan",
+      "status": "passed",
+      "durationMs": 1540,
+      "data": {
+        "categoryName": "Blackbox Category 1774070451737",
+        "createSuccess": true
+      },
+      "errors": []
+    },
+    {
+      "id": "produk-baru-dapat-ditambahkan-pada-kategori-baru",
+      "title": "produk baru dapat ditambahkan pada kategori baru",
+      "status": "passed",
+      "durationMs": 2372,
+      "data": {
+        "productName": "Blackbox Product 1774070453422",
+        "categoryName": "Blackbox Category 1774070451737",
+        "price": 21000,
+        "createSuccess": true
+      },
+      "errors": []
+    },
+    {
+      "id": "produk-dapat-diedit-tanpa-merusak-data-form",
+      "title": "produk dapat diedit tanpa merusak data form",
+      "status": "passed",
+      "durationMs": 3221,
+      "data": {
+        "originalProductName": "Blackbox Product 1774070453422",
+        "updatedProductName": "Blackbox Product 1774070453422 Updated",
+        "updatedPrice": 22000
+      },
+      "errors": []
+    },
+    {
+      "id": "soft-delete-produk-membuatnya-tidak-tampil-di-kasir",
+      "title": "soft delete produk membuatnya tidak tampil di kasir",
+      "status": "passed",
+      "durationMs": 3768,
+      "data": {
+        "productName": "Blackbox Product 1774070453422 Updated",
+        "softDeleteSuccess": true,
+        "hiddenFromCashier": true
+      },
+      "errors": []
+    },
+    {
+      "id": "kategori-dengan-produk-nonaktif-dapat-dihapus",
+      "title": "kategori dengan produk nonaktif dapat dihapus",
+      "status": "passed",
+      "durationMs": 1883,
+      "data": {
+        "categoryName": "Blackbox Category 1774070451737",
+        "deletedAfterProductsInactive": true
+      },
+      "errors": []
+    },
+    {
+      "id": "checkout-tunai-ditolak-jika-nominal-kurang",
+      "title": "checkout tunai ditolak jika nominal kurang",
+      "status": "passed",
+      "durationMs": 1680,
+      "data": {
+        "productName": "Sego Mie Godog",
+        "attemptedCash": 10000,
+        "buttonDisabled": true,
+        "shortageVisible": true
+      },
+      "errors": []
+    },
+    {
+      "id": "kasir-dapat-memecah-catatan-item-dan-mencetaknya-di-struk",
+      "title": "kasir dapat memecah catatan item dan mencetaknya di struk",
+      "status": "passed",
+      "durationMs": 2900,
+      "data": {
+        "invoice": "INV-20260321-1461",
+        "total": "Rp 30.000",
+        "splitRowCreated": true,
+        "notePrintedOnReceipt": true
+      },
+      "errors": []
+    },
+    {
+      "id": "laporan-dapat-menemukan-dan-menampilkan-detail-transaksi",
+      "title": "laporan dapat menemukan dan menampilkan detail transaksi",
+      "status": "passed",
+      "durationMs": 1778,
+      "data": {
+        "invoice": "INV-20260321-1461",
+        "detailOpened": true,
+        "noteVisible": true,
+        "paymentMethodVisible": true
+      },
+      "errors": []
+    },
+    {
+      "id": "laporan-mendukung-sorting-total-transaksi",
+      "title": "laporan mendukung sorting total transaksi",
+      "status": "passed",
+      "durationMs": 2214,
+      "data": {
+        "ascFirstTotal": 1000,
+        "ascSecondTotal": 1000,
+        "descFirstTotal": 117000,
+        "descSecondTotal": 108000
+      },
+      "errors": []
+    },
+    {
+      "id": "laporan-mendukung-perubahan-limit-baris",
+      "title": "laporan mendukung perubahan limit baris",
+      "status": "passed",
+      "durationMs": 2307,
+      "data": {
+        "footerBefore": "Menampilkan 10 transaksi dari total 437 transaksi",
+        "footerAfter": "Menampilkan 25 transaksi dari total 437 transaksi",
+        "visibleRowsAfterLimitChange": 25
+      },
+      "errors": []
+    },
+    {
+      "id": "pagination-laporan-tidak-mengosongkan-footer-saat-pindah-halaman",
+      "title": "pagination laporan tidak mengosongkan footer saat pindah halaman",
+      "status": "passed",
+      "durationMs": 3052,
+      "data": {
+        "footerStayedStable": true,
+        "firstInvoiceBefore": "INV-20260321-005-3610"
+      },
+      "errors": []
+    },
+    {
+      "id": "filter-metode-pembayaran-bekerja-di-laporan",
+      "title": "filter metode pembayaran bekerja di laporan",
+      "status": "passed",
+      "durationMs": 2358,
+      "data": {
+        "selectedPaymentMethod": "QRIS",
+        "visibleRows": 10,
+        "allRowsMatched": true
+      },
+      "errors": []
+    },
+    {
+      "id": "laporan-dapat-diekspor-seluruh-hasil-filter-bukan-hanya-halaman-aktif",
+      "title": "laporan dapat diekspor seluruh hasil filter, bukan hanya halaman aktif",
+      "status": "passed",
+      "durationMs": 1706,
+      "data": {
+        "fileName": "laporan_2026-03-21.csv",
+        "exportedRows": 437,
+        "totalCount": 437,
+        "visibleRowsOnPage": 10,
+        "containsHeader": true
+      },
+      "errors": []
+    },
+    {
+      "id": "laporan-dapat-menghapus-transaksi",
+      "title": "laporan dapat menghapus transaksi",
+      "status": "passed",
+      "durationMs": 2323,
+      "data": {
+        "invoice": "INV-20260321-1461",
+        "deleted": true
+      },
+      "errors": []
+    },
+    {
+      "id": "transaksi-offline-disimpan-lokal-lalu-tersinkron-saat-online",
+      "title": "transaksi offline disimpan lokal lalu tersinkron saat online",
+      "status": "passed",
+      "durationMs": 3647,
+      "data": {
+        "invoice": "INV-20260321-3355",
+        "pendingCountBeforeSync": 1,
+        "syncedToServer": true,
+        "foundInReport": true
+      },
+      "errors": []
+    }
+  ]
+}
