@@ -23,15 +23,16 @@ export const CheckoutCashInput = ({
         Uang Diterima
       </p>
       <div className="relative mb-3">
-        <span className="text-muted-foreground absolute top-1/2 left-4 -translate-y-1/2 font-bold">
-          Rp
-        </span>
         <Input
-          type="number"
-          className="h-12 pl-10 text-lg font-bold"
-          placeholder="0"
-          value={paymentAmount}
-          onChange={(e) => onPaymentAmountChange(e.target.value)}
+          type="text"
+          inputMode="numeric"
+          className="h-12 text-lg font-bold"
+          placeholder="Rp 0"
+          value={paymentAmount ? formatRupiah(Number(paymentAmount)) : ""}
+          onChange={(e) => {
+            const rawValue = e.target.value.replace(/\D/g, "");
+            onPaymentAmountChange(rawValue);
+          }}
         />
       </div>
       <div className="grid grid-cols-4 gap-2">
