@@ -50,6 +50,6 @@ yarn-error.log*
 # agent files
 .agent
 
-# local docs / planning files
-/docs
+# local planning files (keep docs/ tracked)
+/docs/PLAN-*.md
 /design-system
