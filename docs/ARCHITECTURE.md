@@ -95,6 +95,11 @@ features/<feature>/
 
 ## Data Flow
 
+![Post PWA — System Data Flow](./data-flow-diagram.png)
+
+<details>
+<summary>📝 Mermaid Text Version</summary>
+
 ```mermaid
 graph LR
     subgraph Client
@@ -119,11 +124,18 @@ graph LR
     end
 ```
 
+</details>
+
 ---
 
 ## Offline-First Architecture
 
 The application uses a **queue-and-sync** pattern:
+
+![Post PWA — Offline Sync Flow](./offline-sync-diagram.png)
+
+<details>
+<summary>📝 Mermaid Text Version</summary>
 
 ```mermaid
 sequenceDiagram
@@ -148,6 +160,8 @@ sequenceDiagram
     UI->>IDB: Mark as synced
     UI->>UI: Reset pending counter
 ```
+
+</details>
 
 **Key components:**
 - `src/lib/offline-db.ts` — IndexedDB wrapper (Dexie-like API)

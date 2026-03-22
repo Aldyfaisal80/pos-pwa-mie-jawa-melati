@@ -6,6 +6,11 @@
 
 ## ER Diagram
 
+![Post PWA — Database Schema](./erd-diagram.png)
+
+<details>
+<summary>📝 Mermaid Text Version</summary>
+
 ```mermaid
 erDiagram
     Category ||--o{ Product : "has many"
@@ -64,6 +69,8 @@ erDiagram
         datetime updatedAt
     }
 ```
+
+</details>
 
 ---
 

@@ -162,6 +162,7 @@ npm run start
 | [Architecture](./docs/ARCHITECTURE.md) | System overview, data flow, design decisions |
 | [API Reference](./docs/API.md) | All tRPC procedures with input/output schemas |
 | [Database Schema](./docs/DATABASE.md) | ER diagram, model reference, indexes |
+| [UML Diagrams](./docs/UML.md) | Use Case, Class, Component, Activity diagrams |
 | [Changelog](./CHANGELOG.md) | Version history (Keep a Changelog) |
 | [Contributing](./CONTRIBUTING.md) | Development setup & contribution guide |
 
