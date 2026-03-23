@@ -52,7 +52,6 @@ export const useSyncTransaction = () => {
       })),
     };
 
-    // --- ONLINE: langsung ke server ---
     if (typeof window !== "undefined" && navigator.onLine) {
       // Simpan dulu ke IndexedDB, hapus setelah server konfirmasi
       void addPendingTransaction(payload);
@@ -86,7 +85,6 @@ export const useSyncTransaction = () => {
         },
       );
     } else {
-      // --- OFFLINE: simpan ke IndexedDB, tetap tampilkan struk ---
       void addPendingTransaction(payload).then(() => {
         toast.info("Mode Offline", {
           description:

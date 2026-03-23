@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Prisma } from "../../../../generated/prisma";
+import { Prisma, PaymentMethod } from "../../../../generated/prisma";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   syncTransactionSchema,
@@ -40,7 +40,7 @@ const buildReportWhereClause = (
   }
 
   if (input.paymentMethod) {
-    whereClause.paymentMethod = input.paymentMethod as never;
+    whereClause.paymentMethod = input.paymentMethod as PaymentMethod;
   }
 
   if (input.search) {
@@ -73,7 +73,6 @@ const buildReportOrderBy = (
 };
 
 export const transactionRouter = createTRPCRouter({
-  // --- Sync Offline Transactions ---
   syncOfflineData: publicProcedure
     .input(syncTransactionSchema)
     .mutation(async ({ ctx, input }) => {
@@ -108,7 +107,6 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  // --- Delete Transaction ---
   deleteTransaction: publicProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
@@ -121,27 +119,24 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  // --- Transaction Report (Paginated) ---
   getTransactionReport: publicProcedure
     .input(reportFilterSchema)
     .query(async ({ ctx, input }) => {
       try {
         const whereClause = buildReportWhereClause(input);
         const orderBy = buildReportOrderBy(input.sortBy, input.sortOrder);
-
-        const totalCount = await ctx.db.transaction.count({
-          where: whereClause,
-        });
-
         const skip = (input.page - 1) * input.limit;
 
-        const transactions = await ctx.db.transaction.findMany({
-          where: whereClause,
-          include: { items: true },
-          orderBy,
-          skip,
-          take: input.limit,
-        });
+        const [totalCount, transactions] = await Promise.all([
+          ctx.db.transaction.count({ where: whereClause }),
+          ctx.db.transaction.findMany({
+            where: whereClause,
+            include: { items: true },
+            orderBy,
+            skip,
+            take: input.limit,
+          }),
+        ]);
 
         const totalPages = Math.ceil(totalCount / input.limit);
 
@@ -178,7 +173,6 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  // --- Dashboard Statistics (Today) ---
   getDashboardStats: publicProcedure.query(async ({ ctx }) => {
     try {
       const today = new Date();
@@ -211,7 +205,6 @@ export const transactionRouter = createTRPCRouter({
     }
   }),
 
-  // --- Dynamic Revenue Chart ---
   getRevenueChart: publicProcedure
     .input(
       z.object({

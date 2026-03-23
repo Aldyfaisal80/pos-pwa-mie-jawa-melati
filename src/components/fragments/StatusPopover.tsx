@@ -16,12 +16,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { formatRupiah } from "@/lib/format";
+import { api } from "@/trpc/react";
 
 interface StatusPopoverProps {
   isOnline: boolean;
   pendingUpload: number;
-  transactionCount: number;
-  totalOmzet: number;
   isSyncing: boolean;
   onSync: () => void;
 }
@@ -29,11 +28,15 @@ interface StatusPopoverProps {
 export const StatusPopover = ({
   isOnline,
   pendingUpload,
-  transactionCount,
-  totalOmzet,
   isSyncing,
   onSync,
 }: StatusPopoverProps) => {
+  const { data: stats } = api.transaction.getDashboardStats.useQuery(
+    undefined,
+    { staleTime: 60_000 },
+  );
+  const transactionCount = stats?.totalTransactions ?? 0;
+  const totalOmzet = stats?.totalOmzet ?? 0;
   return (
     <Popover>
       <PopoverTrigger asChild>

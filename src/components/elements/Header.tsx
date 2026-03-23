@@ -8,7 +8,6 @@ import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { StatusPopover } from "../fragments/StatusPopover";
 import { useOfflineSync } from "@/hooks/use-offline-sync";
 import { navItems } from "../config/navigation";
-import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
 export const Header = () => {
@@ -19,7 +18,6 @@ export const Header = () => {
     navItems.find((item) => item.href === pathname) ?? navItems[0];
 
   const { pendingCount, syncNow, isSyncing } = useOfflineSync();
-  const { data: stats } = api.transaction.getDashboardStats.useQuery();
 
   return (
     <header className="bg-background sticky top-0 z-40 flex h-14 w-full shrink-0 items-center border-b border-border/50 px-3 sm:px-4">
@@ -62,8 +60,6 @@ export const Header = () => {
         <StatusPopover
           isOnline={isOnline}
           pendingUpload={pendingCount}
-          transactionCount={stats?.totalTransactions ?? 0}
-          totalOmzet={stats?.totalOmzet ?? 0}
           isSyncing={isSyncing}
           onSync={syncNow}
         />

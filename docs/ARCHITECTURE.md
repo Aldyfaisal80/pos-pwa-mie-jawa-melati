@@ -208,3 +208,27 @@ Layer 4: Pages (src/features/*/pages/ → mounted by src/app/)
 ### ADR-005: Vaul Drawer for Mobile Interactions
 **Decision:** Use Vaul to render modals as bottom sheets on mobile.  
 **Rationale:** Native-feeling swipeable drawers provide better mobile ergonomics than centered modals, especially with virtual keyboards.
+
+### ADR-006: No User Authentication (Single-User POS)
+**Status:** Accepted  
+**Context:** Sistem POS ini didesain untuk **satu pengguna (pemilik toko)** yang mengoperasikan aplikasi di perangkat pribadinya. Penambahan fitur login (email/password/OAuth) perlu dievaluasi dari sisi kebutuhan aktual vs kompleksitas tambahan.
+
+**Decision:** Tidak mengimplementasikan authentication system (login/register). Aplikasi langsung dapat digunakan tanpa proses autentikasi.
+
+**Rationale:**
+1. **Analisis Kebutuhan** — Berdasarkan analisis, hanya ada 1 aktor (pemilik toko/kasir). Menambah login justru menghambat kecepatan operasional kasir pada setiap sesi penggunaan.
+2. **Prinsip YAGNI (You Aren't Gonna Need It)** — Membangun fitur autentikasi multi-user untuk aplikasi single-user merupakan over-engineering yang bertentangan dengan prinsip software engineering.
+3. **Preseden Industri** — POS retail single-user seperti Square POS dan Moka POS versi dasar juga tidak menggunakan login tradisional untuk operator tunggal.
+4. **Deployment Model** — Aplikasi di-deploy untuk penggunaan internal/lokal, bukan sebagai SaaS publik multi-tenant.
+
+**Keamanan Tetap Dijaga Melalui:**
+- Input validation Zod pada setiap endpoint API (mencegah malformed data)
+- Prisma ORM parameterized queries (mencegah SQL Injection)
+- Environment variables untuk credential database (`.env` di-gitignore)
+- Build-time env validation via `@t3-oss/env-nextjs`
+
+**Consequences:**
+- ✅ UX lebih cepat — kasir langsung operasional tanpa barrier
+- ✅ Arsitektur lebih sederhana dan maintainable
+- ⚠️ Jika kebutuhan berubah menjadi multi-user, authentication middleware dapat ditambahkan pada layer tRPC tanpa mengubah business logic (karena arsitektur sudah berbasis procedure middleware)
+

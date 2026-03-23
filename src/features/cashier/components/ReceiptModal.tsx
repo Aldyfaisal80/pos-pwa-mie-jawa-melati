@@ -36,19 +36,15 @@ export const ReceiptModal = ({
       <DialogContent className="w-[calc(100vw-2rem)] max-w-85 overflow-visible border-none bg-transparent p-0 shadow-none sm:w-85">
         <DialogTitle className="sr-only">Struk Pembayaran</DialogTitle>
 
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-                        .receipt-jagged { position: relative; background: #ffffff; }
-                        .receipt-jagged::after {
-                            content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 10px;
-                            background: linear-gradient(45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.667%, transparent 66.667%),
-                                        linear-gradient(-45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.667%, transparent 66.667%);
-                            background-size: 20px 20px; background-position: 0 0;
-                        }
-                    `,
-          }}
-        />
+        <style>{`
+          .receipt-jagged { position: relative; background: #ffffff; }
+          .receipt-jagged::after {
+            content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 10px;
+            background: linear-gradient(45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.667%, transparent 66.667%),
+                        linear-gradient(-45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.667%, transparent 66.667%);
+            background-size: 20px 20px; background-position: 0 0;
+          }
+        `}</style>
 
         <div className="receipt-jagged mt-8 w-full rounded-t-xl pb-4 shadow-2xl">
           {/* Header */}

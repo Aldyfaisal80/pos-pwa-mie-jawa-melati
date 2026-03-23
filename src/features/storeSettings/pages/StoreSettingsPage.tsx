@@ -41,7 +41,7 @@ export const StoreSettingsPage = () => {
         name: profile.name ?? "",
         address: profile.address ?? "",
         phone: profile.phone ?? "",
-        logoUrl: (profile as any).logoUrl ?? "",
+        logoUrl: "logoUrl" in profile ? String(profile.logoUrl ?? "") : "",
       });
     }
   }, [profile]);
