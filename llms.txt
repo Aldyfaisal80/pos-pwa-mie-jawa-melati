@@ -22,7 +22,8 @@
 - **Offline-First**: Transactions save to IndexedDB, batch sync to Supabase on reconnect
 - **Feature Modules**: Each feature is self-contained (components/hooks/pages/types/utils)
 - **tRPC + Zod**: End-to-end type safety from DB to UI, no REST endpoints
-- **Soft Delete**: Products marked `isAvailable=false`, never truly deleted (report integrity)
+- **Soft Delete**: Products marked `isAvailable=false`; Transactions set `deletedAt` timestamp — data preserved for reporting
+- **WIB Timezone**: All date queries use `Asia/Jakarta` (UTC+7) boundaries for accurate Indonesian business reporting
 - **Responsive Drawer/Dialog**: Vaul bottom sheets on mobile, standard dialogs on desktop
 
 ## Tech Stack

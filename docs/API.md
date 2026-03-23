@@ -163,7 +163,7 @@ Batch sync offline transactions to the database.
 
 ### `transaction.deleteTransaction` — Mutation
 
-Permanently delete a transaction and its items.
+Soft-delete a transaction (sets `deletedAt` timestamp). Deleted transactions are excluded from all reports and dashboard stats.
 
 **Input:**
 
@@ -171,7 +171,8 @@ Permanently delete a transaction and its items.
 |-------|------|----------|-------------|
 | `id` | `string (uuid)` | ✅ | Transaction ID |
 
-**Response:** Deleted `Transaction` object (cascade deletes items)
+**Response:** Updated `Transaction` object (with `deletedAt` set)  
+**Errors:** `NOT_FOUND` if transaction doesn't exist · `CONFLICT` if already deleted
 
 ---
 

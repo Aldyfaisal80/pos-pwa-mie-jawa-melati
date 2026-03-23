@@ -45,6 +45,7 @@ erDiagram
         decimal paidAmount "Decimal 12-2"
         decimal change "Decimal 12-2"
         boolean isSynced "default false"
+        datetime deletedAt "nullable - soft delete"
         datetime createdAt
         datetime updatedAt
     }
@@ -113,8 +114,11 @@ erDiagram
 | `paidAmount` | `Decimal(12,2)` | required | Amount paid by customer |
 | `change` | `Decimal(12,2)` | required | Change returned |
 | `isSynced` | `Boolean` | default: `false` | Offline sync status |
+| `deletedAt` | `DateTime?` | optional | Soft delete timestamp (`null` = active) |
 
-**Indexes:** `date`, `isSynced`
+**Indexes:** `date`, `isSynced`, `deletedAt`
+
+> **Note:** Deleting a transaction sets `deletedAt` to current timestamp (soft delete). All queries filter `deletedAt: null` to exclude deleted records.
 
 ### TransactionItem
 
