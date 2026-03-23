@@ -2,6 +2,8 @@ import { TRPCError, type TRPC_ERROR_CODE_KEY } from "@trpc/server";
 import { ZodError } from "zod";
 import { ErrorTRPCService } from "../services/error.service";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export class AppError extends Error {
   constructor(
     public statusCode: number,
@@ -65,9 +67,10 @@ export const errorFilter = (error: unknown) => {
   if (error instanceof Error) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
-      message:
-        error.message ||
-        ErrorTRPCService.generateMessage("INTERNAL_SERVER_ERROR"),
+      // In production, hide internal error details (Prisma table names, constraints, etc.)
+      message: isDev
+        ? (error.message || ErrorTRPCService.generateMessage("INTERNAL_SERVER_ERROR"))
+        : ErrorTRPCService.generateMessage("INTERNAL_SERVER_ERROR"),
       cause: error,
     });
   }

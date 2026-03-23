@@ -26,7 +26,7 @@ export const categoryRouter = createTRPCRouter({
     }),
 
   delete: publicProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.number().int().positive() }))
     .mutation(async ({ ctx, input }) => {
       try {
         return await ctx.db.$transaction(async (tx) => {

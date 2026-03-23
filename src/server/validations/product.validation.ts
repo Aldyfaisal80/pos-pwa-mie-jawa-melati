@@ -10,14 +10,14 @@ export const createProductSchema = z.object({
     .number({ message: "Harga wajib diisi" })
     .min(0, "Harga tidak boleh negatif"),
   image: z.string().optional().nullable(),
-  categoryId: z.number({ message: "Kategori wajib dipilih" }),
+  categoryId: z.number({ message: "Kategori wajib dipilih" }).int().positive(),
   isAvailable: z.boolean().default(true).optional(),
 });
 
 export const updateProductSchema = createProductSchema.partial();
 
 export const filterProductSchema = z.object({
-  categoryId: z.number().optional(),
+  categoryId: z.number().int().positive().optional(),
   search: z.string().optional(),
   onlyAvailable: z.boolean().optional(),
 });

@@ -8,6 +8,8 @@ import {
   ReportSortBy,
 } from "@/server/validations";
 import { errorFilter } from "@/server/filters/error.filter";
+import { ErrorTRPCService } from "@/server/services/error.service";
+import { toWIBStartOfDay, toWIBEndOfDay, todayWIBStart } from "@/lib/timezone";
 
 const buildReportWhereClause = (
   input: {
@@ -19,22 +21,15 @@ const buildReportWhereClause = (
 ): Prisma.TransactionWhereInput => {
   const whereClause: Prisma.TransactionWhereInput = {
     isSynced: true,
+    deletedAt: null, // exclude soft-deleted records
   };
 
   if (input.startDate || input.endDate) {
     const dateFilter: Prisma.DateTimeFilter = {};
 
-    if (input.startDate) {
-      const start = new Date(input.startDate);
-      start.setHours(0, 0, 0, 0);
-      dateFilter.gte = start;
-    }
-
-    if (input.endDate) {
-      const end = new Date(input.endDate);
-      end.setHours(23, 59, 59, 999);
-      dateFilter.lte = end;
-    }
+    // Use WIB (UTC+7) boundaries so date filtering is accurate for Indonesian users
+    if (input.startDate) dateFilter.gte = toWIBStartOfDay(new Date(input.startDate));
+    if (input.endDate) dateFilter.lte = toWIBEndOfDay(new Date(input.endDate));
 
     whereClause.date = dateFilter;
   }
@@ -111,8 +106,17 @@ export const transactionRouter = createTRPCRouter({
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       try {
-        return await ctx.db.transaction.delete({
+        const trx = await ctx.db.transaction.findUnique({
           where: { id: input.id },
+          select: { deletedAt: true },
+        });
+
+        if (!trx) ErrorTRPCService.throw("NOT_FOUND");
+        if (trx.deletedAt) ErrorTRPCService.throw("CONFLICT", "sudah dihapus");
+
+        return await ctx.db.transaction.update({
+          where: { id: input.id },
+          data: { deletedAt: new Date() },
         });
       } catch (error) {
         errorFilter(error);
@@ -175,18 +179,20 @@ export const transactionRouter = createTRPCRouter({
 
   getDashboardStats: publicProcedure.query(async ({ ctx }) => {
     try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      // Use WIB start-of-day so "today" is correct for Indonesian users
+      const today = todayWIBStart();
 
       const stats = await ctx.db.transaction.aggregate({
-        where: { date: { gte: today }, isSynced: true },
+        where: { date: { gte: today }, isSynced: true, deletedAt: null },
         _sum: { totalAmount: true },
         _count: { id: true },
       });
 
       const topProducts = await ctx.db.transactionItem.groupBy({
         by: ["productName"],
-        where: { transaction: { date: { gte: today }, isSynced: true } },
+        where: {
+          transaction: { date: { gte: today }, isSynced: true, deletedAt: null },
+        },
         _sum: { quantity: true },
         orderBy: { _sum: { quantity: "desc" } },
         take: 5,
@@ -214,45 +220,55 @@ export const transactionRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       try {
         const dayNames = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
-
-        const days = Array.from({ length: input.days }, (_, i) => {
-          const d = new Date();
-          d.setDate(d.getDate() - (input.days - 1 - i));
-          d.setHours(0, 0, 0, 0);
-          return d;
-        });
-
-        const startDate = days[0]!;
-        const endDate = new Date();
-        endDate.setHours(23, 59, 59, 999);
-
-        const transactions = await ctx.db.transaction.findMany({
-          where: {
-            isSynced: true,
-            date: { gte: startDate, lte: endDate },
-          },
-          select: { date: true, totalAmount: true },
-        });
-
         const useDate = input.days > 14;
 
-        const result = days.map((day) => {
-          const dayTransactions = transactions.filter((trx) => {
-            const trxDate = new Date(trx.date);
-            trxDate.setHours(0, 0, 0, 0);
-            return trxDate.getTime() === day.getTime();
-          });
+        // Build the WIB-aware date range for the query
+        const now = new Date();
+        const startDate = toWIBStartOfDay(
+          new Date(now.getTime() - (input.days - 1) * 24 * 60 * 60 * 1000),
+        );
+        const endDate = toWIBEndOfDay(now);
 
-          const total = dayTransactions.reduce(
-            (sum, trx) => sum + trx.totalAmount.toNumber(),
-            0,
+        // Single SQL GROUP BY query — avoids fetching all rows into JS memory.
+        // DATE() with AT TIME ZONE ensures day boundaries are calculated in WIB.
+        type RevenueRow = { day: Date; total: number };
+        const rows = await ctx.db.$queryRaw<RevenueRow[]>`
+          SELECT
+            DATE(date AT TIME ZONE 'Asia/Jakarta') AS day,
+            COALESCE(SUM("totalAmount"), 0)::float   AS total
+          FROM "Transaction"
+          WHERE
+            "isSynced" = true
+            AND "deletedAt" IS NULL
+            AND date >= ${startDate}
+            AND date <= ${endDate}
+          GROUP BY day
+          ORDER BY day ASC
+        `;
+
+        // Build every day in range so days with 0 revenue are still included
+        const result = Array.from({ length: input.days }, (_, i) => {
+          const d = new Date(
+            now.getTime() - (input.days - 1 - i) * 24 * 60 * 60 * 1000,
           );
+          // Shift to WIB to get the correct local date for label/lookup
+          const wibD = new Date(d.getTime() + 7 * 60 * 60 * 1000);
 
           const label = useDate
-            ? `${String(day.getDate()).padStart(2, "0")}/${String(day.getMonth() + 1).padStart(2, "0")}`
-            : dayNames[day.getDay()]!;
+            ? `${String(wibD.getUTCDate()).padStart(2, "0")}/${String(wibD.getUTCMonth() + 1).padStart(2, "0")}`
+            : dayNames[wibD.getUTCDay()]!;
 
-          return { name: label, total };
+          // Match the SQL `day` column (a plain date at midnight UTC from DATE())
+          const match = rows.find((r) => {
+            const rowDay = new Date(r.day);
+            return (
+              rowDay.getUTCFullYear() === wibD.getUTCFullYear() &&
+              rowDay.getUTCMonth() === wibD.getUTCMonth() &&
+              rowDay.getUTCDate() === wibD.getUTCDate()
+            );
+          });
+
+          return { name: label, total: match?.total ?? 0 };
         });
 
         return result;

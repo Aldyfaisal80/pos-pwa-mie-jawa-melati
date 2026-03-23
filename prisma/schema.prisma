@@ -55,7 +55,8 @@ model Transaction {
     paidAmount    Decimal       @db.Decimal(12, 2)
     change        Decimal       @db.Decimal(12, 2)
 
-    isSynced Boolean @default(false)
+    isSynced  Boolean   @default(false)
+    deletedAt DateTime? // null = active, set = soft-deleted
 
     items TransactionItem[]
 
@@ -64,7 +65,9 @@ model Transaction {
 
     @@index([date])
     @@index([isSynced])
+    @@index([deletedAt])
 }
+
 
 model TransactionItem {
     id            String      @id @default(uuid())
