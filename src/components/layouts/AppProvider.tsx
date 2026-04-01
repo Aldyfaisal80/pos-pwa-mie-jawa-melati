@@ -3,7 +3,7 @@
 
 import React, { forwardRef, Suspense, useEffect, useState } from "react";
 import { MainLoading } from "../elements";
-import { Toaster as Sooner } from "sonner";
+import { Toaster } from "../ui/sonner";
 import { Providers } from "./providers/Providers";
 import { cn } from "@/lib/utils";
 import { SidebarProvider } from "../ui/sidebar";
@@ -65,7 +65,7 @@ export const AppProvider = forwardRef<
             </Suspense>
             {/* Mobile bottom tab navigation — hidden on desktop via lg:hidden */}
             <BottomTabBar />
-            <Sooner position="top-right" />
+            <Toaster />
           </>
         )}
       </Providers>
