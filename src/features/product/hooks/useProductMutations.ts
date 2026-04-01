@@ -24,7 +24,7 @@ export const useProductMutations = () => {
 
   const deleteProduct = api.product.delete.useMutation({
     onSuccess: () => {
-      toast.success("Produk dihapus (tidak tersedia).");
+      toast.success("Produk dinonaktifkan.");
       void refreshProducts();
     },
     onError: (err) => toast.error(err.message),

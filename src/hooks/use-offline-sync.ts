@@ -110,10 +110,13 @@ export const useOfflineSync = () => {
       });
     }
     if (purgedCount > 0) {
-      toast.warning(`${purgedCount} transaksi offline tidak dapat disinkronkan`, {
-        description:
-          "Data produk tidak lagi valid (mungkin karena migrasi database). Transaksi telah dihapus dari antrian.",
-      });
+      toast.warning(
+        `${purgedCount} transaksi offline tidak dapat disinkronkan`,
+        {
+          description:
+            "Data produk tidak lagi valid (mungkin karena migrasi database). Transaksi telah dihapus dari antrian.",
+        },
+      );
     }
     if (failCount > 0) {
       toast.error(

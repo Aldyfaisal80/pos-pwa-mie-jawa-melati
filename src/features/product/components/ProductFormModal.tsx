@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
@@ -8,6 +10,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -17,17 +27,24 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Plus, Loader2 } from "lucide-react";
 import { useProductMutations } from "../hooks/useProductMutations";
 import { CategoryFormModal } from "./CategoryFormModal";
-import type {
-  Category,
-  Product,
-  ProductFormData,
-} from "../types/product.types";
-import { defaultProductFormData } from "../types/product.types";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { productFormSchema, type ProductFormValues } from "../schemas";
+import type { Category, Product } from "../types/product.types";
+import { useState } from "react";
+
+const PRODUCT_FORM_ID = "product-form";
+
+const DEFAULT_VALUES: ProductFormValues = {
+  name: "",
+  description: "",
+  price: 0,
+  categoryId: "",
+  image: "",
+  isAvailable: true,
+};
 
 interface ProductFormModalProps {
   open: boolean;
@@ -42,40 +59,40 @@ export const ProductFormModal = ({
   editingProduct,
   categories,
 }: ProductFormModalProps) => {
-  const [formData, setFormData] = useState<ProductFormData>(
-    defaultProductFormData,
-  );
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-
   const { createProduct, updateProduct } = useProductMutations();
   const isLoading = createProduct.isPending || updateProduct.isPending;
 
+  const form = useForm<ProductFormValues>({
+    resolver: zodResolver(productFormSchema),
+    defaultValues: DEFAULT_VALUES,
+  });
+
+  // Sync form with editingProduct whenever dialog opens
   useEffect(() => {
-    setFormData(
+    if (!open) return;
+    form.reset(
       editingProduct
         ? {
             name: editingProduct.name,
             description: editingProduct.description ?? "",
+            price: Number(editingProduct.price),
             categoryId: String(editingProduct.categoryId),
-            price: String(editingProduct.price),
             image: editingProduct.image ?? "",
             isAvailable: editingProduct.isAvailable,
           }
-        : defaultProductFormData,
+        : DEFAULT_VALUES,
     );
-  }, [editingProduct, open]);
+  }, [editingProduct, open, form]);
 
-  const handleSubmit = () => {
-    if (!formData.name.trim() || !formData.categoryId || !formData.price) {
-      return;
-    }
+  const onSubmit = (data: ProductFormValues) => {
     const payload = {
-      name: formData.name.trim(),
-      description: formData.description.trim() || null,
-      categoryId: Number(formData.categoryId),
-      price: Number(formData.price),
-      image: formData.image?.trim() || null,
-      isAvailable: formData.isAvailable,
+      name: data.name,
+      description: data.description || null,
+      price: data.price,
+      categoryId: Number(data.categoryId),
+      image: data.image || null,
+      isAvailable: data.isAvailable,
     };
 
     if (editingProduct) {
@@ -85,16 +102,10 @@ export const ProductFormModal = ({
       );
     } else {
       createProduct.mutate(payload, {
-        onSuccess: () => {
-          setFormData(defaultProductFormData);
-          onOpenChange(false);
-        },
+        onSuccess: () => onOpenChange(false),
       });
     }
   };
-
-  const set = (field: keyof ProductFormData) => (value: string | boolean) =>
-    setFormData((prev) => ({ ...prev, [field]: value }));
 
   return (
     <>
@@ -106,110 +117,169 @@ export const ProductFormModal = ({
             </DialogTitle>
           </DialogHeader>
 
-          <div className="grid gap-4 py-4">
-            {/* Image Upload */}
-            <div className="relative mt-2 mb-6 flex flex-col items-center justify-center">
-              <ImageUpload
-                value={formData.image}
-                onChange={(url) => set("image")(url || "")}
-                shape="square"
-                className="ring-background shadow-sm ring-4 transition-shadow hover:shadow-md"
-                placeholderText="Upload Foto"
+          <Form {...form}>
+            <form
+              id={PRODUCT_FORM_ID}
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid gap-4 py-4"
+            >
+              {/* Image Upload */}
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <div className="relative mt-2 mb-6 flex flex-col items-center justify-center">
+                    <ImageUpload
+                      value={field.value ?? ""}
+                      onChange={(url) => field.onChange(url || "")}
+                      shape="square"
+                      className="ring-background shadow-sm ring-4 transition-shadow hover:shadow-md"
+                      placeholderText="Upload Foto"
+                    />
+                    <p className="text-muted-foreground mt-3 px-4 text-center text-xs">
+                      Format 1:1 direkomendasikan. Foto akan tampil di katalog.
+                    </p>
+                  </div>
+                )}
               />
-              <p className="text-muted-foreground mt-3 px-4 text-center text-xs">
-                Format 1:1 direkomendasikan. Foto akan tampil di katalog.
-              </p>
-            </div>
 
-            {/* Nama */}
-            <div className="space-y-2">
-              <Label htmlFor="prod-name">Nama Produk</Label>
-              <Input
-                id="prod-name"
-                placeholder="Contoh: Nasi Goreng Spesial"
-                value={formData.name}
-                onChange={(e) => set("name")(e.target.value)}
+              {/* Nama Produk */}
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nama Produk</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="prod-name"
+                        placeholder="Contoh: Nasi Goreng Spesial"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
 
-            {/* Deskripsi */}
-            <div className="space-y-2">
-              <Label htmlFor="prod-desc">Deskripsi (opsional)</Label>
-              <Input
-                id="prod-desc"
-                placeholder="Contoh: Pedas, tanpa MSG"
-                value={formData.description}
-                onChange={(e) => set("description")(e.target.value)}
+              {/* Deskripsi */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Deskripsi (opsional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="prod-desc"
+                        placeholder="Contoh: Pedas, tanpa MSG"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
 
-            {/* Kategori */}
-            <div className="space-y-2">
-              <Label>Kategori</Label>
-              <div className="flex gap-2">
-                <Select
-                  value={formData.categoryId}
-                  onValueChange={set("categoryId")}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Pilih Kategori" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.id} value={String(cat.id)}>
-                        {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  title="Tambah Kategori Baru"
-                  onClick={() => setIsCategoryModalOpen(true)}
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Harga */}
-            <div className="space-y-2">
-              <Label htmlFor="prod-price">Harga (Rp)</Label>
-              <Input
-                id="prod-price"
-                type="number"
-                min={0}
-                placeholder="Contoh: 15000"
-                value={formData.price}
-                onChange={(e) => set("price")(e.target.value)}
+              {/* Kategori */}
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kategori</FormLabel>
+                    <div className="flex gap-2">
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Pilih Kategori" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories.map((cat) => (
+                            <SelectItem key={cat.id} value={String(cat.id)}>
+                              {cat.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        title="Tambah Kategori Baru"
+                        onClick={() => setIsCategoryModalOpen(true)}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
 
-            {/* Status */}
-            <div className="space-y-2">
-              <Label>Status Ketersediaan</Label>
-              <Select
-                value={formData.isAvailable ? "true" : "false"}
-                onValueChange={(v) => set("isAvailable")(v === "true")}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="true">Tersedia</SelectItem>
-                  <SelectItem value="false">Tidak Tersedia</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+              {/* Harga */}
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Harga (Rp)</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="prod-price"
+                        type="number"
+                        min={0}
+                        placeholder="Contoh: 15000"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Status Ketersediaan */}
+              <FormField
+                control={form.control}
+                name="isAvailable"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status Ketersediaan</FormLabel>
+                    <Select
+                      value={field.value ? "true" : "false"}
+                      onValueChange={(v) => field.onChange(v === "true")}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="true">Tersedia</SelectItem>
+                        <SelectItem value="false">Tidak Tersedia</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Batal
             </Button>
-            <Button onClick={handleSubmit} disabled={isLoading}>
+            <Button type="submit" form={PRODUCT_FORM_ID} disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -223,11 +293,10 @@ export const ProductFormModal = ({
         </DialogContent>
       </Dialog>
 
-      {/* Modal Kategori Baru  */}
       <CategoryFormModal
         open={isCategoryModalOpen}
         onOpenChange={setIsCategoryModalOpen}
-        onCreated={(id) => set("categoryId")(String(id))}
+        onCreated={(id) => form.setValue("categoryId", String(id))}
       />
     </>
   );

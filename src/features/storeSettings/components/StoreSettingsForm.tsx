@@ -13,6 +13,7 @@ import {
 } from "../hooks/useStoreProfile";
 import {
   StoreSettingsFormInner,
+  STORE_SETTINGS_FORM_ID,
 } from "./StoreSettingsFormInner";
 import { storeSettingsSchema } from "../schemas";
 import { type StoreSettingsFormValues } from "../types";
@@ -78,12 +79,12 @@ export const StoreSettingsForm = () => {
   return (
     <div className="space-y-6">
       <Form {...form}>
-        <StoreSettingsFormInner formId="store-settings-form" onSubmit={onSubmit} />
+        <StoreSettingsFormInner onSubmit={onSubmit} />
       </Form>
 
       <Button
         type="submit"
-        form="store-settings-form"
+        form={STORE_SETTINGS_FORM_ID}
         disabled={updateProfile.isPending}
         className="flex w-full items-center gap-2 sm:w-auto"
       >

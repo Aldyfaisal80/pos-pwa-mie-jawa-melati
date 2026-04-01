@@ -54,6 +54,15 @@ export const CategoryManagerModal = ({
     setPendingDelete({ id, name });
   };
 
+  const handleConfirmDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!pendingDelete) return;
+    deleteCategory.mutate(
+      { id: pendingDelete.id },
+      { onSettled: () => setPendingDelete(null) },
+    );
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <>
@@ -144,16 +153,7 @@ export const CategoryManagerModal = ({
               </AlertDialogCancel>
               <AlertDialogAction
                 disabled={isDeletingCategory}
-                onClick={(event) => {
-                  event.preventDefault();
-                  if (!pendingDelete || isDeletingCategory) return;
-                  deleteCategory.mutate(
-                    { id: pendingDelete.id },
-                    {
-                      onSuccess: () => setPendingDelete(null),
-                    },
-                  );
-                }}
+                onClick={handleConfirmDelete}
               >
                 {isDeletingCategory ? "Menghapus..." : "Ya, Hapus"}
               </AlertDialogAction>

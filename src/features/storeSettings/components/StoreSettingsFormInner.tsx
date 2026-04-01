@@ -13,22 +13,20 @@ import { ImageUpload } from "@/components/ui/image-upload";
 import { Store, MapPin, Phone } from "lucide-react";
 import { type StoreSettingsFormValues } from "../types";
 
+export const STORE_SETTINGS_FORM_ID = "store-settings-form";
+
 type StoreSettingsFormInnerProps = {
-  formId: string;
   onSubmit: (values: StoreSettingsFormValues) => void;
 };
 
-
-
 export const StoreSettingsFormInner = ({
-  formId,
   onSubmit,
 }: StoreSettingsFormInnerProps) => {
   const form = useFormContext<StoreSettingsFormValues>();
 
   return (
     <form
-      id={formId}
+      id={STORE_SETTINGS_FORM_ID}
       onSubmit={form.handleSubmit(onSubmit)}
       noValidate
       className="space-y-6"

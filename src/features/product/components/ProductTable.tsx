@@ -21,6 +21,13 @@ interface ProductTableProps {
   onDelete: (id: string) => void;
 }
 
+const COLUMN_WIDTHS = {
+  kategori: "hidden w-36 md:table-cell",
+  harga: "w-28",
+  status: "hidden w-32 md:table-cell",
+  aksi: "w-[88px]",
+} as const;
+
 const TableSkeleton = () => (
   <>
     {Array.from({ length: 4 }).map((_, i) => (
@@ -28,16 +35,16 @@ const TableSkeleton = () => (
         <TableCell>
           <Skeleton className="h-5 w-40" />
         </TableCell>
-        <TableCell className="hidden md:table-cell">
+        <TableCell className={COLUMN_WIDTHS.kategori}>
           <Skeleton className="h-5 w-24" />
         </TableCell>
-        <TableCell>
+        <TableCell className={COLUMN_WIDTHS.harga}>
           <Skeleton className="h-5 w-20" />
         </TableCell>
-        <TableCell className="hidden md:table-cell">
+        <TableCell className={COLUMN_WIDTHS.status}>
           <Skeleton className="h-5 w-16" />
         </TableCell>
-        <TableCell className="text-right">
+        <TableCell className={COLUMN_WIDTHS.aksi}>
           <Skeleton className="ml-auto h-8 w-16" />
         </TableCell>
       </TableRow>
@@ -53,14 +60,18 @@ export const ProductTable = ({
 }: ProductTableProps) => {
   return (
     <div className="overflow-hidden rounded-md border">
-      <Table>
+      {/* table-fixed: column widths set by <th>, not content → no layout shift */}
+      <Table className="table-fixed">
         <TableHeader className="bg-muted/50">
           <TableRow>
+            {/* No width = takes all remaining space after fixed columns */}
             <TableHead>Nama Produk</TableHead>
-            <TableHead className="hidden md:table-cell">Kategori</TableHead>
-            <TableHead>Harga</TableHead>
-            <TableHead className="hidden md:table-cell">Status</TableHead>
-            <TableHead className="text-right">Aksi</TableHead>
+            <TableHead className={COLUMN_WIDTHS.kategori}>Kategori</TableHead>
+            <TableHead className={COLUMN_WIDTHS.harga}>Harga</TableHead>
+            <TableHead className={COLUMN_WIDTHS.status}>Status</TableHead>
+            <TableHead className={`${COLUMN_WIDTHS.aksi} text-right`}>
+              Aksi
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -88,18 +99,23 @@ export const ProductTable = ({
             products.map((product) => (
               <TableRow key={product.id}>
                 <TableCell>
-                  <div className="flex items-center gap-2 font-medium">
-                    {getCategoryIcon(product.category.name)}
-                    {product.name}
+                  {/* min-w-0 allows flex children to truncate properly */}
+                  <div className="flex min-w-0 items-center gap-2 font-medium">
+                    <span className="shrink-0">
+                      {getCategoryIcon(product.category.name)}
+                    </span>
+                    <span className="truncate">{product.name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-muted-foreground hidden md:table-cell">
-                  {product.category.name}
+                <TableCell
+                  className={`text-muted-foreground ${COLUMN_WIDTHS.kategori}`}
+                >
+                  <span className="truncate">{product.category.name}</span>
                 </TableCell>
-                <TableCell className="font-semibold">
+                <TableCell className={`font-semibold ${COLUMN_WIDTHS.harga}`}>
                   {formatRupiah(Number(product.price))}
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell className={COLUMN_WIDTHS.status}>
                   <Badge
                     variant={product.isAvailable ? "default" : "destructive"}
                     className={
@@ -111,8 +127,8 @@ export const ProductTable = ({
                     {product.isAvailable ? "Tersedia" : "Tidak Tersedia"}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
+                <TableCell className={`text-right ${COLUMN_WIDTHS.aksi}`}>
+                  <div className="flex justify-end gap-1">
                     <Button
                       variant="ghost"
                       size="icon"

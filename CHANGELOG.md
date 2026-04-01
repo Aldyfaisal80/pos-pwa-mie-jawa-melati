@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `src/features/storeSettings/schemas/index.ts` — Co-located Zod schema with clean `.min(1, "pesan")` error syntax (L8-TRPC pattern)
+- `src/features/storeSettings/types/index.ts` — Co-located `StoreSettingsFormValues` type inferred from schema
+- `src/features/storeSettings/components/StoreSettingsForm.tsx` — Smart container component (data fetching + form state + skeleton + mutation)
+- `src/features/product/schemas/index.ts` — Co-located Zod schema for product form (`productFormSchema`, `ProductFormValues`)
+- `src/features/product/components/ProductManager.tsx` — New smart container extracted from `ProductPage` (state, modals, delete logic); renders `CardContent` + action toolbar within parent `Card`
+- `isForeignKeyError` and `isUnrecoverableError` helpers in `use-offline-sync.ts` to detect stale IndexedDB data
+- Sonner `closeButton`, `visibleToasts`, `duration`, `gap`, `offset` props configured per official docs
+- `STORE_SETTINGS_FORM_ID` constant exported from `StoreSettingsFormInner` — single source of truth for HTML form `id`/`form` attribute link
+- `COLUMN_WIDTHS` constant in `ProductTable` — shared between header, skeleton, and data rows for layout stability
+
+### Changed
+- **ProductPage** — Now owns `Card` + `CardHeader` (icon, title, description) layout matching `StoreSettingsPage` pattern; `ProductManager` renders inner content only
+- **ProductFormModal** — Migrated from `useState`/manual validation to React Hook Form + Zod; uses `PRODUCT_FORM_ID` constant; error messages via `<FormMessage />`
+- **ProductTable** — Added `table-fixed` CSS layout; `COLUMN_WIDTHS` constant prevents layout shift across all screen sizes and data states; `truncate` + `min-w-0` on name column for overflow safety
+- **StoreSettingsPage** — Refactored to pure layout wrapper (~34 lines); delegates all logic to `StoreSettingsForm`
+- **StoreSettingsFormInner** — Migrated to `useFormContext` pattern; `formId` prop removed in favor of `STORE_SETTINGS_FORM_ID` exported constant; imports from co-located `types/`
+- **StoreSettingsForm** — Migrated schema/type imports to co-located `schemas/` and `types/` folders; imports `STORE_SETTINGS_FORM_ID` from `StoreSettingsFormInner`
+- **CategoryManagerModal** — Delete error UX: `AlertDialog` now closes on both success and error (`onSettled`); extracted inline `onClick` to named `handleConfirmDelete`
+- **Offline sync error handling** — FK violations (e.g., stale `productId` after DB seed/reset) now purge stuck transactions from IndexedDB queue instead of retrying indefinitely; user shown actionable warning toast instead of silent infinite failure
+- **Sonner Toaster** — Upgraded with type-specific left-border accent colors (emerald=success, destructive=error, amber=warning, blue=info); fixed critical bug where `AppProvider` was using raw `Sonner` directly, bypassing all custom styling
+- `COL` constant renamed to `COLUMN_WIDTHS` (SCREAMING_SNAKE_CASE per clean-code convention)
+
+### Fixed
+- `AppProvider` was importing raw `Sonner` from `"sonner"` instead of the custom `Toaster` from `@/components/ui/sonner` — all icon and style customizations were previously ignored
+- Offline sync infinite retry loop: FK constraint errors caused by DB seed/reset no longer accumulate indefinitely in the pending queue
+- `StoreSettingsFormInner` comment about fallback icon removed (prettier formatted)
+- `productFormSchema` — Removed invalid `invalid_type_error` option (not valid in Zod v4); simplified to clean `.min(1, "message")` chain
+- `CategoryManagerModal` delete dialog — Was silently staying open on mutation error; now closes consistently (success or error) with toast providing error context
+- Double-toast bug on product delete — `useProductMutations` and component no longer fire separate success toasts; unified to single "Produk dinonaktifkan" message
+
 ---
 
 ## [0.2.0] - 2026-03-23
