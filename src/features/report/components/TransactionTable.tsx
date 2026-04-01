@@ -315,9 +315,8 @@ export const TransactionTable = ({
             <AlertDialogTitle>Hapus Transaksi?</AlertDialogTitle>
             <AlertDialogDescription>
               Tindakan ini akan <strong>menghapus secara permanen</strong>{" "}
-              transaksi{" "}
-              <strong>{pendingDeleteTrx?.invoiceNumber ?? ""}</strong> beserta
-              semua item di dalamnya. Data tidak bisa dikembalikan.
+              transaksi <strong>{pendingDeleteTrx?.invoiceNumber ?? ""}</strong>{" "}
+              beserta semua item di dalamnya. Data tidak bisa dikembalikan.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

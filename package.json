@@ -12,7 +12,9 @@
     "db:push:local": "dotenv -e .env.development -- prisma db push",
     "db:push:prod": "dotenv -e .env.production -- prisma db push",
     "db:reset:local": "dotenv -e .env.development -- prisma migrate reset --force",
+    "db:reset:prod": "dotenv -e .env.production -- prisma migrate reset --force",
     "db:seed:local": "dotenv -e .env.development -- prisma db seed",
+    "db:seed:prod": "dotenv -e .env.production -- prisma db seed",
     "db:studio": "prisma studio",
     "dev": "next dev --turbo",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
@@ -29,6 +31,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.0",
     "@serwist/next": "^9.5.6",
@@ -50,6 +53,7 @@
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-hook-form": "^7.72.0",
     "recharts": "^2.15.4",
     "server-only": "^0.0.1",
     "sonner": "^2.0.7",
@@ -59,6 +63,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@eslint/eslintrc": "^3.3.1",
     "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4.1.18",
@@ -66,6 +71,7 @@
     "@types/pg": "^8.16.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "axe-core": "^4.11.1",
     "cross-env": "^10.1.0",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.23.0",

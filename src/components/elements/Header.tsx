@@ -20,7 +20,7 @@ export const Header = () => {
   const { pendingCount, syncNow, isSyncing } = useOfflineSync();
 
   return (
-    <header className="bg-background sticky top-0 z-40 flex h-14 w-full shrink-0 items-center border-b border-border/50 px-3 sm:px-4">
+    <header className="bg-background border-border/50 sticky top-0 z-40 flex h-14 w-full shrink-0 items-center border-b px-3 sm:px-4">
       {/* Desktop: sidebar trigger */}
       <SidebarTrigger className="-ml-2 hidden lg:flex" />
 
@@ -35,9 +35,7 @@ export const Header = () => {
       <div className="hidden flex-1 lg:flex" />
 
       {/* Right actions */}
-      <div
-        className="flex items-center gap-x-1.5 sm:gap-x-2 ml-auto"
-      >
+      <div className="ml-auto flex items-center gap-x-1.5 sm:gap-x-2">
         {/* Online/Offline pill — desktop only (mobile shows in StatusPopover) */}
         <div
           className={cn(

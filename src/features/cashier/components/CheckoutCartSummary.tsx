@@ -53,7 +53,7 @@ export const CheckoutCartSummary = ({
             <div className="bg-background flex h-8 items-center rounded-lg border shadow-sm">
               <button
                 onClick={() => onUpdateQty(item.cartId, -1)}
-                className="text-muted-foreground hover:text-destructive px-2 transition-colors hover:bg-muted/50 rounded-l-lg flex h-full items-center"
+                className="text-muted-foreground hover:text-destructive hover:bg-muted/50 flex h-full items-center rounded-l-lg px-2 transition-colors"
               >
                 <Minus className="h-4 w-4" />
               </button>
@@ -62,7 +62,7 @@ export const CheckoutCartSummary = ({
               </span>
               <button
                 onClick={() => onUpdateQty(item.cartId, 1)}
-                className="text-muted-foreground px-2 hover:text-green-600 transition-colors hover:bg-muted/50 rounded-r-lg flex h-full items-center"
+                className="text-muted-foreground hover:bg-muted/50 flex h-full items-center rounded-r-lg px-2 transition-colors hover:text-green-600"
               >
                 <Plus className="h-4 w-4" />
               </button>

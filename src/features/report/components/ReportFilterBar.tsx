@@ -93,7 +93,10 @@ export const ReportFilterBar = ({
         type="date"
         className="w-full pl-9 sm:w-40"
         onChange={(e) => {
-          if (!e.target.value) { onStartDateChange(undefined); return; }
+          if (!e.target.value) {
+            onStartDateChange(undefined);
+            return;
+          }
           onStartDateChange(parseLocalDate(e.target.value));
         }}
       />
@@ -106,7 +109,10 @@ export const ReportFilterBar = ({
         type="date"
         className="w-full pl-9 sm:w-40"
         onChange={(e) => {
-          if (!e.target.value) { onEndDateChange(undefined); return; }
+          if (!e.target.value) {
+            onEndDateChange(undefined);
+            return;
+          }
           onEndDateChange(parseLocalDate(e.target.value, true));
         }}
       />

@@ -53,7 +53,7 @@ export const useReportFilters = () => {
 
   // Reset pagination on any filter change
   const withReset =
-    <T,>(setter: React.Dispatch<React.SetStateAction<T>>) =>
+    <T>(setter: React.Dispatch<React.SetStateAction<T>>) =>
     (value: T) => {
       setter(value);
       setPage(1);
@@ -63,7 +63,9 @@ export const useReportFilters = () => {
     setPage(1);
     if (sortBy === column) {
       setSortOrder((prev) =>
-        prev === ReportSortOrder.ASC ? ReportSortOrder.DESC : ReportSortOrder.ASC,
+        prev === ReportSortOrder.ASC
+          ? ReportSortOrder.DESC
+          : ReportSortOrder.ASC,
       );
       return;
     }
@@ -122,7 +124,10 @@ export const useReportFilters = () => {
     setStartDate: withReset(setStartDate),
     setEndDate: withReset(setEndDate),
     setPaymentMethod: withReset(setPaymentMethod),
-    setLimit: (v: number) => { setLimit(v); setPage(1); },
+    setLimit: (v: number) => {
+      setLimit(v);
+      setPage(1);
+    },
     // handlers
     handleSortChange,
     handlePageChange,

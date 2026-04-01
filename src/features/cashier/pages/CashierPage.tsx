@@ -157,7 +157,9 @@ export const CashierPage = () => {
           {cartTotal > 0 && (
             <div
               className="animate-in slide-in-from-bottom-5 fixed right-4 left-4 z-40 lg:hidden"
-              style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 4.5rem)" }}
+              style={{
+                bottom: "calc(env(safe-area-inset-bottom, 0px) + 4.5rem)",
+              }}
             >
               <Button
                 className="flex h-auto w-full items-center justify-between rounded-2xl border border-white/10 p-4 shadow-2xl"
@@ -239,14 +241,18 @@ export const CashierPage = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Kosongkan semua pesanan?</AlertDialogTitle>
             <AlertDialogDescription>
-              Semua item di keranjang akan dihapus. Tindakan ini tidak bisa dibatalkan.
+              Semua item di keranjang akan dihapus. Tindakan ini tidak bisa
+              dibatalkan.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Batal</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              onClick={() => { clearCart(); setIsClearConfirmOpen(false); }}
+              onClick={() => {
+                clearCart();
+                setIsClearConfirmOpen(false);
+              }}
             >
               Ya, Kosongkan
             </AlertDialogAction>
@@ -254,6 +260,5 @@ export const CashierPage = () => {
         </AlertDialogContent>
       </AlertDialog>
     </PageContainer>
- 
   );
 };

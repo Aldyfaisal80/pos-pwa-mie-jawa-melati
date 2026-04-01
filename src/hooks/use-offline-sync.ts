@@ -13,13 +13,27 @@ import { useBroadcastChannel } from "./use-broadcast-channel";
 
 const isDuplicateInvoiceError = (error: unknown) => {
   if (!(error instanceof Error)) return false;
-
   const message = error.message.toLowerCase();
   return (
     message.includes("unique constraint failed") &&
     message.includes("invoicenumber")
   );
 };
+
+// FK violation = productId di IndexedDB tidak ada di DB server
+// Terjadi saat DB di-seed/reset ulang sementara IndexedDB punya data lama
+// Transaksi ini tidak bisa di-recover → purge dari antrian
+const isForeignKeyError = (error: unknown) => {
+  if (!(error instanceof Error)) return false;
+  const message = error.message.toLowerCase();
+  return (
+    message.includes("foreign key constraint") ||
+    message.includes("foreign key violation")
+  );
+};
+
+const isUnrecoverableError = (error: unknown) =>
+  isDuplicateInvoiceError(error) || isForeignKeyError(error);
 
 export const useOfflineSync = () => {
   const [pendingCount, setPendingCount] = useState(0);
@@ -48,6 +62,7 @@ export const useOfflineSync = () => {
 
     let successCount = 0;
     let failCount = 0;
+    let purgedCount = 0;
 
     for (const trx of pending) {
       try {
@@ -72,9 +87,11 @@ export const useOfflineSync = () => {
         await removePendingTransaction(trx.invoiceNumber);
         successCount++;
       } catch (error) {
-        if (isDuplicateInvoiceError(error)) {
+        // Unrecoverable: duplicate invoice atau FK violation (stale productId setelah DB seed)
+        // Purge dari antrian — retry tidak akan pernah berhasil
+        if (isUnrecoverableError(error)) {
           await removePendingTransaction(trx.invoiceNumber);
-          successCount++;
+          purgedCount++;
           continue;
         }
 
@@ -90,6 +107,12 @@ export const useOfflineSync = () => {
       postMessage({ type: "TRANSACTION_CREATED" });
       toast.success(`Sinkronisasi Berhasil`, {
         description: `${successCount} transaksi offline berhasil diunggah ke server.`,
+      });
+    }
+    if (purgedCount > 0) {
+      toast.warning(`${purgedCount} transaksi offline tidak dapat disinkronkan`, {
+        description:
+          "Data produk tidak lagi valid (mungkin karena migrasi database). Transaksi telah dihapus dari antrian.",
       });
     }
     if (failCount > 0) {

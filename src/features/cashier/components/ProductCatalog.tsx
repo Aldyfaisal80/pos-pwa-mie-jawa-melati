@@ -45,7 +45,7 @@ export const ProductCatalog = ({
           <button
             key={cat}
             onClick={() => onCategoryChange(cat)}
-            className={`shrink-0 whitespace-nowrap rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition-all duration-200 sm:px-6 sm:py-2.5 ${
+            className={`shrink-0 rounded-full border px-5 py-2 text-sm font-semibold whitespace-nowrap shadow-sm transition-all duration-200 sm:px-6 sm:py-2.5 ${
               activeCategory === cat
                 ? "bg-primary text-primary-foreground border-primary"
                 : "bg-background text-foreground border-border hover:bg-muted"
@@ -68,7 +68,7 @@ export const ProductCatalog = ({
                 return (
                   <Card
                     key={product.id}
-                    className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border-transparent shadow-sm ring-1 ring-border/50 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-primary/50"
+                    className="group ring-border/50 hover:ring-primary/50 flex cursor-pointer flex-col overflow-hidden rounded-2xl border-transparent shadow-sm ring-1 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
                     onClick={() => onAddToCart(product)}
                   >
                     {/* Top Image Section - Edge to Edge */}

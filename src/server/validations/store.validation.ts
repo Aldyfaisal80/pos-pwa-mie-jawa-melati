@@ -6,3 +6,5 @@ export const updateStoreProfileSchema = z.object({
   phone: z.string().max(20).optional().nullable(),
   logoUrl: z.string().url().optional().nullable(),
 });
+
+export type StoreProfileFormValues = z.infer<typeof updateStoreProfileSchema>;

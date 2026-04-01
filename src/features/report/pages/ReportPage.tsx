@@ -15,12 +15,28 @@ export const ReportPage = () => {
   useLiveStats();
 
   const {
-    search, startDate: _sd, endDate: _ed, paymentMethod,
-    sortBy, sortOrder, limit, page,
-    setSearch, setStartDate, setEndDate, setPaymentMethod, setLimit,
-    handleSortChange, handlePageChange, handleExport,
-    transactions, totalCount, totalPages,
-    isLoading, isFetching, isExporting,
+    search,
+    startDate: _sd,
+    endDate: _ed,
+    paymentMethod,
+    sortBy,
+    sortOrder,
+    limit,
+    page,
+    setSearch,
+    setStartDate,
+    setEndDate,
+    setPaymentMethod,
+    setLimit,
+    handleSortChange,
+    handlePageChange,
+    handleExport,
+    transactions,
+    totalCount,
+    totalPages,
+    isLoading,
+    isFetching,
+    isExporting,
   } = useReportFilters();
 
   return (

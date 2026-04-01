@@ -1,4 +1,10 @@
-import { LayoutDashboard, ShoppingCart, Package, BarChart3, Settings2 } from "lucide-react";
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  Package,
+  BarChart3,
+  Settings2,
+} from "lucide-react";
 
 export const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },

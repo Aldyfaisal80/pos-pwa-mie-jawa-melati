@@ -29,7 +29,10 @@ type TRPCUser = {
   email?: string;
 };
 
-export const createTRPCContext = async (opts: { headers: Headers; user?: TRPCUser }) => {
+export const createTRPCContext = async (opts: {
+  headers: Headers;
+  user?: TRPCUser;
+}) => {
   return {
     db,
     user: opts.user ?? null,

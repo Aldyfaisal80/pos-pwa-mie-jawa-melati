@@ -81,7 +81,7 @@ export const CheckoutModal = ({
 
       <div className="bg-background shrink-0 border-t p-4 sm:p-5">
         <Button
-          className="h-14 w-full rounded-xl text-base font-bold shadow-lg shadow-primary/25 transition-transform active:scale-[0.98] hover:-translate-y-0.5"
+          className="shadow-primary/25 h-14 w-full rounded-xl text-base font-bold shadow-lg transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
           disabled={!isValid || isPending}
           onClick={onProcess}
         >

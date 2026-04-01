@@ -13,9 +13,9 @@ export const BottomTabBar = () => {
     <nav
       className={cn(
         "lg:hidden",
-        "fixed bottom-0 left-0 right-0 z-50",
+        "fixed right-0 bottom-0 left-0 z-50",
         "bg-background/95 backdrop-blur-md",
-        "border-t border-border/60",
+        "border-border/60 border-t",
         "flex items-stretch",
         "pb-[env(safe-area-inset-bottom,0px)]",
         "shadow-[0_-1px_12px_0_rgb(0,0,0,0.06)]",
@@ -34,10 +34,10 @@ export const BottomTabBar = () => {
             href={item.href}
             className={cn(
               "flex flex-1 flex-col items-center justify-center gap-0.5",
-              "min-h-14 py-2 px-1",
+              "min-h-14 px-1 py-2",
               "transition-all duration-200 ease-out",
               "active:scale-95",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+              "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none",
               isActive
                 ? "text-amber-600 dark:text-amber-400"
                 : "text-muted-foreground hover:text-foreground",
@@ -63,7 +63,7 @@ export const BottomTabBar = () => {
             </span>
             <span
               className={cn(
-                "text-[10px] font-medium leading-none tracking-wide",
+                "text-[10px] leading-none font-medium tracking-wide",
                 "transition-all duration-200",
                 isActive ? "opacity-100" : "opacity-70",
               )}

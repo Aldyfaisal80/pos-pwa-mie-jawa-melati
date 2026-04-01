@@ -10,7 +10,6 @@ import { SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "../fragments/AppSidebar";
 import { BottomTabBar } from "../fragments/BottomTabBar";
 
-
 type AppProviderProps = React.ComponentProps<"main">;
 
 const SIDEBAR_STATE_KEY = "pos:sidebar-state";
@@ -67,7 +66,6 @@ export const AppProvider = forwardRef<
             {/* Mobile bottom tab navigation — hidden on desktop via lg:hidden */}
             <BottomTabBar />
             <Sooner position="top-right" />
-
           </>
         )}
       </Providers>

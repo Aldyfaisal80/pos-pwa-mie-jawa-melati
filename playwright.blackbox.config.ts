@@ -12,6 +12,7 @@ export default defineConfig({
   reporter: [
     ["list"],
     ["json", { outputFile: "generated/blackbox/playwright-report.json" }],
+    ["html", { outputFolder: "generated/playwright-report", open: "never" }],
   ],
   use: {
     baseURL: "http://localhost:3000",
@@ -23,9 +24,11 @@ export default defineConfig({
     video: "retain-on-failure",
   },
   webServer: {
-    command: "npm run dev -- --port 3000",
+    command: process.env.CI
+      ? "npm run start -- -p 3000"
+      : "npm run dev -- --port 3000",
     url: "http://localhost:3000",
     timeout: 180_000,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
   },
 });

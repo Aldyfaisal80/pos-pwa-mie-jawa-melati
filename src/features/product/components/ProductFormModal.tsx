@@ -42,7 +42,9 @@ export const ProductFormModal = ({
   editingProduct,
   categories,
 }: ProductFormModalProps) => {
-  const [formData, setFormData] = useState<ProductFormData>(defaultProductFormData);
+  const [formData, setFormData] = useState<ProductFormData>(
+    defaultProductFormData,
+  );
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   const { createProduct, updateProduct } = useProductMutations();

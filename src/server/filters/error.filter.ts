@@ -69,7 +69,8 @@ export const errorFilter = (error: unknown) => {
       code: "INTERNAL_SERVER_ERROR",
       // In production, hide internal error details (Prisma table names, constraints, etc.)
       message: isDev
-        ? (error.message || ErrorTRPCService.generateMessage("INTERNAL_SERVER_ERROR"))
+        ? error.message ||
+          ErrorTRPCService.generateMessage("INTERNAL_SERVER_ERROR")
         : ErrorTRPCService.generateMessage("INTERNAL_SERVER_ERROR"),
       cause: error,
     });

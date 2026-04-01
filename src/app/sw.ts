@@ -34,7 +34,7 @@ const runtimeCaching: RuntimeCaching[] = [
       ],
     }),
   },
-  // Cache all tRPC Data 
+  // Cache all tRPC Data
   {
     matcher: ({ url }) => url.pathname.startsWith("/api/trpc/"),
     handler: new NetworkFirst({

@@ -11,14 +11,12 @@ import { errorFilter } from "@/server/filters/error.filter";
 import { ErrorTRPCService } from "@/server/services/error.service";
 import { toWIBStartOfDay, toWIBEndOfDay, todayWIBStart } from "@/lib/timezone";
 
-const buildReportWhereClause = (
-  input: {
-    startDate?: Date;
-    endDate?: Date;
-    paymentMethod?: string;
-    search?: string;
-  },
-): Prisma.TransactionWhereInput => {
+const buildReportWhereClause = (input: {
+  startDate?: Date;
+  endDate?: Date;
+  paymentMethod?: string;
+  search?: string;
+}): Prisma.TransactionWhereInput => {
   const whereClause: Prisma.TransactionWhereInput = {
     isSynced: true,
     deletedAt: null, // exclude soft-deleted records
@@ -28,7 +26,8 @@ const buildReportWhereClause = (
     const dateFilter: Prisma.DateTimeFilter = {};
 
     // Use WIB (UTC+7) boundaries so date filtering is accurate for Indonesian users
-    if (input.startDate) dateFilter.gte = toWIBStartOfDay(new Date(input.startDate));
+    if (input.startDate)
+      dateFilter.gte = toWIBStartOfDay(new Date(input.startDate));
     if (input.endDate) dateFilter.lte = toWIBEndOfDay(new Date(input.endDate));
 
     whereClause.date = dateFilter;
@@ -191,7 +190,11 @@ export const transactionRouter = createTRPCRouter({
       const topProducts = await ctx.db.transactionItem.groupBy({
         by: ["productName"],
         where: {
-          transaction: { date: { gte: today }, isSynced: true, deletedAt: null },
+          transaction: {
+            date: { gte: today },
+            isSynced: true,
+            deletedAt: null,
+          },
         },
         _sum: { quantity: true },
         orderBy: { _sum: { quantity: "desc" } },

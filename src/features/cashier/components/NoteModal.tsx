@@ -307,18 +307,18 @@ export const NoteModal = ({
         </div>
       </div>
 
-      <div className="bg-background shrink-0 gap-2 border-t px-4 py-3 sm:px-5 pb-safe">
+      <div className="bg-background pb-safe shrink-0 gap-2 border-t px-4 py-3 sm:px-5">
         <div className="flex gap-2">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="flex-1 shadow-sm h-12"
+            className="h-12 flex-1 shadow-sm"
           >
             Batal
           </Button>
           <Button
             onClick={handleSave}
-            className="flex-1 font-semibold shadow-sm h-12"
+            className="h-12 flex-1 font-semibold shadow-sm"
           >
             Simpan Catatan
           </Button>
@@ -329,7 +329,7 @@ export const NoteModal = ({
 
   const HeaderContent = (
     <>
-      <div className="text-base font-semibold leading-none tracking-tight">
+      <div className="text-base leading-none font-semibold tracking-tight">
         Catatan Pesanan
         {productName && (
           <span className="text-muted-foreground ml-2 text-sm font-normal">
@@ -337,7 +337,7 @@ export const NoteModal = ({
           </span>
         )}
       </div>
-      <div className="flex items-center gap-2 mt-2 sm:mt-0">
+      <div className="mt-2 flex items-center gap-2 sm:mt-0">
         {categoryName && (
           <p className="text-muted-foreground text-xs">
             Kategori: <span className="font-medium">{categoryName}</span>

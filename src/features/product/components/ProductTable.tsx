@@ -74,8 +74,12 @@ export const ProductTable = ({
                     <PackageOpen className="text-muted-foreground h-8 w-8" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-foreground font-medium">Belum ada data produk</p>
-                    <p className="text-muted-foreground text-sm">Klik &quot;Tambah Produk&quot; untuk memulai.</p>
+                    <p className="text-foreground font-medium">
+                      Belum ada data produk
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      Klik &quot;Tambah Produk&quot; untuk memulai.
+                    </p>
                   </div>
                 </div>
               </TableCell>
