@@ -1,6 +1,6 @@
 "use client";
 
-import { usePrinter } from "@/contexts/printer-context";
+import { usePrinter } from "@/components/layouts/providers/PrinterProvider";
 import {
   Card,
   CardContent,

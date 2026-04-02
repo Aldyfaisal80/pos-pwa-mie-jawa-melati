@@ -11,7 +11,7 @@ import type { RouterOutputs } from "@/trpc/react";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
 import { render } from "react-thermal-printer";
-import { usePrinter } from "@/contexts/printer-context";
+import { usePrinter } from "@/components/layouts/providers/PrinterProvider";
 import { ReceiptPrintTemplate } from "@/features/cashier/components/ReceiptPrintTemplate";
 import { PrinterActionButtons } from "@/features/cashier/components/PrinterActionButtons";
 import type { PaymentMethod } from "@/features/cashier/types/cashier.types";

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { api } from "@/trpc/react";
 import { render } from "react-thermal-printer";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
-import { usePrinter } from "@/contexts/printer-context";
+import { usePrinter } from "@/components/layouts/providers/PrinterProvider";
 import { ReceiptPrintTemplate } from "./ReceiptPrintTemplate";
 import { PrinterActionButtons } from "./PrinterActionButtons";
 
