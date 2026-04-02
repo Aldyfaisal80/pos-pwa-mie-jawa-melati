@@ -19,7 +19,7 @@ export const useTransactionReport = (
     {
       startDate,
       endDate,
-      search: search || undefined,
+      search: search ?? undefined,
       paymentMethod: paymentMethod === "ALL" ? undefined : paymentMethod,
       sortBy,
       sortOrder,

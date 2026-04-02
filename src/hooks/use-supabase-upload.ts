@@ -60,7 +60,7 @@ export const useSupabaseUpload = (): UseSupabaseUploadReturn => {
 
       setProgress(100);
       return publicUrl;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Unexpected upload error:", err);
       toast.error("Terjadi kesalahan saat mengunggah gambar.");
       return null;

@@ -1,7 +1,7 @@
 import { env } from "@/env";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
-import { Prisma, PrismaClient } from "../../generated/prisma";
+import { type Prisma, PrismaClient } from "../../generated/prisma";
 
 export type DBClient = PrismaClient | Prisma.TransactionClient;
 

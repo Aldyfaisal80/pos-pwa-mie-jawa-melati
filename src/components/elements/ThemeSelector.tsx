@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 import {
   useAppTheme,
   type AppMode,
-  type AppThemeId,
 } from "@/hooks/use-app-theme";
 
 const MODES: { id: AppMode; icon: React.ReactNode; label: string }[] = [
@@ -22,7 +21,7 @@ const MODES: { id: AppMode; icon: React.ReactNode; label: string }[] = [
 ];
 
 export const ThemeSelector = () => {
-  const { colorTheme, mode, isDark, setColorTheme, setMode, themes } =
+  const { colorTheme, mode, setColorTheme, setMode, themes } =
     useAppTheme();
 
   return (
@@ -89,7 +88,7 @@ export const ThemeSelector = () => {
               {themes.map((t) => (
                 <button
                   key={t.id}
-                  onClick={() => setColorTheme(t.id as AppThemeId)}
+                  onClick={() => setColorTheme(t.id)}
                   className={cn(
                     "flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-all",
                     colorTheme === t.id

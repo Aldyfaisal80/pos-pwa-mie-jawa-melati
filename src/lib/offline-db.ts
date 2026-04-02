@@ -38,7 +38,8 @@ const openDB = (): Promise<IDBDatabase> => {
     };
 
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    request.onerror = () =>
+      reject(request.error ?? new Error("IndexedDB open failed"));
   });
 };
 
@@ -52,7 +53,10 @@ export const addPendingTransaction = async (
     const store = tx.objectStore(STORE_NAME);
     const req = store.put(trx); // put = add or update (idempotent)
     req.onsuccess = () => resolve();
-    req.onerror = () => reject(req.error);
+    req.onerror = () =>
+      reject(
+        req.error instanceof Error ? req.error : new Error(String(req.error)),
+      );
     tx.oncomplete = () => db.close();
   });
 };
@@ -67,7 +71,10 @@ export const getAllPendingTransactions = async (): Promise<
     const store = tx.objectStore(STORE_NAME);
     const req = store.getAll();
     req.onsuccess = () => resolve(req.result as PendingTransaction[]);
-    req.onerror = () => reject(req.error);
+    req.onerror = () =>
+      reject(
+        req.error instanceof Error ? req.error : new Error(String(req.error)),
+      );
     tx.oncomplete = () => db.close();
   });
 };
@@ -82,7 +89,10 @@ export const removePendingTransaction = async (
     const store = tx.objectStore(STORE_NAME);
     const req = store.delete(invoiceNumber);
     req.onsuccess = () => resolve();
-    req.onerror = () => reject(req.error);
+    req.onerror = () =>
+      reject(
+        req.error instanceof Error ? req.error : new Error(String(req.error)),
+      );
     tx.oncomplete = () => db.close();
   });
 };
@@ -95,7 +105,10 @@ export const getPendingCount = async (): Promise<number> => {
     const store = tx.objectStore(STORE_NAME);
     const req = store.count();
     req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    req.onerror = () =>
+      reject(
+        req.error instanceof Error ? req.error : new Error(String(req.error)),
+      );
     tx.oncomplete = () => db.close();
   });
 };

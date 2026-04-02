@@ -27,10 +27,9 @@ export const AppSidebar = () => {
     <ShadcnSidebar variant="sidebar" collapsible="icon">
       <SidebarHeader className="flex h-16 justify-center border-b px-2">
         <div className="flex w-full items-center gap-3">
-          {(store as any)?.logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
+          {store?.logoUrl ? (
             <img
-              src={(store as any).logoUrl}
+              src={store.logoUrl}
               alt={store?.name}
               className="h-9 w-auto max-w-30 shrink-0 object-contain drop-shadow-sm"
             />
@@ -40,7 +39,7 @@ export const AppSidebar = () => {
             </div>
           )}
           <span className="truncate font-bold tracking-tight group-data-[collapsible=icon]:hidden">
-            {store?.name || "Memuat..."}
+            {store?.name ?? "Memuat..."}
           </span>
         </div>
       </SidebarHeader>

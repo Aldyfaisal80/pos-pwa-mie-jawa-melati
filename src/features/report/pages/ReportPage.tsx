@@ -16,8 +16,6 @@ export const ReportPage = () => {
 
   const {
     search,
-    startDate: _sd,
-    endDate: _ed,
     paymentMethod,
     sortBy,
     sortOrder,

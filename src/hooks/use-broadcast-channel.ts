@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback } from "react";
 
 type BroadcastMessage = {
   type: "TRANSACTION_CREATED" | "TRANSACTION_SYNCED";
-  payload?: any;
+  payload?: unknown;
 };
 
 export const useBroadcastChannel = (

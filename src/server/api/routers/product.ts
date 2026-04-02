@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Prisma } from "../../../../generated/prisma";
+import { type Prisma } from "../../../../generated/prisma";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { errorFilter } from "@/server/filters/error.filter";
 import {

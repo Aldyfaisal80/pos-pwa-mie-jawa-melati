@@ -93,9 +93,9 @@ const extractReceiptData = async (page: Page) => {
 
   const receiptText = await receiptDialog.innerText();
   const invoice =
-    receiptText.match(/No:\s+#(INV-[\d-]+)/)?.[1] ?? "INVOICE_NOT_FOUND";
+    /No:\s+#(INV-[\d-]+)/.exec(receiptText)?.[1] ?? "INVOICE_NOT_FOUND";
   const total =
-    receiptText.match(/\bTotal\b\s*(Rp[\d.\s\u00A0]+)/)?.[1]?.trim() ?? null;
+    /\bTotal\b\s*(Rp[\d.\s\u00A0]+)/.exec(receiptText)?.[1]?.trim() ?? null;
 
   return { receiptDialog, receiptText, invoice, total };
 };
@@ -117,7 +117,12 @@ const readPendingTransactions = async (
     const db = await new Promise<IDBDatabase>((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, 1);
       request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
+      request.onerror = () =>
+        reject(
+          request.error instanceof Error
+            ? request.error
+            : new Error(String(request.error)),
+        );
       request.onupgradeneeded = () => resolve(request.result);
     });
 
@@ -140,7 +145,12 @@ const readPendingTransactions = async (
             invoices: rows.map((row) => row.invoiceNumber),
           });
         };
-        getAllRequest.onerror = () => reject(getAllRequest.error);
+        getAllRequest.onerror = () =>
+          reject(
+            getAllRequest.error instanceof Error
+              ? getAllRequest.error
+              : new Error(String(getAllRequest.error)),
+          );
         tx.oncomplete = () => db.close();
       },
     );
@@ -162,7 +172,7 @@ const waitForReportData = async (page: Page) => {
 };
 
 const parseTotalCountFromFooter = (footerText: string) => {
-  const match = footerText.match(/dari total (\d+) transaksi/);
+  const match = /dari total (\d+) transaksi/.exec(footerText);
   return match ? Number(match[1]) : null;
 };
 

@@ -71,9 +71,7 @@ test.describe("POS WebApp - Edge Cases", () => {
     await page.getByRole("button", { name: /Simpan Perubahan/i }).click();
 
     // Depending on schema length validation, it might fail or show error
-    // Check if error toast exists, or if it successfully stores the huge name
-    const successToast = page.getByText("Pengaturan Disimpan");
-    const errorToast = page.getByText(/Gagal|Maksimal|terlalu panjang/i);
+    await expect(page.getByText("Pengaturan Disimpan").or(page.getByText(/Gagal|Maksimal|terlalu panjang/i))).toBeVisible();
 
     // Since we don't know the exact schema, we just expect one of them to be visible
     // without the app crashing

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Camera, Image as ImageIcon, Loader2, X } from "lucide-react";
+import { Camera, Loader2, X } from "lucide-react";
 import { useSupabaseUpload } from "@/hooks/use-supabase-upload";
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
@@ -79,7 +79,6 @@ export const ImageUpload = ({
       >
         {/* Preview Image */}
         {value ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={value}
             alt="Preview"

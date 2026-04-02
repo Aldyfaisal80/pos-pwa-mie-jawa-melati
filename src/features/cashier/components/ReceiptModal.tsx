@@ -1,11 +1,16 @@
 "use client";
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Printer, UtensilsCrossed } from "lucide-react";
+import { UtensilsCrossed } from "lucide-react";
+import type { RouterOutputs } from "@/trpc/react";
 import { formatRupiah } from "@/lib/format";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
+import { render } from "react-thermal-printer";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
+import { usePrinter } from "@/contexts/printer-context";
+import { ReceiptPrintTemplate } from "./ReceiptPrintTemplate";
+import { PrinterActionButtons } from "./PrinterActionButtons";
 
 interface ReceiptModalProps {
   open: boolean;
@@ -28,11 +33,47 @@ export const ReceiptModal = ({
   transactionDate,
   onFinish,
 }: ReceiptModalProps) => {
+  type StoreProfile = NonNullable<RouterOutputs["store"]["getProfile"]>;
   const { data: store } = api.store.getProfile.useQuery();
   const changeAmount = Number(paymentAmount) - cartTotal;
 
+  const {
+    isConnected,
+    isPrinting,
+    connect,
+    disconnect,
+    printReceipt,
+    savedPrinterName,
+  } = usePrinter();
+
+  const handlePrint = async () => {
+    if (!store) {
+      toast.error("Data toko belum dimuat");
+      return;
+    }
+
+    try {
+      const data = await render(
+        <ReceiptPrintTemplate
+          store={store as StoreProfile}
+          cart={cart}
+          cartTotal={cartTotal}
+          paymentAmount={paymentAmount}
+          paymentMethod={paymentMethod}
+          invoiceNumber={invoiceNumber}
+          transactionDate={transactionDate}
+        />,
+      );
+      await printReceipt(data);
+    } catch (e: unknown) {
+      toast.error(
+        `Gagal merender struk: ${e instanceof Error ? e.message : "Error tidak diketahui"}`,
+      );
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={() => {}}>
+    <Dialog open={open} onOpenChange={undefined}>
       <DialogContent className="w-[calc(100vw-2rem)] max-w-85 overflow-visible border-none bg-transparent p-0 shadow-none sm:w-85">
         <DialogTitle className="sr-only">Struk Pembayaran</DialogTitle>
 
@@ -49,10 +90,9 @@ export const ReceiptModal = ({
         <div className="receipt-jagged mt-8 w-full rounded-t-xl pb-4 shadow-2xl">
           {/* Header */}
           <div className="flex flex-col items-center border-b border-dashed border-gray-300 p-6 pb-4">
-            {(store as any)?.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
+            {store?.logoUrl ? (
               <img
-                src={(store as any).logoUrl}
+                src={store.logoUrl}
                 alt="Store Logo"
                 className="mb-3 h-16 w-auto max-w-40 object-contain drop-shadow-sm"
               />
@@ -138,7 +178,7 @@ export const ReceiptModal = ({
                   {paymentMethod === "CASH" ? "Tunai" : paymentMethod}
                 </span>
                 <span>
-                  {formatRupiah(Number(paymentAmount || cartTotal.toString()))}
+                  {formatRupiah(Number(paymentAmount ?? cartTotal.toString()))}
                 </span>
               </div>
               {paymentMethod === "CASH" && changeAmount >= 0 && (
@@ -157,23 +197,16 @@ export const ReceiptModal = ({
               <br />
               Selamat Menikmati
             </p>
-            <div className="flex gap-2">
-              <button
-                className="flex-1 rounded-lg border border-gray-300 py-2 text-xs font-bold text-gray-700 transition-colors hover:bg-gray-50"
-                onClick={onFinish}
-              >
-                Tutup
-              </button>
-              <button
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-amber-600 py-2 text-xs font-bold text-white shadow-sm transition-colors hover:bg-amber-700"
-                onClick={() => {
-                  toast.success("Mencetak Struk...");
-                  setTimeout(onFinish, 1500);
-                }}
-              >
-                <Printer className="h-4 w-4" /> Cetak
-              </button>
-            </div>
+            <PrinterActionButtons
+              isConnected={isConnected}
+              isPrinting={isPrinting}
+              savedPrinterName={savedPrinterName}
+              onConnect={connect}
+              onDisconnect={disconnect}
+              onPrint={handlePrint}
+              onClose={onFinish}
+              printLabel="Cetak Struk"
+            />
           </div>
         </div>
       </DialogContent>

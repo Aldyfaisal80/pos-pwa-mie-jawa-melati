@@ -8,6 +8,17 @@ import { formatRupiah } from "@/lib/format";
 import { formatDateTime, getPaymentMethodLabel } from "../utils/report.utils";
 import type { RouterOutputs } from "@/trpc/react";
 
+import { toast } from "sonner";
+import { api } from "@/trpc/react";
+import { render } from "react-thermal-printer";
+import { usePrinter } from "@/contexts/printer-context";
+import { ReceiptPrintTemplate } from "@/features/cashier/components/ReceiptPrintTemplate";
+import { PrinterActionButtons } from "@/features/cashier/components/PrinterActionButtons";
+import type { PaymentMethod } from "@/features/cashier/types/cashier.types";
+import { mapTransactionItemsToCart } from "../utils/receipt-mapper";
+
+type StoreProfile = NonNullable<RouterOutputs["store"]["getProfile"]>;
+
 type Transaction = Exclude<
   RouterOutputs["transaction"]["getTransactionReport"],
   undefined
@@ -24,9 +35,45 @@ export const TransactionDetailModal = ({
   open,
   onOpenChange,
 }: TransactionDetailModalProps) => {
+  const { data: store } = api.store.getProfile.useQuery();
+  const {
+    isConnected,
+    isPrinting,
+    connect,
+    disconnect,
+    printReceipt,
+    savedPrinterName,
+  } = usePrinter();
+
   if (!transaction) return null;
 
   const { date, time } = formatDateTime(transaction.date);
+
+  const handlePrint = async () => {
+    if (!store || !transaction) {
+      toast.error("Data toko belum dimuat");
+      return;
+    }
+
+    try {
+      const data = await render(
+        <ReceiptPrintTemplate
+          store={store as StoreProfile}
+          cart={mapTransactionItemsToCart(transaction.items)}
+          cartTotal={Number(transaction.totalAmount)}
+          paymentAmount={String(transaction.paidAmount)}
+          paymentMethod={transaction.paymentMethod as PaymentMethod}
+          invoiceNumber={transaction.invoiceNumber}
+          transactionDate={transaction.date}
+        />,
+      );
+      await printReceipt(data);
+    } catch (e: unknown) {
+      toast.error(
+        `Gagal merender struk: ${e instanceof Error ? e.message : "Error tidak diketahui"}`,
+      );
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -113,6 +160,18 @@ export const TransactionDetailModal = ({
                 </span>
               </div>
             )}
+          </div>
+
+          <div className="mt-2 rounded-lg bg-gray-50 p-3 dark:bg-gray-900/50">
+            <PrinterActionButtons
+              isConnected={isConnected}
+              isPrinting={isPrinting}
+              savedPrinterName={savedPrinterName}
+              onConnect={connect}
+              onDisconnect={disconnect}
+              onPrint={handlePrint}
+              printLabel="Cetak Ulang Struk"
+            />
           </div>
         </div>
       </DialogContent>

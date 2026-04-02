@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Prisma, PaymentMethod } from "../../../../generated/prisma";
+import { type Prisma, type PaymentMethod } from "../../../../generated/prisma";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   syncTransactionSchema,

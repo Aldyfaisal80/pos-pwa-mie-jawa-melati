@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquare, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem } from "../types/cashier.types";
 

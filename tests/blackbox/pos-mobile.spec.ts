@@ -57,7 +57,7 @@ test.describe("POS WebApp - Mobile View Tests", () => {
           await expect(page.getByText(productName)).toBeVisible();
         }
       }
-    } catch (e) {
+    } catch {
       test.skip(
         true,
         "No products available to test mobile cart checkout or layout changed.",

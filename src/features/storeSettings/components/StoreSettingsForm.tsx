@@ -42,9 +42,9 @@ export const StoreSettingsForm = () => {
   const onSubmit = (data: StoreSettingsFormValues) => {
     updateProfile.mutate({
       name: data.name.trim(),
-      address: data.address?.trim() || undefined,
-      phone: data.phone?.trim() || undefined,
-      logoUrl: data.logoUrl?.trim() || undefined,
+      address: data.address?.trim() ?? undefined,
+      phone: data.phone?.trim() ?? undefined,
+      logoUrl: data.logoUrl?.trim() ?? undefined,
     });
   };
 

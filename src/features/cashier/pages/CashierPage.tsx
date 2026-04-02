@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -72,23 +72,29 @@ export const CashierPage = () => {
   });
 
   // --- handlers ---
-  const handleOpenNote = (cartId: string) => {
+  const handleOpenNote = useCallback((cartId: string) => {
     setActiveNoteCartId(cartId);
     setIsNoteOpen(true);
-  };
+  }, []);
 
-  const handleSaveNote = (note: string, splitQty: number) => {
-    if (activeNoteCartId) updateNote(activeNoteCartId, note, splitQty);
-  };
+  const handleSaveNote = useCallback(
+    (note: string, splitQty: number) => {
+      if (activeNoteCartId) updateNote(activeNoteCartId, note, splitQty);
+    },
+    [activeNoteCartId, updateNote],
+  );
 
-  const handleClearNote = (cartId: string) => {
-    // Clear note applies to the whole row
-    updateNote(cartId, "");
-  };
+  const handleClearNote = useCallback(
+    (cartId: string) => {
+      updateNote(cartId, "");
+    },
+    [updateNote],
+  );
 
-  const handleClearCart = () => setIsClearConfirmOpen(true);
+  const handleClearCart = useCallback(() => setIsClearConfirmOpen(true), []);
+  const handleOpenCheckout = useCallback(() => setIsCheckoutOpen(true), []);
 
-  const handleProcess = () => {
+  const handleProcess = useCallback(() => {
     syncTransaction({
       cart,
       cartTotal,
@@ -107,7 +113,7 @@ export const CashierPage = () => {
         setIsReceiptOpen(true);
       },
     });
-  };
+  }, [cart, cartTotal, paymentMethod, paymentAmount, syncTransaction]);
 
   // Auto-close checkout modal when cart becomes empty
   useEffect(() => {
@@ -116,7 +122,7 @@ export const CashierPage = () => {
     }
   }, [cart.length, isCheckoutOpen]);
 
-  const handleFinish = () => {
+  const handleFinish = useCallback(() => {
     setIsReceiptOpen(false);
     clearCart();
     setPaymentAmount("");
@@ -124,7 +130,7 @@ export const CashierPage = () => {
     toast.success("Transaksi Berhasil!", {
       description: "Data pesanan telah disimpan ke server.",
     });
-  };
+  }, [clearCart]);
 
   return (
     <PageContainer title="Kasir" withHeader>
@@ -149,7 +155,7 @@ export const CashierPage = () => {
               onOpenNote={handleOpenNote}
               onClearNote={handleClearNote}
               onClear={handleClearCart}
-              onCheckout={() => setIsCheckoutOpen(true)}
+              onCheckout={handleOpenCheckout}
             />
           </div>
 
@@ -164,7 +170,7 @@ export const CashierPage = () => {
               <Button
                 className="flex h-auto w-full items-center justify-between rounded-2xl border border-white/10 p-4 shadow-2xl"
                 size="lg"
-                onClick={() => setIsCheckoutOpen(true)}
+                onClick={handleOpenCheckout}
               >
                 <div className="flex items-center gap-3">
                   <div className="bg-primary-foreground/20 text-primary-foreground flex h-10 w-10 items-center justify-center rounded-full font-bold">

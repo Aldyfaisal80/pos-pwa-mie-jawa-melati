@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Thermal Printer Bluetooth (58mm)** — Full Web Bluetooth API integration via `react-thermal-printer`.
+- `src/hooks/use-bluetooth-printer.ts` — Custom hook for BLE GATT connection, handling generic ESC/POS UUIDs (`000018f0...`), auto-chunking for MTU sizes, and `localStorage` memory for printer name UI.
+- `src/features/cashier/components/ReceiptPrintTemplate.tsx` — Headless JSX-to-Buffer component. Renders receipt layout exactly to 32 columns, handles Base64 logo rendering with Floyd-Steinberg dithering.
+- `src/features/cashier/components/PrinterActionButtons.tsx` — Reusable, DRY UI component for uniform Bluetooth connect/print triggers across modules.
 - `src/features/storeSettings/schemas/index.ts` — Co-located Zod schema with clean `.min(1, "pesan")` error syntax (L8-TRPC pattern)
 - `src/features/storeSettings/types/index.ts` — Co-located `StoreSettingsFormValues` type inferred from schema
 - `src/features/storeSettings/components/StoreSettingsForm.tsx` — Smart container component (data fetching + form state + skeleton + mutation)
@@ -19,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `COLUMN_WIDTHS` constant in `ProductTable` — shared between header, skeleton, and data rows for layout stability
 
 ### Changed
+- **TransactionDetailModal** (Reports) — Can now reprint historical and offline-synced transactions using the unified Bluetooth template.
+- **ReceiptModal** (Cashier) — UI refactored into `PrinterActionButtons`; integrated to trigger raw ESC/POS binary generation right after checkout.
 - **ProductPage** — Now owns `Card` + `CardHeader` (icon, title, description) layout matching `StoreSettingsPage` pattern; `ProductManager` renders inner content only
 - **ProductFormModal** — Migrated from `useState`/manual validation to React Hook Form + Zod; uses `PRODUCT_FORM_ID` constant; error messages via `<FormMessage />`
 - **ProductTable** — Added `table-fixed` CSS layout; `COLUMN_WIDTHS` constant prevents layout shift across all screen sizes and data states; `truncate` + `min-w-0` on name column for overflow safety

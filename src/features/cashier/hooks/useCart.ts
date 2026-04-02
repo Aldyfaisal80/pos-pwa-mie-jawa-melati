@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import type { CartItem, ProductFromServer } from "../types/cashier.types";
 
 export const useCart = () => {
@@ -16,7 +16,7 @@ export const useCart = () => {
   );
   const hasNotes = cart.some((item) => item.note.trim() !== "");
 
-  const addToCart = (product: ProductFromServer) => {
+  const addToCart = useCallback((product: ProductFromServer) => {
     setCart((prev) => {
       const existing = prev.find(
         (item) => item.productId === product.id && item.note === "",
@@ -41,9 +41,9 @@ export const useCart = () => {
         },
       ];
     });
-  };
+  }, []);
 
-  const updateQty = (cartId: string, delta: number) => {
+  const updateQty = useCallback((cartId: string, delta: number) => {
     setCart((prev) =>
       prev
         .map((item) =>
@@ -51,39 +51,43 @@ export const useCart = () => {
         )
         .filter((item) => item.qty > 0),
     );
-  };
+  }, []);
 
-  const updateNote = (cartId: string, note: string, splitQty?: number) => {
-    setCart((prev) => {
-      const idx = prev.findIndex((item) => item.cartId === cartId);
-      if (idx === -1) return prev;
+  const updateNote = useCallback(
+    (cartId: string, note: string, splitQty?: number) => {
+      setCart((prev) => {
+        const idx = prev.findIndex((item) => item.cartId === cartId);
+        if (idx === -1) return prev;
 
-      const item = prev[idx]!;
-      const qtyToApply = splitQty ?? item.qty;
+        const item = prev[idx]!;
+        const qtyToApply = splitQty ?? item.qty;
 
-      // If applying to all, just update the note
-      if (qtyToApply >= item.qty) {
+        // If applying to all, just update the note
+        if (qtyToApply >= item.qty) {
+          const next = [...prev];
+          next[idx] = { ...item, note };
+          return next;
+        }
+
+        // ─── ITEM SPLITTING ───
+        const originalReduced = { ...item, qty: item.qty - qtyToApply };
+        const newSplitItem = {
+          ...item,
+          cartId:
+            Date.now().toString() + Math.random().toString(36).slice(2, 6),
+          qty: qtyToApply,
+          note: note,
+        };
+
         const next = [...prev];
-        next[idx] = { ...item, note };
+        next.splice(idx, 1, originalReduced, newSplitItem);
         return next;
-      }
+      });
+    },
+    [],
+  );
 
-      // ─── ITEM SPLITTING ───
-      const originalReduced = { ...item, qty: item.qty - qtyToApply };
-      const newSplitItem = {
-        ...item,
-        cartId: Date.now().toString() + Math.random().toString(36).slice(2, 6),
-        qty: qtyToApply,
-        note: note,
-      };
-
-      const next = [...prev];
-      next.splice(idx, 1, originalReduced, newSplitItem);
-      return next;
-    });
-  };
-
-  const clearCart = () => setCart([]);
+  const clearCart = useCallback(() => setCart([]), []);
 
   return {
     cart,

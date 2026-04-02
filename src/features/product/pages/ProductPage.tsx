@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UtensilsCrossed } from "lucide-react";
+
 import { ProductManager } from "../components/ProductManager";
 
 export const ProductPage = () => (

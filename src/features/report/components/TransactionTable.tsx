@@ -41,7 +41,7 @@ import { TransactionDetailModal } from "./TransactionDetailModal";
 import { useTransactionMutations } from "../hooks/useTransactionMutations";
 import {
   ReportSortBy,
-  type ReportSortOrder,
+  ReportSortOrder,
 } from "@/server/validations/transaction.validation";
 
 export type Transaction = Exclude<
@@ -98,7 +98,7 @@ const SortIcon = ({
 }) => {
   if (sortColumn !== column)
     return <ArrowUpDown className="ml-1.5 h-3.5 w-3.5 opacity-50" />;
-  return sortOrder === "asc" ? (
+  return sortOrder === ReportSortOrder.ASC ? (
     <ArrowUp className="ml-1.5 h-3.5 w-3.5" />
   ) : (
     <ArrowDown className="ml-1.5 h-3.5 w-3.5" />
