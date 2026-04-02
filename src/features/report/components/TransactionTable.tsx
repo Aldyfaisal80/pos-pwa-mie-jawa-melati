@@ -35,7 +35,7 @@ import {
   formatDateTime,
   getPaymentMethodBadge,
   getPaymentMethodLabel,
-} from "../utils/report.utils";
+} from "../utils/reportUtils";
 import type { RouterOutputs } from "@/trpc/react";
 import { TransactionDetailModal } from "./TransactionDetailModal";
 import { useTransactionMutations } from "../hooks/useTransactionMutations";

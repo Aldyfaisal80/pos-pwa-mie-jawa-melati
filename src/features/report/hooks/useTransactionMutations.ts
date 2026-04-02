@@ -1,6 +1,6 @@
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
-import { useBroadcastChannel } from "@/hooks/use-broadcast-channel";
+import { useBroadcastChannel } from "@/hooks/useBroadcastChannel";
 
 export const useTransactionMutations = () => {
   const utils = api.useUtils();

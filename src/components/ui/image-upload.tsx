@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { Camera, Loader2, X } from "lucide-react";
-import { useSupabaseUpload } from "@/hooks/use-supabase-upload";
+import { useSupabaseUpload } from "@/hooks/useSupabaseUpload";
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
 

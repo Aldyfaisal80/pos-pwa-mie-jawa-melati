@@ -1,4 +1,4 @@
-// src/hooks/use-app-theme.ts
+// src/hooks/useAppTheme.ts
 "use client";
 
 import { useTheme } from "next-themes";

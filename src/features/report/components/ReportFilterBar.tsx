@@ -13,7 +13,7 @@ import {
   PaymentMethod,
   type PaymentMethod as ServerPaymentMethod,
 } from "@/server/validations";
-import { parseLocalDate } from "../utils/report.utils";
+import { parseLocalDate } from "../utils/reportUtils";
 
 interface ReportFilterBarProps {
   search: string;

@@ -6,7 +6,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeSelector } from "./ThemeSelector";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { StatusPopover } from "../fragments/StatusPopover";
-import { useOfflineSync } from "@/hooks/use-offline-sync";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { navItems } from "../config/navigation";
 import { cn } from "@/lib/utils";
 

@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import {
   useAppTheme,
   type AppMode,
-} from "@/hooks/use-app-theme";
+} from "@/hooks/useAppTheme";
 
 const MODES: { id: AppMode; icon: React.ReactNode; label: string }[] = [
   { id: "light", icon: <Sun className="h-4 w-4" />, label: "Terang" },

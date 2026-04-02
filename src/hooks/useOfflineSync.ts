@@ -9,7 +9,7 @@ import {
   removePendingTransaction,
 } from "@/lib/offline-db";
 import { type PaymentMethod as ServerPaymentMethod } from "@/server/validations/transaction.validation";
-import { useBroadcastChannel } from "./use-broadcast-channel";
+import { useBroadcastChannel } from "./useBroadcastChannel";
 
 const isDuplicateInvoiceError = (error: unknown) => {
   if (!(error instanceof Error)) return false;

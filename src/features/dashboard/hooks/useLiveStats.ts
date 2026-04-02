@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { api } from "@/trpc/react";
-import { useBroadcastChannel } from "@/hooks/use-broadcast-channel";
+import { useBroadcastChannel } from "@/hooks/useBroadcastChannel";
 import { supabase } from "@/lib/supabase-client";
 
 export const useLiveStats = () => {

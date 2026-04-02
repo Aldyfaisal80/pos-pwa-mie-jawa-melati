@@ -1,1 +1,1 @@
-export { StoreSettingsPage as default } from "@/features/storeSettings/pages/StoreSettingsPage";
+export { StoreSettingsPage as default } from "@/features/store-settings/pages/StoreSettingsPage";

@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { formatRupiah } from "@/lib/format";
-import { formatDateTime, getPaymentMethodLabel } from "../utils/report.utils";
+import { formatDateTime, getPaymentMethodLabel } from "../utils/reportUtils";
 import type { RouterOutputs } from "@/trpc/react";
 
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ import { usePrinter } from "@/contexts/printer-context";
 import { ReceiptPrintTemplate } from "@/features/cashier/components/ReceiptPrintTemplate";
 import { PrinterActionButtons } from "@/features/cashier/components/PrinterActionButtons";
 import type { PaymentMethod } from "@/features/cashier/types/cashier.types";
-import { mapTransactionItemsToCart } from "../utils/receipt-mapper";
+import { mapTransactionItemsToCart } from "../utils/receiptMapper";
 
 type StoreProfile = NonNullable<RouterOutputs["store"]["getProfile"]>;
 

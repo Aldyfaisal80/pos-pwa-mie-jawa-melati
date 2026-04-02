@@ -7,7 +7,7 @@ import {
   addPendingTransaction,
   removePendingTransaction,
 } from "@/lib/offline-db";
-import { useBroadcastChannel } from "@/hooks/use-broadcast-channel";
+import { useBroadcastChannel } from "@/hooks/useBroadcastChannel";
 
 interface SyncOptions {
   cart: CartItem[];

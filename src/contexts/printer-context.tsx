@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, type ReactNode } from "react";
-import { useBluetoothPrinter } from "@/hooks/use-bluetooth-printer";
+import { useBluetoothPrinter } from "@/hooks/useBluetoothPrinter";
 
 type PrinterContextValue = ReturnType<typeof useBluetoothPrinter>;
 
