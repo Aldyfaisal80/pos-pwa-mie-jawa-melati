@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   buildNote,
   parseNote,
@@ -21,8 +21,11 @@ export const useNoteDraft = ({
   categoryName,
 }: UseNoteDraftOptions) => {
   const isDrink = isDrinkCategory(categoryName);
-  const relevantGroups = getRelevantGroups(isDrink);
-  const allRelevantTags = relevantGroups.flatMap((g) => g.tags);
+  const relevantGroups = useMemo(() => getRelevantGroups(isDrink), [isDrink]);
+  const allRelevantTags = useMemo(
+    () => relevantGroups.flatMap((g) => g.tags),
+    [relevantGroups],
+  );
 
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
   const [freeText, setFreeText] = useState("");

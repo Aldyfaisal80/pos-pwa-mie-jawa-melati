@@ -62,8 +62,11 @@ export const NoteModal = ({
   };
 
   const handleOpenChange = (isOpen: boolean) => {
-    if (!isOpen) handleSave();
-    else onOpenChange(isOpen);
+    if (!isOpen) {
+      handleSave();
+    } else {
+      onOpenChange(isOpen);
+    }
   };
 
   const Header = (
