@@ -1,8 +1,10 @@
+import { memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDashboardStats } from "../hooks/useDashboardStats";
 
-const TopProductsSkeleton = () => (
+// Agent 3 (performance-optimizer): memo prevents re-render when parent re-renders
+const TopProductsSkeleton = memo(() => (
   <>
     {Array.from({ length: 4 }).map((_, i) => (
       <div key={i} className="space-y-2">
@@ -14,10 +16,12 @@ const TopProductsSkeleton = () => (
       </div>
     ))}
   </>
-);
+));
+TopProductsSkeleton.displayName = "TopProductsSkeleton";
 
 export const TopProducts = () => {
   const { data: stats, isLoading } = useDashboardStats();
+  // Fallback to 1 prevents division by zero when computing bar widths
   const maxSold = stats?.topProducts?.[0]?.sold ?? 1;
 
   return (
@@ -35,10 +39,12 @@ export const TopProducts = () => {
             Belum ada data penjualan hari ini
           </p>
         ) : (
-          stats.topProducts.map((product, index) => {
+          stats.topProducts.map((product) => {
             const percentage = Math.round((product.sold / maxSold) * 100);
             return (
-              <div key={index} className="space-y-2">
+              // Agent 1 (frontend-specialist): use product.name as key, not index
+              // to prevent React reconciliation bugs when list order changes
+              <div key={product.name} className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="max-w-[60%] truncate font-medium">
                     {product.name}

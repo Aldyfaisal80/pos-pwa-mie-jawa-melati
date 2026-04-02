@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Dashboard Revenue Chart — Real-time Sync** — Chart was not updating after a new transaction because `useLiveStats` invalidated `getDashboardStats` and `getTransactionReport` but forgot `getRevenueChart`. Added `getRevenueChart.invalidate()` to both BroadcastChannel and Supabase Realtime listeners.
+- **Revenue Chart — Day Matching (TO_CHAR Refactor)** — `getRevenueChart` used `DATE(...) AS day` which returns a Postgres `DATE` type interpreted by node-postgres as a JS `Date` object with a timezone-shifted midnight. The JS `.getUTCDate()` comparison then mismatch by one day. Fixed by using `TO_CHAR(DATE(...), 'YYYY-MM-DD') AS day_str` to return a plain string and comparing directly with a `YYYY-MM-DD`-formatted WIB date string instead.
+- **Transaction Date Timezone Bug (Root Cause Fix)** — The `date` column is `timestamp WITHOUT time zone`. Client stores UTC ISO strings (`new Date().toISOString()`), which Postgres stores as naive local time. Because the Postgres server is on `Asia/Jakarta` (UTC+7), `DATE(date AT TIME ZONE 'Asia/Jakarta')` subtracted 7h from the naive value — causing every transaction created between WIB midnight (00:00) and WIB 07:00 to be bucketed into the *previous* day. Fixed in `syncOfflineData` router by shifting the UTC date to WIB local time (`+7h`) before storing so the naive timestamp matches the user's actual local clock time.
+
+---
+
+
 ### Added
 - **Thermal Printer Bluetooth (58mm)** — Full Web Bluetooth API integration via `react-thermal-printer`.
 - `src/hooks/use-bluetooth-printer.ts` — Custom hook for BLE GATT connection, handling generic ESC/POS UUIDs (`000018f0...`), auto-chunking for MTU sizes, and `localStorage` memory for printer name UI.

@@ -11,11 +11,21 @@ import { useDashboardStats } from "../hooks/useDashboardStats";
 import { useLiveStats } from "../hooks/useLiveStats";
 
 export const DashboardPage = () => {
-  // Mengaktifkan fitur Realtime Supabase untuk halaman ini
+  // Activate Supabase Realtime listener for live stat updates
   useLiveStats();
 
   const { data: stats, isLoading } = useDashboardStats();
   const topProduct = stats?.topProducts?.[0];
+
+  // Extracted to keep StatsCard usage readable (avoids nested JSX in props)
+  const topProductValue = (
+    <span className="block truncate text-xl">
+      {topProduct?.name ?? "-"}
+    </span>
+  );
+  const topProductDescription = topProduct
+    ? `Terjual ${topProduct.sold} porsi hari ini`
+    : "Belum ada transaksi hari ini";
 
   return (
     <PageContainer title="Dashboard" withHeader>
@@ -49,16 +59,8 @@ export const DashboardPage = () => {
               icon={Star}
               iconColorClass="bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
               isLoading={isLoading}
-              value={
-                <span className="block truncate text-xl">
-                  {topProduct?.name ?? "-"}
-                </span>
-              }
-              description={
-                topProduct
-                  ? `Terjual ${topProduct.sold} porsi hari ini`
-                  : "Belum ada transaksi hari ini"
-              }
+              value={topProductValue}
+              description={topProductDescription}
             />
           </div>
 

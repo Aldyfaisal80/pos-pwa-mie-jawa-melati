@@ -1,45 +1,14 @@
-# Comprehensive Multi-Agent Health & Status Audit
+# Debug: Revenue Chart Showing 0 RP for Today
 
-This orchestration plan outlines the approach for a deep, system-wide health and status check utilizing three distinct agents as per the `@[/orchestrate]` and `@[/webapp-testing]` workflows.
+## Goal
+Fix the issue where the Revenue Chart for the current day shows 0 RP, even though the total transaction and the `Stats Card` omzet count them correctly.
 
-## Goal Description
+## Root Cause
+When the database queries transactions using `DATE(date AT TIME ZONE 'Asia/Jakarta')`, Prisma & Node-postgres translate this raw SQL DATE format back into JavaScript using the local timezone of the NodeJS server process. For example, '2026-04-03' gets parsed as `2026-04-02T17:00:00Z`. The matching script array strictly checks against the `wibD.getUTCDate()` which differs, resulting in no match and defaulting to `0`. 
 
-To holistically evaluate the project's health, covering code quality, security vulnerabilities, bundle performance, and end-to-end (E2E) webapp reliability. We will leverage the automated scripts provided by the agent skill set across multiple specialized perspectives.
+## Tasks
+- [ ] Task 1: Refactor `getRevenueChart` inside `transaction.ts` router to convert the date into a strict string formatted `YYYY-MM-DD` using `TO_CHAR`. → Verify: Fix timezone shifting bugs.
+- [ ] Task 2: Validate the updated mapping string inside the `.find()` loop array to ensure strictly identical pattern matches.
 
-## User Review Required
-
-> [!IMPORTANT]
-> The development server is recorded as running (`http://localhost:3000`). The `test-engineer` will use this active instance to run the Playwright browser tests.
-> Are there any specific routes, authentication flows, or priority modules you want the E2E tests to focus on, or should we let the agent perform automatic discovery?
-
-> [!WARNING]
-> Running the complete suite of audits (especially Playwright E2E and Bundle Analyzer) may temporarily consume high CPU resources on your local machine.
-
-## Proposed Changes (Parallel Agent Execution)
-
-Upon approval, we will proceed to **Phase 2 (Implementation)** and spin up the following agents strictly in parallel to fetch reports:
-
-### 1. 🛡️ `security-auditor`
-Focuses on project vulnerabilities, outdated dependencies, and security best practices.
-- **Task:** Run dependency and vulnerability scans.
-- **Execution:**
-  - `python .agent/skills/vulnerability-scanner/scripts/dependency_analyzer.py .`
-  - `python .agent/skills/vulnerability-scanner/scripts/security_scan.py .`
-
-### 2. 🧪 `test-engineer`
-Focuses on typing, linting, unit tests, and the requested deep webapp-testing.
-- **Task:** Audit codebase formatting, type safety, and execute Playwright tests against `http://localhost:3000`.
-- **Execution:**
-  - `python .agent/skills/lint-and-validate/scripts/lint_runner.py .`
-  - `python .agent/skills/testing-patterns/scripts/test_runner.py .`
-  - `python .agent/skills/webapp-testing/scripts/playwright_runner.py http://localhost:3000`
-
-### 3. ⚡ `performance-optimizer`
-Focuses on application speed, package sizes, and Core Web Vitals.
-- **Task:** Conduct a bundle size analysis and basic Lighthouse emulation.
-- **Execution:**
-  - `python .agent/skills/performance-profiling/scripts/bundle_analyzer.py .`
-  - `python .agent/skills/performance-profiling/scripts/lighthouse_audit.py .`
-
-## Final Synthesis
-All agents will return their findings to the `orchestrator`, which will then deliver a unified **🎼 Orchestration Report** containing the final Pass/Fail verdicts and key findings.
+## Done When
+- [ ] Today's daily revenue matches exactly the overall omzet in the Dashboard.

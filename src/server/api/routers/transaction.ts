@@ -71,12 +71,20 @@ export const transactionRouter = createTRPCRouter({
     .input(syncTransactionSchema)
     .mutation(async ({ ctx, input }) => {
       try {
+        // The `date` column is `timestamp WITHOUT time zone`.
+        // PostgreSQL treats stored values as "local" time.
+        // Client sends UTC ISO strings (new Date().toISOString()), which Prisma
+        // passes through as-is. We must shift to WIB (UTC+7) before storing
+        // so that DATE(date AT TIME ZONE 'Asia/Jakarta') computes the correct day.
+        const toWIBLocal = (utcDate: Date): Date =>
+          new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
+
         return await ctx.db.$transaction(
           input.map((trx) =>
             ctx.db.transaction.create({
               data: {
                 invoiceNumber: trx.invoiceNumber,
-                date: trx.date,
+                date: toWIBLocal(trx.date),
                 totalAmount: trx.totalAmount,
                 paymentMethod: trx.paymentMethod,
                 paidAmount: trx.paidAmount,
@@ -234,10 +242,11 @@ export const transactionRouter = createTRPCRouter({
 
         // Single SQL GROUP BY query — avoids fetching all rows into JS memory.
         // DATE() with AT TIME ZONE ensures day boundaries are calculated in WIB.
-        type RevenueRow = { day: Date; total: number };
+        // We use TO_CHAR to force Prisma to return a String instead of a misleading Date object.
+        type RevenueRow = { day_str: string; total: number };
         const rows = await ctx.db.$queryRaw<RevenueRow[]>`
           SELECT
-            DATE(date AT TIME ZONE 'Asia/Jakarta') AS day,
+            TO_CHAR(DATE(date AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD') AS day_str,
             COALESCE(SUM("totalAmount"), 0)::float   AS total
           FROM "Transaction"
           WHERE
@@ -245,8 +254,8 @@ export const transactionRouter = createTRPCRouter({
             AND "deletedAt" IS NULL
             AND date >= ${startDate}
             AND date <= ${endDate}
-          GROUP BY day
-          ORDER BY day ASC
+          GROUP BY day_str
+          ORDER BY day_str ASC
         `;
 
         // Build every day in range so days with 0 revenue are still included
@@ -261,15 +270,10 @@ export const transactionRouter = createTRPCRouter({
             ? `${String(wibD.getUTCDate()).padStart(2, "0")}/${String(wibD.getUTCMonth() + 1).padStart(2, "0")}`
             : dayNames[wibD.getUTCDay()]!;
 
-          // Match the SQL `day` column (a plain date at midnight UTC from DATE())
-          const match = rows.find((r) => {
-            const rowDay = new Date(r.day);
-            return (
-              rowDay.getUTCFullYear() === wibD.getUTCFullYear() &&
-              rowDay.getUTCMonth() === wibD.getUTCMonth() &&
-              rowDay.getUTCDate() === wibD.getUTCDate()
-            );
-          });
+          const wibDString = `${wibD.getUTCFullYear()}-${String(wibD.getUTCMonth() + 1).padStart(2, "0")}-${String(wibD.getUTCDate()).padStart(2, "0")}`;
+
+          // Match the SQL `day_str` column directly bypasses any Node.js Date timezone pitfalls
+          const match = rows.find((r) => r.day_str === wibDString);
 
           return { name: label, total: match?.total ?? 0 };
         });

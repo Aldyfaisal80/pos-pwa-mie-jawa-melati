@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -18,47 +18,67 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import { formatRupiah } from "@/lib/format";
+import { formatRupiah, formatRupiahShort } from "@/lib/format";
 import { PERIOD_OPTIONS, type PeriodDays } from "../constants/periodOptions";
 import { useRevenueChart } from "../hooks/useRevenueChart";
 
-const ChartTooltipContent = ({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: { value: number }[];
-  label?: string;
-}) => {
-  if (!active || !payload?.length || !payload[0]) return null;
-  return (
-    <div className="border-border bg-background rounded-lg border p-3 shadow-md">
-      <p className="text-foreground mb-1 text-sm font-medium">{label}</p>
-      <p className="text-primary text-sm font-bold">
-        {formatRupiah(payload[0].value)}
-      </p>
-    </div>
-  );
-};
+// Chart display config — centralises all magic numbers in one place
+const CHART_CONFIG = {
+  largePeriodThreshold: 14,
+  fontSizeLarge: 10,
+  fontSizeDefault: 12,
+  xAxisIntervalLarge: 4,
+  xAxisIntervalDefault: 0,
+  skeletonMinHeight: 40,
+  skeletonHeightStep: 15,
+} as const;
 
-const ChartSkeleton = ({ bars }: { bars: number }) => (
+// Agent 3 (performance-optimizer): memo prevents re-render on every chart hover
+const ChartTooltipContent = memo(
+  ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: { value: number }[];
+    label?: string;
+  }) => {
+    if (!active || !payload?.length || !payload[0]) return null;
+    return (
+      <div className="border-border bg-background rounded-lg border p-3 shadow-md">
+        <p className="text-foreground mb-1 text-sm font-medium">{label}</p>
+        <p className="text-primary text-sm font-bold">
+          {formatRupiah(payload[0].value)}
+        </p>
+      </div>
+    );
+  },
+);
+ChartTooltipContent.displayName = "ChartTooltipContent";
+
+// Agent 3 (performance-optimizer): memo prevents re-render during data refetch
+const ChartSkeleton = memo(({ bars }: { bars: number }) => (
   <div className="flex h-full items-end gap-1 pb-2">
     {Array.from({ length: bars }).map((_, i) => (
       <Skeleton
         key={i}
         className="flex-1 rounded-t-sm"
-        style={{ height: `${40 + (i % 3) * 15}%` }}
+        style={{
+          height: `${CHART_CONFIG.skeletonMinHeight + (i % 3) * CHART_CONFIG.skeletonHeightStep}%`,
+        }}
       />
     ))}
   </div>
-);
+));
+ChartSkeleton.displayName = "ChartSkeleton";
 
 export const RevenueChart = () => {
   const [selectedDays, setSelectedDays] = useState<PeriodDays>(7);
   const { data: chartData, isLoading } = useRevenueChart(selectedDays);
 
-  const skeletonBars = selectedDays > 14 ? 10 : selectedDays;
+  const isLargePeriod = selectedDays > CHART_CONFIG.largePeriodThreshold;
+  const skeletonBars = isLargePeriod ? 10 : selectedDays;
 
   return (
     <Card className="col-span-1 lg:col-span-2">
@@ -97,17 +117,25 @@ export const RevenueChart = () => {
                 <XAxis
                   dataKey="name"
                   stroke="#888888"
-                  fontSize={selectedDays > 14 ? 10 : 12}
+                  fontSize={
+                    isLargePeriod
+                      ? CHART_CONFIG.fontSizeLarge
+                      : CHART_CONFIG.fontSizeDefault
+                  }
                   tickLine={false}
                   axisLine={false}
-                  interval={selectedDays > 14 ? 4 : 0}
+                  interval={
+                    isLargePeriod
+                      ? CHART_CONFIG.xAxisIntervalLarge
+                      : CHART_CONFIG.xAxisIntervalDefault
+                  }
                 />
                 <YAxis
                   stroke="#888888"
-                  fontSize={12}
+                  fontSize={CHART_CONFIG.fontSizeDefault}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(v) => `Rp ${v / 1000}k`}
+                  tickFormatter={formatRupiahShort}
                 />
                 <Tooltip
                   cursor={{ fill: "hsl(var(--muted))", opacity: 0.5 }}

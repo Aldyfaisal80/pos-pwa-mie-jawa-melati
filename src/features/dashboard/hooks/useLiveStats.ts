@@ -6,16 +6,20 @@ import { supabase } from "@/lib/supabase-client";
 export const useLiveStats = () => {
   const utils = api.useUtils();
 
-  // 1. LOKAL PWA: Mendengarkan tab lain pada perangkat yang sama (Offline/Online)
+  // 1. LOCAL PWA: Listen for transactions created on the same device (Offline/Online)
   useBroadcastChannel("pos-sync-channel", (message) => {
     if (message.type === "TRANSACTION_CREATED") {
+      // void: intentionally fire-and-forget — suppresses no-floating-promises lint rule
       void utils.transaction.getDashboardStats.invalidate();
       void utils.transaction.getTransactionReport.invalidate();
+      void utils.transaction.getRevenueChart.invalidate();
     }
   });
 
-  // 2. SERVER RTS: Mendengarkan perubahan dari perangkat BERBEDA (seperti Kasir di PC -> Bos di Tablet)
+  // 2. SERVER REALTIME: Listen for changes from OTHER devices (e.g. Cashier on PC → Owner on Tablet)
   useEffect(() => {
+    // NOTE: `utils` from api.useUtils() is referentially stable (tRPC guarantees this),
+    // so including it in deps is safe and does NOT cause repeated subscribe/unsubscribe cycles.
     const channel = supabase
       .channel("supabase_realtime")
       .on(
@@ -26,9 +30,10 @@ export const useLiveStats = () => {
           table: "Transaction",
         },
         () => {
-          // Hanya me-refresh jika ada trigger dari Supabase (perangkat lain)
+          // void: intentionally fire-and-forget — suppresses no-floating-promises lint rule
           void utils.transaction.getDashboardStats.invalidate();
           void utils.transaction.getTransactionReport.invalidate();
+          void utils.transaction.getRevenueChart.invalidate();
         },
       )
       .subscribe();

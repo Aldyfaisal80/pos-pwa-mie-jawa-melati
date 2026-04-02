@@ -19,11 +19,15 @@ export const CheckoutCashInput = ({
 }: CheckoutCashInputProps) => {
   return (
     <div className="animate-in fade-in slide-in-from-top-2">
-      <p className="text-muted-foreground mb-2 text-xs font-bold uppercase">
+      <label
+        htmlFor="cash-input"
+        className="text-muted-foreground mb-2 block text-xs font-bold uppercase cursor-pointer"
+      >
         Uang Diterima
-      </p>
+      </label>
       <div className="relative mb-3">
         <Input
+          id="cash-input"
           type="text"
           inputMode="numeric"
           className="h-12 text-lg font-bold"

@@ -232,3 +232,23 @@ Layer 4: Pages (src/features/*/pages/ → mounted by src/app/)
 - ✅ Arsitektur lebih sederhana dan maintainable
 - ⚠️ Jika kebutuhan berubah menjadi multi-user, authentication middleware dapat ditambahkan pada layer tRPC tanpa mengubah business logic (karena arsitektur sudah berbasis procedure middleware)
 
+### ADR-007: WIB Local Time Storage for Transaction.date
+**Status:** Accepted
+
+**Context:** The `Transaction.date` column is `timestamp WITHOUT time zone`. Prisma + node-postgres pass the value through as-is without tz conversion. The client sends `new Date().toISOString()` (UTC), while all chart/stats queries use `DATE(date AT TIME ZONE 'Asia/Jakarta')` to bucket by WIB calendar day.
+
+**Problem:** Because `timestamp WITHOUT tz` is interpreted as naive local time by Postgres (server tz = `Asia/Jakarta`/UTC+7), storing a UTC value like `21:54 UTC` is read back as `21:54 local (WIB)`. However `DATE('21:54' AT TIME ZONE 'Asia/Jakarta')` would subtract 7h, producing `14:54 UTC` → date = previous day — an off-by-one error for all transactions created between WIB midnight and WIB 07:00.
+
+**Decision:** In the `syncOfflineData` tRPC mutation, pre-shift the incoming UTC `Date` to WIB wall-clock time before storing:
+```typescript
+const toWIBLocal = (utcDate: Date): Date =>
+  new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
+// stored value = WIB local time, matching what DATE(...AT TIME ZONE) expects
+```
+
+**Chart query:** Use `TO_CHAR(DATE(date AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD')` instead of `DATE(...)` to return a string, avoiding node-postgres re-parsing the returned `DATE` type with unexpected UTC-midnight offsets.
+
+**Consequences:**
+- ✅ `DATE(date AT TIME ZONE 'Asia/Jakarta')` always resolves the correct WIB calendar day
+- ✅ Dashboard stats, revenue chart, and report date filters are consistent
+- ⚠️ Stored timestamps are NOT UTC — developers must remember this convention when writing raw SQL

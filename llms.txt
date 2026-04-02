@@ -23,7 +23,8 @@
 - **Feature Modules**: Each feature is self-contained (components/hooks/pages/types/utils)
 - **tRPC + Zod**: End-to-end type safety from DB to UI, no REST endpoints
 - **Soft Delete**: Products marked `isAvailable=false`; Transactions set `deletedAt` timestamp — data preserved for reporting
-- **WIB Timezone**: All date queries use `Asia/Jakarta` (UTC+7) boundaries for accurate Indonesian business reporting
+- **WIB Timezone Storage Convention**: `Transaction.date` is `timestamp WITHOUT time zone`. The server pre-shifts UTC dates to WIB (+7h) before storing so Postgres `DATE(date AT TIME ZONE 'Asia/Jakarta')` always resolves the correct local calendar day. Chart queries use `TO_CHAR(..., 'YYYY-MM-DD')` string comparison to avoid node-postgres `Date` object UTC-shift pitfalls.
+- **Real-time Dashboard Sync**: `useLiveStats` hook listens to both local `BroadcastChannel` (pos-sync-channel) and `supabase_realtime` Postgres changes. On `TRANSACTION_CREATED`, invalidates `getDashboardStats`, `getTransactionReport`, and `getRevenueChart` caches simultaneously.
 - **Responsive Drawer/Dialog**: Vaul bottom sheets on mobile, standard dialogs on desktop
 
 ## Tech Stack

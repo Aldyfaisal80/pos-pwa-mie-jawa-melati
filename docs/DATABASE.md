@@ -108,7 +108,7 @@ erDiagram
 |-------|------|-------------|-------------|
 | `id` | `String` (UUID) | PK, `uuid()` | Transaction ID |
 | `invoiceNumber` | `String` | unique | Format: `INV-YYYYMMDD-XXXX` |
-| `date` | `DateTime` | default: `now()` | Transaction date |
+| `date` | `DateTime` | `timestamp WITHOUT tz` | Transaction date stored as **WIB local time** (see note below) |
 | `totalAmount` | `Decimal(12,2)` | required | Total bill amount |
 | `paymentMethod` | `PaymentMethod` | default: `CASH` | Payment type enum |
 | `paidAmount` | `Decimal(12,2)` | required | Amount paid by customer |
@@ -118,7 +118,9 @@ erDiagram
 
 **Indexes:** `date`, `isSynced`, `deletedAt`
 
-> **Note:** Deleting a transaction sets `deletedAt` to current timestamp (soft delete). All queries filter `deletedAt: null` to exclude deleted records.
+> **Important — WIB Local Time Convention:** The `date` column type is `timestamp WITHOUT time zone`. PostgreSQL stores and retrieves it as-is (no tz conversion). To ensure `DATE(date AT TIME ZONE 'Asia/Jakarta')` buckets records into the correct WIB calendar day, the `syncOfflineData` router pre-shifts the UTC client timestamp by +7 hours before storing: `new Date(utcDate.getTime() + 7 * 60 * 60 * 1000)`. This means stored values represent **WIB (UTC+7) wall-clock time**, not UTC.
+
+> **Note (soft delete):** Deleting a transaction sets `deletedAt` to current timestamp. All queries filter `deletedAt: null` to exclude deleted records.
 
 ### TransactionItem
 
