@@ -12,7 +12,7 @@ const PRINTER_SERVICE_UUIDS: BluetoothServiceUUID[] = [
 ];
 
 const SAVED_PRINTER_KEY = "pos_saved_printer_name";
-const BLE_CHUNK_SIZE = 256;
+const BLE_CHUNK_SIZE = 100;
 const BLE_CHUNK_DELAY_MS = 50;
 
 // ─── Pure Helpers (no React state) ────────────────────────────────────────────
@@ -61,8 +61,7 @@ const writeChunk = (
   char: BluetoothRemoteGATTCharacteristic,
   chunk: Uint8Array,
 ): Promise<void> => {
-  // slice() always returns a new Uint8Array with its own ArrayBuffer (no shared memory)
-  const buf = chunk.buffer as ArrayBuffer;
+  const buf = chunk.buffer.slice(chunk.byteOffset, chunk.byteOffset + chunk.byteLength) as ArrayBuffer;
   return char.properties.writeWithoutResponse
     ? char.writeValueWithoutResponse(buf)
     : char.writeValue(buf);

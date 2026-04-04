@@ -1,5 +1,5 @@
 import React from "react";
-import { Printer, Text, Row, Line, Cut, Image } from "react-thermal-printer";
+import { Text, Row, Line, Cut, Image } from "react-thermal-printer";
 import { transforms } from "@react-thermal-printer/image";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
@@ -35,7 +35,7 @@ export const ReceiptPrintTemplate = ({
   const changeAmount = Number(paymentAmount) - cartTotal;
 
   return (
-    <Printer type="epson" width={32}>
+    <>
       {store.logoUrl && (
         <>
           <Image
@@ -101,6 +101,6 @@ export const ReceiptPrintTemplate = ({
       <Text> </Text>
 
       <Cut />
-    </Printer>
+    </>
   );
 };

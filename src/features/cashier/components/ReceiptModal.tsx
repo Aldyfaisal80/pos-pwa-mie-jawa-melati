@@ -6,7 +6,7 @@ import type { RouterOutputs } from "@/trpc/react";
 import { formatRupiah } from "@/lib/format";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
-import { render } from "react-thermal-printer";
+import { render, Printer } from "react-thermal-printer";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
 import { usePrinter } from "@/components/layouts/providers/PrinterProvider";
 import { ReceiptPrintTemplate } from "./ReceiptPrintTemplate";
@@ -54,15 +54,17 @@ export const ReceiptModal = ({
 
     try {
       const data = await render(
-        <ReceiptPrintTemplate
-          store={store as StoreProfile}
-          cart={cart}
-          cartTotal={cartTotal}
-          paymentAmount={paymentAmount}
-          paymentMethod={paymentMethod}
-          invoiceNumber={invoiceNumber}
-          transactionDate={transactionDate}
-        />,
+        <Printer type="epson" width={32}>
+          <ReceiptPrintTemplate
+            store={store as StoreProfile}
+            cart={cart}
+            cartTotal={cartTotal}
+            paymentAmount={paymentAmount}
+            paymentMethod={paymentMethod}
+            invoiceNumber={invoiceNumber}
+            transactionDate={transactionDate}
+          />
+        </Printer>,
       );
       await printReceipt(data);
     } catch (e: unknown) {
