@@ -30,6 +30,8 @@ interface TransactionDetailModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+import { getBase64ImageFromUrl } from "@/lib/imageToDataUrl";
+
 export const TransactionDetailModal = ({
   transaction,
   open,
@@ -56,10 +58,17 @@ export const TransactionDetailModal = ({
     }
 
     try {
+      let b64Logo = store.logoUrl;
+      if (store.logoUrl && !store.logoUrl.startsWith("data:")) {
+         const converted = await getBase64ImageFromUrl(store.logoUrl);
+         if (converted) b64Logo = converted;
+      }
+      const storeWithB64 = { ...store, logoUrl: b64Logo };
+
       const data = await render(
         <Printer type="epson" width={32}>
           <ReceiptPrintTemplate
-            store={store as StoreProfile}
+            store={storeWithB64 as StoreProfile}
             cart={mapTransactionItemsToCart(transaction.items)}
             cartTotal={Number(transaction.totalAmount)}
             paymentAmount={String(transaction.paidAmount)}

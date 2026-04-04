@@ -1,11 +1,36 @@
 import React from "react";
-import { Text, Row, Line, Cut, Image } from "react-thermal-printer";
-import { transforms } from "@react-thermal-printer/image";
+import { Text, Row, Line, Image } from "react-thermal-printer";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
 
 const stripAccents = (text: string) =>
   text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const getAbsoluteUrl = (url: string) => {
+  if (url.startsWith("http") || url.startsWith("data:")) return url;
+  if (typeof window !== "undefined") {
+    const origin = window.location.origin;
+    return `${origin}${url.startsWith("/") ? "" : "/"}${url}`;
+  }
+  return url;
+};
+
+const splitText = (text: string, maxLength: number) => {
+  const words = text.split(" ");
+  const lines: string[] = [];
+  let currentLine = "";
+
+  for (const word of words) {
+    if ((currentLine + word).length > maxLength) {
+      if (currentLine.trim()) lines.push(currentLine.trim());
+      currentLine = word + " ";
+    } else {
+      currentLine += word + " ";
+    }
+  }
+  if (currentLine.trim()) lines.push(currentLine.trim());
+  return lines;
+};
 
 interface ReceiptPrintTemplateProps {
   store: {
@@ -39,42 +64,48 @@ export const ReceiptPrintTemplate = ({
       {store.logoUrl && (
         <>
           <Image
-            src={store.logoUrl}
+            src={getAbsoluteUrl(store.logoUrl)}
+            width={160}
             align="center"
-            transforms={[transforms.floydSteinberg]}
           />
-          <Text> </Text>
+          <Text>{"\n"}</Text>
         </>
       )}
 
+      <Text align="center" bold={true}>================================</Text>
       <Text align="center" bold={true} size={{ width: 2, height: 2 }}>
         {stripAccents(store.name.toUpperCase())}
       </Text>
+      <Text align="center" bold={true}>================================</Text>
 
-      {store.address && (
-        <Text align="center">{stripAccents(store.address)}</Text>
-      )}
+      {store.address &&
+        splitText(stripAccents(store.address), 32).map((line, i) => (
+          <Text key={i} align="center">
+            {line}
+          </Text>
+        ))}
+
       {store.phone && <Text align="center">Telp: {store.phone}</Text>}
-      <Text> </Text>
+      <Text>{"\n"}</Text>
 
-      <Row left={`No: #${invoiceNumber}`} right="Kasir: Admin" />
+      <Text>{`No: #${invoiceNumber}`}</Text>
       <Row
-        left={transactionDate.toLocaleDateString("id-ID")}
-        right={transactionDate.toLocaleTimeString("id-ID", {
+        left={`${transactionDate.toLocaleDateString("id-ID")} ${transactionDate.toLocaleTimeString("id-ID", {
           hour: "2-digit",
           minute: "2-digit",
-        })}
+        })}`}
+        right="Kasir: Admin"
       />
       <Line />
 
       {cart.map((item) => (
         <React.Fragment key={item.cartId}>
-          <Text bold={true}>{stripAccents(item.name)}</Text>
+          <Text>{stripAccents(item.name)}</Text>
           <Row
             left={`  ${item.qty} x ${formatRupiah(item.price)}`}
             right={formatRupiah(item.price * item.qty)}
           />
-          {item.note && <Text> * {stripAccents(item.note)}</Text>}
+          {item.note && <Text>   * {stripAccents(item.note)}</Text>}
         </React.Fragment>
       ))}
       <Line />
@@ -86,7 +117,7 @@ export const ReceiptPrintTemplate = ({
         TOTAL: {formatRupiah(cartTotal)}
       </Text>
 
-      <Text> </Text>
+      <Text>{"\n"}</Text>
       <Row
         left={paymentMethod === "CASH" ? "Tunai:" : `${paymentMethod}:`}
         right={formatRupiah(Number(paymentAmount || cartTotal))}
@@ -95,12 +126,12 @@ export const ReceiptPrintTemplate = ({
         <Row left="Kembali:" right={formatRupiah(changeAmount)} />
       )}
 
-      <Text> </Text>
+      <Text>{"\n"}</Text>
       <Text align="center">*** TERIMA KASIH ***</Text>
       <Text align="center">Selamat Menikmati</Text>
-      <Text> </Text>
 
-      <Cut />
+      {/* Provide exact space for mobile POS manual tear, avoiding waste from <Cut /> */}
+      <Text>{"\n"}</Text>
     </>
   );
 };

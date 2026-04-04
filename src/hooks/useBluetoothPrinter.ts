@@ -13,7 +13,7 @@ const PRINTER_SERVICE_UUIDS: BluetoothServiceUUID[] = [
 
 const SAVED_PRINTER_KEY = "pos_saved_printer_name";
 const BLE_CHUNK_SIZE = 100;
-const BLE_CHUNK_DELAY_MS = 50;
+const BLE_CHUNK_DELAY_MS = 80;
 
 // ─── Pure Helpers (no React state) ────────────────────────────────────────────
 
