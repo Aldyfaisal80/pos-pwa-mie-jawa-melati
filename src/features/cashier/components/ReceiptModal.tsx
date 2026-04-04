@@ -85,7 +85,7 @@ export const ReceiptModal = ({
 
   return (
     <Dialog open={open} onOpenChange={undefined}>
-      <DialogContent className="w-[calc(100vw-2rem)] max-w-85 overflow-visible border-none bg-transparent p-0 shadow-none sm:w-85">
+      <DialogContent className="w-[calc(100vw-2rem)] max-w-85 overflow-hidden border-none bg-transparent p-0 shadow-none sm:w-85">
         <DialogTitle className="sr-only">Struk Pembayaran</DialogTitle>
 
         <style>{`
@@ -98,7 +98,7 @@ export const ReceiptModal = ({
           }
         `}</style>
 
-        <div className="receipt-jagged mt-8 w-full rounded-t-xl pb-4 shadow-2xl">
+        <div className="receipt-jagged mt-8 flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-xl shadow-2xl">
           {/* Header */}
           <div className="flex flex-col items-center border-b border-dashed border-gray-300 p-6 pb-4">
             {store?.logoUrl ? (
@@ -127,8 +127,8 @@ export const ReceiptModal = ({
             )}
           </div>
 
-          {/* Isi */}
-          <div className="p-6 py-4">
+          {/* Isi — scrollable area */}
+          <div className="flex-1 overflow-y-auto p-6 py-4">
             <div className="mb-3 flex justify-between border-b border-dashed border-gray-300 pb-3 font-mono text-xs text-gray-500">
               <div>
                 <p>No: #{invoiceNumber}</p>
@@ -201,9 +201,9 @@ export const ReceiptModal = ({
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="p-6 pt-0 text-center">
-            <p className="mb-5 font-mono text-xs text-gray-400">
+          {/* Footer — sticky di bawah */}
+          <div className="shrink-0 border-t border-dashed border-gray-200 bg-white p-4 pt-3 text-center">
+            <p className="mb-3 font-mono text-xs text-gray-400">
               *** TERIMA KASIH ***
               <br />
               Selamat Menikmati
