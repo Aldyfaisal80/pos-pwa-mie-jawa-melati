@@ -61,17 +61,6 @@ export const ReceiptPrintTemplate = ({
 
   return (
     <>
-      {store.logoUrl && (
-        <>
-          <Image
-            src={getAbsoluteUrl(store.logoUrl)}
-            width={160}
-            align="center"
-          />
-          <Text>{"\n"}</Text>
-        </>
-      )}
-
       <Text align="center" bold={true}>================================</Text>
       <Text align="center" bold={true} size={{ width: 2, height: 2 }}>
         {stripAccents(store.name.toUpperCase())}
@@ -86,7 +75,6 @@ export const ReceiptPrintTemplate = ({
         ))}
 
       {store.phone && <Text align="center">Telp: {store.phone}</Text>}
-      <Text>{"\n"}</Text>
 
       <Text>{`No: #${invoiceNumber}`}</Text>
       <Row
@@ -116,8 +104,6 @@ export const ReceiptPrintTemplate = ({
       <Text bold={true} align="center">
         TOTAL: {formatRupiah(cartTotal)}
       </Text>
-
-      <Text>{"\n"}</Text>
       <Row
         left={paymentMethod === "CASH" ? "Tunai:" : `${paymentMethod}:`}
         right={formatRupiah(Number(paymentAmount || cartTotal))}
@@ -126,7 +112,6 @@ export const ReceiptPrintTemplate = ({
         <Row left="Kembali:" right={formatRupiah(changeAmount)} />
       )}
 
-      <Text>{"\n"}</Text>
       <Text align="center">*** TERIMA KASIH ***</Text>
       <Text align="center">Selamat Menikmati</Text>
 
