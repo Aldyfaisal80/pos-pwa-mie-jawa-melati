@@ -6,10 +6,11 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase-client";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -33,12 +34,18 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Stable browser client instance
+  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
+
   useEffect(() => {
-    // Hydrate session on mount
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+    // Use getUser() for trusted server-validated auth state
+    void supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      // Get session separately for token access
+      void supabase.auth.getSession().then(({ data: { session } }) => {
+        setSession(session);
+        setLoading(false);
+      });
     });
 
     // Listen for auth state changes (login, logout, token refresh)
@@ -51,11 +58,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [supabase]);
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
-  }, []);
+  }, [supabase]);
 
   return (
     <AuthContext.Provider value={{ user, session, loading, signOut }}>

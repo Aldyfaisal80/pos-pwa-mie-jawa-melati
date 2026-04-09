@@ -11,7 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-import { supabase } from "@/lib/supabase-client";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
  * 1. CONTEXT
@@ -40,7 +40,8 @@ export const createTRPCContext = async (opts: {
   const authHeader = opts.headers.get("authorization");
   if (!user && authHeader?.startsWith("Bearer ")) {
     const token = authHeader.slice(7);
-    const { data } = await supabase.auth.getUser(token);
+    const serverSupabase = await createSupabaseServerClient();
+    const { data } = await serverSupabase.auth.getUser(token);
     if (data.user) {
       user = { id: data.user.id, email: data.user.email };
     }

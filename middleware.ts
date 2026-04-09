@@ -1,28 +1,35 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { env } from "@/env";
 
 // Routes that don't require authentication
 const PUBLIC_ROUTES = ["/login"];
 
-// Static assets and API routes to skip
-const SKIP_PREFIXES = ["/_next", "/api", "/favicon", "/manifest", "/icon", "/sw.js", "/~offline"];
+// Static assets and API routes to skip (middleware won't run on these)
+const SKIP_PREFIXES = [
+  "/_next",
+  "/api",
+  "/favicon",
+  "/manifest",
+  "/icon",
+  "/sw.js",
+  "/~offline",
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip static assets and API routes
+  // Skip static assets and internal Next.js routes
   if (SKIP_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return NextResponse.next();
   }
 
   const response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request: { headers: request.headers },
   });
 
-  // Create Supabase server client that can read cookies
+  // Create Supabase server client that can read/write cookies
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const supabase = createServerClient(
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -31,24 +38,26 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(
+          cookiesToSet: { name: string; value: string; options: CookieOptions }[],
+        ) {
           cookiesToSet.forEach(({ name, value, options }) => {
             request.cookies.set(name, value);
-            response.cookies.set(name, value, options);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+            response.cookies.set(name, value, options as any);
           });
         },
       },
     },
   );
 
-  // Get the current session (refreshes token automatically)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Validate the user session (auto-refreshes expired tokens)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  const { data: { user } } = await supabase.auth.getUser();
 
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
 
-  // Not authenticated → redirect to /login (except on public routes)
+  // Not authenticated → redirect to /login
   if (!user && !isPublicRoute) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);

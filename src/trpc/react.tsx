@@ -6,7 +6,7 @@ import { createTRPCReact } from "@trpc/react-query";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import { useState } from "react";
 import SuperJSON from "superjson";
-import { supabase } from "@/lib/supabase-client";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 import { type AppRouter } from "@/server/api/root";
 import { createQueryClient } from "./query-client";
@@ -57,6 +57,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
             const headers = new Headers();
             headers.set("x-trpc-source", "nextjs-react");
             // Inject Supabase access token for protectedProcedure
+            const supabase = createSupabaseBrowserClient();
             const { data } = await supabase.auth.getSession();
             if (data.session?.access_token) {
               headers.set(
