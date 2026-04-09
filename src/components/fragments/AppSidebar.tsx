@@ -3,8 +3,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Store } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut, Store } from "lucide-react";
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
@@ -17,11 +17,22 @@ import {
 
 import { navItems } from "../config/navigation";
 import { api } from "@/trpc/react";
+import { useAuth } from "@/components/layouts/providers/AuthProvider";
+import { Button } from "@/components/ui/button";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, signOut } = useAuth();
 
   const { data: store } = api.store.getProfile.useQuery();
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/login");
+    router.refresh();
+  };
+
 
   return (
     <ShadcnSidebar variant="sidebar" collapsible="icon">
@@ -78,16 +89,26 @@ export const AppSidebar = () => {
       <SidebarFooter className="border-t p-3">
         <div className="flex items-center gap-3 overflow-hidden rounded-xl p-1">
           <img
-            src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff"
-            alt="Profil Admin"
+            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.email ?? "Admin")}&background=d97706&color=fff`}
+            alt="Profil"
             className="border-background h-9 w-9 shrink-0 rounded-full border-2 shadow-sm"
           />
-          <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <p className="truncate text-sm leading-tight font-bold">Admin</p>
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              Administrator
+          <div className="flex min-w-0 flex-1 flex-col group-data-[collapsible=icon]:hidden">
+            <p className="truncate text-sm leading-tight font-bold">
+              {user?.email ?? "Admin"}
             </p>
+            <p className="text-muted-foreground mt-0.5 text-xs">Administrator</p>
           </div>
+          <Button
+            id="sidebar-logout"
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground hover:text-destructive h-8 w-8 shrink-0 group-data-[collapsible=icon]:hidden"
+            onClick={handleLogout}
+            title="Keluar"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </SidebarFooter>
     </ShadcnSidebar>
