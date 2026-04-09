@@ -31,11 +31,25 @@
 - Next.js 16 (App Router) + tRPC 11 + Prisma 7 + Supabase (PostgreSQL)
 - Tailwind CSS v4 + Shadcn UI + Radix UI + Vaul + Recharts
 - Serwist (PWA/Service Worker) + IndexedDB + TanStack React Query 5
-- Playwright (E2E testing)
+- Playwright (E2E blackbox testing) + axe-core (accessibility)
+
+## Testing
+- [tests/blackbox/pos-blackbox.spec.ts]: Main blackbox specs (cashier, product, report, settings)
+- [tests/blackbox/pos-navigation.spec.ts]: Sidebar navigation flow tests (5 paths)
+- [tests/blackbox/pos-mobile.spec.ts]: Mobile viewport layout and interaction tests
+- [tests/blackbox/pos-admin.spec.ts]: Admin operations (store config, product master data)
+- [tests/blackbox/pos-edge-cases.spec.ts]: Edge cases (empty cart, long inputs, boundary values)
+- [tests/blackbox/pos-a11y.spec.ts]: Automated accessibility scan with axe-core
+- [tests/blackbox/pos-reports.spec.ts]: Report filtering, sorting, pagination, CSV export
+
+## Generated
+- [generated/blackbox/blackbox-testcases.json]: 53 manual blackbox test cases (JSON), 6 modules
+- [generated/blackbox/blackbox-report.html]: Interactive HTML report — all 53 TC passed
 
 ## Documentation
 - [docs/ARCHITECTURE.md]: System architecture, data flow, ADRs
 - [docs/API.md]: Complete tRPC API reference
 - [docs/DATABASE.md]: Schema docs with ER diagram
-- [CHANGELOG.md]: Version history
+- [docs/UML.md]: Use Case, Class, Component, Activity diagrams
+- [CHANGELOG.md]: Version history — current: v0.3.0
 - [CONTRIBUTING.md]: Contribution guidelines

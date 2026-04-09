@@ -7,10 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.3.0] - 2026-04-09
+
+### Added
+- **Blackbox Testing Suite** — 53 skenario pengujian blackbox manual mencakup 6 modul utama (Dashboard, Kasir, Produk, Laporan, Pengaturan Toko, Navigasi)
+- `generated/blackbox/blackbox-testcases.json` — JSON test suite terstruktur berisi 53 TC dengan field: skenario, langkah-langkah, hasil diharapkan, hasil diperoleh, dan status
+- `generated/blackbox/blackbox-report.html` — HTML report interaktif dengan collapsible section per modul, badge BARU untuk skenario terbaru, dan summary statistics
+- `tests/blackbox/pos-edge-cases.spec.ts` — Edge case Playwright: empty cart checkout prevention, long order notes (1000 char), huge store name safe handling
+- `tests/blackbox/pos-a11y.spec.ts` — Automated accessibility scan dengan `@axe-core/playwright` untuk Dashboard, Cashier, dan Store Settings
+- `tests/blackbox/pos-navigation.spec.ts` — Automated sidebar navigation tests (5 alur: Dashboard → Kasir/Produk/Laporan/Pengaturan dan kembali ke Dashboard)
+- **TC-15** — Skenario tunai berhasil: nominal melebihi total, kembalian tampil, tombol aktif, transaksi selesai
+- **TC-16** — Skenario Clear Cart: hapus seluruh item keranjang sekaligus via tombol ikon tempat sampah; tombol Bayar Sekarang kembali disabled
+- **TC-48** — Skenario Hubungkan Printer: tombol Bluetooth printer tersedia dan memberikan respons visual di tab Printer pada halaman Pengaturan
+- **Thermal Printer Bluetooth (58mm)** — Full Web Bluetooth API integration via `react-thermal-printer`
+- `src/hooks/use-bluetooth-printer.ts` — Custom hook untuk BLE GATT connection, auto-chunking MTU, dan `localStorage` memory untuk nama printer
+- `src/features/cashier/components/ReceiptPrintTemplate.tsx` — Headless JSX-to-Buffer component, 32-column layout, Base64 logo dengan Floyd-Steinberg dithering
+- `src/features/cashier/components/PrinterActionButtons.tsx` — Reusable DRY component untuk Bluetooth connect/print trigger
+- `src/features/store-settings/schemas/index.ts` — Co-located Zod schema dengan clean `.min(1)` error syntax
+- `src/features/store-settings/types/index.ts` — Co-located `StoreSettingsFormValues` type inferred dari schema
+- `src/features/store-settings/components/StoreSettingsForm.tsx` — Smart container (data fetching + form state + skeleton + mutation)
+- `src/features/product/schemas/index.ts` — Co-located Zod schema untuk product form
+- `src/features/product/components/ProductManager.tsx` — Smart container diekstrak dari `ProductPage` (state, modals, delete logic)
+- `isForeignKeyError` dan `isUnrecoverableError` helpers di `use-offline-sync.ts`
+- `STORE_SETTINGS_FORM_ID` constant — single source of truth untuk HTML form `id`/`form` attribute
+- `COLUMN_WIDTHS` constant di `ProductTable` — shared antara header, skeleton, dan data rows
+
+### Changed
+- **TransactionDetailModal** — Dapat mencetak ulang transaksi historis dan offline-synced menggunakan unified Bluetooth template
+- **ReceiptModal** — UI di-refactor ke `PrinterActionButtons`; integrasi ESC/POS binary generation langsung setelah checkout
+- **ProductPage** — Sekarang memiliki `Card` + `CardHeader` layout; `ProductManager` hanya render konten inner
+- **ProductFormModal** — Migrasi dari `useState`/manual validation ke React Hook Form + Zod dengan `PRODUCT_FORM_ID` constant
+- **ProductTable** — Tambah `table-fixed` CSS layout; `COLUMN_WIDTHS` constant mencegah layout shift; `truncate` + `min-w-0` untuk overflow safety
+- **StoreSettingsPage** — Refactor menjadi pure layout wrapper (~34 baris); delegate semua logic ke `StoreSettingsForm`
+- **StoreSettingsFormInner** — Migrasi ke `useFormContext` pattern; `formId` prop dihapus
+- **CategoryManagerModal** — Delete error UX: `AlertDialog` menutup pada success maupun error (`onSettled`)
+- **Offline sync error handling** — FK violations sekarang membersihkan transaksi stuck dari antrian IndexedDB; user ditampilkan warning toast yang actionable
+- **Sonner Toaster** — Type-specific left-border accent colors (emerald=success, destructive=error, amber=warning, blue=info)
+- `COL` constant diubah nama menjadi `COLUMN_WIDTHS` (SCREAMING_SNAKE_CASE)
+
 ### Fixed
-- **Dashboard Revenue Chart — Real-time Sync** — Chart was not updating after a new transaction because `useLiveStats` invalidated `getDashboardStats` and `getTransactionReport` but forgot `getRevenueChart`. Added `getRevenueChart.invalidate()` to both BroadcastChannel and Supabase Realtime listeners.
-- **Revenue Chart — Day Matching (TO_CHAR Refactor)** — `getRevenueChart` used `DATE(...) AS day` which returns a Postgres `DATE` type interpreted by node-postgres as a JS `Date` object with a timezone-shifted midnight. The JS `.getUTCDate()` comparison then mismatch by one day. Fixed by using `TO_CHAR(DATE(...), 'YYYY-MM-DD') AS day_str` to return a plain string and comparing directly with a `YYYY-MM-DD`-formatted WIB date string instead.
-- **Transaction Date Timezone Bug (Root Cause Fix)** — The `date` column is `timestamp WITHOUT time zone`. Client stores UTC ISO strings (`new Date().toISOString()`), which Postgres stores as naive local time. Because the Postgres server is on `Asia/Jakarta` (UTC+7), `DATE(date AT TIME ZONE 'Asia/Jakarta')` subtracted 7h from the naive value — causing every transaction created between WIB midnight (00:00) and WIB 07:00 to be bucketed into the *previous* day. Fixed in `syncOfflineData` router by shifting the UTC date to WIB local time (`+7h`) before storing so the naive timestamp matches the user's actual local clock time.
+- **Dashboard Revenue Chart — Real-time Sync** — `useLiveStats` sekarang juga menginvalidasi `getRevenueChart` cache
+- **Revenue Chart — Day Matching** — `getRevenueChart` menggunakan `TO_CHAR(DATE(...), 'YYYY-MM-DD')` untuk menghindari timezone mismatch node-postgres
+- **Transaction Date Timezone Bug** — `syncOfflineData` menggeser UTC date ke WIB (+7h) sebelum disimpan agar `DATE(date AT TIME ZONE 'Asia/Jakarta')` selalu memberikan hari kalender yang tepat
+- `StoreSettingsForm.tsx` — TypeScript type error zodResolver diselesaikan dengan infertype dari schema Zod
+- `AppProvider` sekarang mengimpor custom `Toaster` dari `@/components/ui/sonner`, bukan raw `Sonner` dari `"sonner"`
+- Offline sync infinite retry loop: FK constraint errors tidak lagi menumpuk di antrian pending
+- `productFormSchema` — Hapus `invalid_type_error` yang tidak valid di Zod v4
+- `CategoryManagerModal` — Dialog delete yang sebelumnya diam saat mutation error; kini menutup secara konsisten
+- Double-toast bug pada product delete dihilangkan
 
 ---
 

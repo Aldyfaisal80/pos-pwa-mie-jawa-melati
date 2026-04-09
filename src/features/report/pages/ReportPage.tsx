@@ -9,6 +9,7 @@ import { useReportFilters } from "../hooks/useReportFilters";
 import { TransactionTable } from "../components/TransactionTable";
 import { ReportFilterBar } from "../components/ReportFilterBar";
 import { ReportPagination } from "../components/ReportPagination";
+import { ReportStatsCards } from "../components/ReportStatsCards";
 import { useLiveStats } from "@/features/dashboard/hooks/useLiveStats";
 
 export const ReportPage = () => {
@@ -16,6 +17,8 @@ export const ReportPage = () => {
 
   const {
     search,
+    startDate,
+    endDate,
     paymentMethod,
     sortBy,
     sortOrder,
@@ -35,7 +38,13 @@ export const ReportPage = () => {
     isLoading,
     isFetching,
     isExporting,
+    stablePage,
   } = useReportFilters();
+
+  const startItem = (stablePage - 1) * limit + 1;
+  const paginationLabel = totalCount > 0
+    ? `Menampilkan ${startItem}–${startItem + transactions.length - 1} dari ${totalCount} transaksi`
+    : "Tidak ada transaksi";
 
   return (
     <PageContainer title="Laporan Pendapatan" withHeader>
@@ -43,7 +52,7 @@ export const ReportPage = () => {
         {/* Header */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-foreground text-lg font-bold md:text-xl">
-            Riwayat Transaksi
+            Laporan Penjualan
           </h2>
           <Button
             onClick={handleExport}
@@ -70,6 +79,13 @@ export const ReportPage = () => {
           onEndDateChange={setEndDate}
         />
 
+        {/* Summary Cards */}
+        <ReportStatsCards
+          startDate={startDate}
+          endDate={endDate}
+          paymentMethod={paymentMethod}
+        />
+
         {/* Tabel + Footer */}
         <Card className="border-border relative overflow-hidden border shadow-sm">
           <TransactionTable
@@ -81,10 +97,7 @@ export const ReportPage = () => {
           />
 
           <div className="bg-muted/50 flex flex-col items-center justify-between gap-3 border-t px-4 py-3 sm:flex-row">
-            <span className="text-muted-foreground text-xs">
-              Menampilkan {transactions.length} transaksi{" "}
-              {totalCount > 0 && `dari total ${totalCount} transaksi`}
-            </span>
+            <span className="text-muted-foreground text-xs">{paginationLabel}</span>
             <ReportPagination
               currentPage={page}
               totalPages={totalPages}

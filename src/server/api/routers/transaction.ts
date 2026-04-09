@@ -1,10 +1,11 @@
 import { z } from "zod";
-import { type Prisma, type PaymentMethod } from "../../../../generated/prisma";
+import { Prisma, type PaymentMethod } from "../../../../generated/prisma";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   syncTransactionSchema,
   reportFilterSchema,
   exportReportSchema,
+  reportStatsSchema,
   ReportSortBy,
 } from "@/server/validations";
 import { errorFilter } from "@/server/filters/error.filter";
@@ -71,20 +72,12 @@ export const transactionRouter = createTRPCRouter({
     .input(syncTransactionSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        // The `date` column is `timestamp WITHOUT time zone`.
-        // PostgreSQL treats stored values as "local" time.
-        // Client sends UTC ISO strings (new Date().toISOString()), which Prisma
-        // passes through as-is. We must shift to WIB (UTC+7) before storing
-        // so that DATE(date AT TIME ZONE 'Asia/Jakarta') computes the correct day.
-        const toWIBLocal = (utcDate: Date): Date =>
-          new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
-
         return await ctx.db.$transaction(
           input.map((trx) =>
             ctx.db.transaction.create({
               data: {
                 invoiceNumber: trx.invoiceNumber,
-                date: toWIBLocal(trx.date),
+                date: trx.date, // store raw UTC — browser applies WIB timezone on display
                 totalAmount: trx.totalAmount,
                 paymentMethod: trx.paymentMethod,
                 paidAmount: trx.paidAmount,
@@ -209,9 +202,15 @@ export const transactionRouter = createTRPCRouter({
         take: 5,
       });
 
+      const totalOmzet = stats._sum.totalAmount?.toNumber() ?? 0;
+      const totalTransactions = stats._count.id ?? 0;
+      const avgPerTransaction =
+        totalTransactions > 0 ? totalOmzet / totalTransactions : 0;
+
       return {
-        totalOmzet: stats._sum.totalAmount?.toNumber() ?? 0,
-        totalTransactions: stats._count.id ?? 0,
+        totalOmzet,
+        totalTransactions,
+        avgPerTransaction,
         topProducts: topProducts.map((p) => ({
           name: p.productName,
           sold: p._sum.quantity ?? 0,
@@ -274,6 +273,96 @@ export const transactionRouter = createTRPCRouter({
 
           // Match the SQL `day_str` column directly bypasses any Node.js Date timezone pitfalls
           const match = rows.find((r) => r.day_str === wibDString);
+
+          return { name: label, total: match?.total ?? 0 };
+        });
+
+        return result;
+      } catch (error) {
+        errorFilter(error);
+      }
+    }),
+
+  getReportStats: publicProcedure
+    .input(reportStatsSchema)
+    .query(async ({ ctx, input }) => {
+      try {
+        const whereClause = buildReportWhereClause(input);
+
+        const stats = await ctx.db.transaction.aggregate({
+          where: whereClause,
+          _sum: { totalAmount: true },
+          _count: { id: true },
+        });
+
+        const totalOmzet = stats._sum.totalAmount?.toNumber() ?? 0;
+        const totalTransactions = stats._count.id ?? 0;
+        const avgPerTransaction =
+          totalTransactions > 0 ? totalOmzet / totalTransactions : 0;
+
+        return { totalOmzet, totalTransactions, avgPerTransaction };
+      } catch (error) {
+        errorFilter(error);
+      }
+    }),
+
+  getReportChart: publicProcedure
+    .input(reportStatsSchema)
+    .query(async ({ ctx, input }) => {
+      try {
+        const dayNames = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+
+        // Default ke 30 hari terakhir jika tidak ada filter tanggal
+        const now = new Date();
+        const rawStart =
+          input.startDate ??
+          new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000);
+        const rawEnd = input.endDate ?? now;
+
+        const startDate = toWIBStartOfDay(rawStart);
+        const endDate = toWIBEndOfDay(rawEnd);
+
+        // Hitung berapa hari yang dicakup
+        const diffMs = endDate.getTime() - startDate.getTime();
+        const diffDays = Math.max(
+          1,
+          Math.ceil(diffMs / (1000 * 60 * 60 * 24)),
+        );
+        const useDate = diffDays > 14;
+
+        // Prisma.sql allows conditional fragments in tagged template raw queries
+        const paymentMethodSql = input.paymentMethod
+          ? Prisma.sql`AND "paymentMethod" = ${input.paymentMethod}`
+          : Prisma.empty;
+
+        type RevenueRow = { day_str: string; total: number };
+        const rows = await ctx.db.$queryRaw<RevenueRow[]>`
+          SELECT
+            TO_CHAR(DATE(date AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD') AS day_str,
+            COALESCE(SUM("totalAmount"), 0)::float AS total
+          FROM "Transaction"
+          WHERE
+            "isSynced" = true
+            AND "deletedAt" IS NULL
+            AND date >= ${startDate}
+            AND date <= ${endDate}
+            ${paymentMethodSql}
+          GROUP BY day_str
+          ORDER BY day_str ASC
+        `;
+
+        const result = Array.from({ length: diffDays }, (_, i) => {
+          const d = new Date(
+            startDate.getTime() + i * 24 * 60 * 60 * 1000,
+          );
+          const wibD = new Date(d.getTime() + 7 * 60 * 60 * 1000);
+
+          const label = useDate
+            ? `${String(wibD.getUTCDate()).padStart(2, "0")}/${String(wibD.getUTCMonth() + 1).padStart(2, "0")}`
+            : dayNames[wibD.getUTCDay()]!;
+
+          const wibDStr = `${wibD.getUTCFullYear()}-${String(wibD.getUTCMonth() + 1).padStart(2, "0")}-${String(wibD.getUTCDate()).padStart(2, "0")}`;
+          const match = rows.find((r) => r.day_str === wibDStr);
 
           return { name: label, total: match?.total ?? 0 };
         });

@@ -24,6 +24,7 @@ interface ReceiptModalProps {
 }
 
 import { getBase64ImageFromUrl } from "@/lib/imageToDataUrl";
+import { loadPrinterPrefs } from "@/features/store-settings/hooks/usePrinterPrefs";
 
 export const ReceiptModal = ({
   open,
@@ -54,13 +55,15 @@ export const ReceiptModal = ({
       return;
     }
 
+    const { showLogo, showFooter } = loadPrinterPrefs();
+
     try {
       let b64Logo = store.logoUrl;
-      if (store.logoUrl && !store.logoUrl.startsWith("data:")) {
+      if (showLogo && store.logoUrl && !store.logoUrl.startsWith("data:")) {
          const converted = await getBase64ImageFromUrl(store.logoUrl);
          if (converted) b64Logo = converted;
       }
-      const storeWithB64 = { ...store, logoUrl: b64Logo };
+      const storeWithB64 = { ...store, logoUrl: showLogo ? b64Logo : null };
 
       const data = await render(
         <Printer type="epson" width={32}>
@@ -72,6 +75,8 @@ export const ReceiptModal = ({
             paymentMethod={paymentMethod}
             invoiceNumber={invoiceNumber}
             transactionDate={transactionDate}
+            showLogo={showLogo}
+            showFooter={showFooter}
           />
         </Printer>,
       );
@@ -101,7 +106,7 @@ export const ReceiptModal = ({
         <div className="receipt-jagged mt-8 flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-xl shadow-2xl">
           {/* Header */}
           <div className="flex flex-col items-center border-b border-dashed border-gray-300 p-6 pb-4">
-            {store?.logoUrl ? (
+            {store?.logoUrl && loadPrinterPrefs().showLogo ? (
               <img
                 src={store.logoUrl}
                 alt="Store Logo"
@@ -203,11 +208,13 @@ export const ReceiptModal = ({
 
           {/* Footer — sticky di bawah */}
           <div className="shrink-0 border-t border-dashed border-gray-200 bg-white p-4 pt-3 text-center">
-            <p className="mb-3 font-mono text-xs text-gray-400">
-              *** TERIMA KASIH ***
-              <br />
-              Selamat Menikmati
-            </p>
+            {loadPrinterPrefs().showFooter && (
+              <p className="mb-3 font-mono text-xs text-gray-400">
+                *** TERIMA KASIH ***
+                <br />
+                Selamat Menikmati
+              </p>
+            )}
             <PrinterActionButtons
               isConnected={isConnected}
               isPrinting={isPrinting}

@@ -53,6 +53,7 @@ yarn-error.log*
 # local planning files (keep docs/ tracked)
 /docs/PLAN-*.md
 /design-system
+/docs/wireframe
 
 # prisma generated files
 /generated

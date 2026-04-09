@@ -1,47 +1,43 @@
 "use client";
 
 import { usePrinter } from "@/components/layouts/providers/PrinterProvider";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Bluetooth,
-  BluetoothConnected,
-  Info,
-  Printer,
-} from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Bluetooth, BluetoothConnected, Printer, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePrinterPrefs } from "../hooks/usePrinterPrefs";
+
+const TOGGLE_ITEMS = [
+  { key: "autoPrint" as const, label: "Cetak otomatis setelah transaksi" },
+  { key: "showLogo" as const, label: "Tampilkan logo di struk" },
+  { key: "showFooter" as const, label: "Tampilkan footer struk" },
+] as const;
 
 export const PrinterSettingsCard = () => {
   const { isConnected, isPrinting, savedPrinterName, connect, disconnect } =
     usePrinter();
+  const { prefs, togglePref } = usePrinterPrefs();
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl">
-          <Printer className="h-5 w-5 text-emerald-600" />
+        <CardTitle className="flex items-center gap-2 text-base font-semibold">
+          <Printer className="h-4 w-4 text-emerald-600" />
           Pengaturan Printer
         </CardTitle>
-        <CardDescription>
-          Hubungkan printer thermal 58mm via Bluetooth untuk mencetak struk
-          kasir secara otomatis tanpa harus pairing ulang.
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6 p-6 pt-0 sm:p-8 sm:pt-0">
-        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-4 sm:flex-row dark:border-gray-800 dark:bg-gray-900/20">
+      <CardContent className="space-y-6">
+        {/* Connection Status */}
+        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border bg-muted/30 p-4 sm:flex-row">
           <div className="flex items-center gap-3">
             <div
               className={cn(
                 "flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors",
                 isConnected
                   ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30"
-                  : "bg-gray-200 text-gray-500 dark:bg-gray-800",
+                  : "bg-muted text-muted-foreground",
               )}
             >
               {isConnected ? (
@@ -53,10 +49,10 @@ export const PrinterSettingsCard = () => {
               )}
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              <p className="text-sm font-medium">
                 {isConnected ? "Printer Terhubung" : "Printer Terputus"}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-muted-foreground text-xs">
                 {isConnected && savedPrinterName
                   ? `Device: ${savedPrinterName}`
                   : "Belum ada printer yang terhubung"}
@@ -68,7 +64,8 @@ export const PrinterSettingsCard = () => {
             {isConnected ? (
               <Button
                 variant="outline"
-                className="w-full border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-600 sm:w-auto dark:border-gray-700"
+                size="sm"
+                className="w-full hover:border-red-300 hover:bg-red-50 hover:text-red-600 sm:w-auto dark:hover:bg-red-950/20"
                 onClick={disconnect}
                 disabled={isPrinting}
               >
@@ -77,7 +74,8 @@ export const PrinterSettingsCard = () => {
             ) : (
               <Button
                 variant="outline"
-                className="w-full border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 sm:w-auto dark:border-emerald-900/30 dark:bg-emerald-900/20"
+                size="sm"
+                className="w-full border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 sm:w-auto dark:border-emerald-900/30 dark:bg-emerald-900/20"
                 onClick={connect}
               >
                 Hubungkan Printer
@@ -86,11 +84,34 @@ export const PrinterSettingsCard = () => {
           </div>
         </div>
 
-        <div className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+        {/* Printer Toggles */}
+        <div className="space-y-1">
+          {TOGGLE_ITEMS.map(({ key, label }) => (
+            <div
+              key={key}
+              className="flex items-center justify-between border-b py-3 last:border-0"
+            >
+              <Label
+                htmlFor={`printer-${key}`}
+                className="text-foreground cursor-pointer text-sm font-normal"
+              >
+                {label}
+              </Label>
+              <Switch
+                id={`printer-${key}`}
+                checked={prefs[key]}
+                onCheckedChange={() => togglePref(key)}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Info note */}
+        <div className="flex items-start gap-2 text-xs text-muted-foreground">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
           <p>
-            Membutuhkan browser Chrome/Edge dengan Bluetooth aktif. Jika printer
-            pernah terhubung, kamu hanya perlu menyalakannya.
+            Membutuhkan browser Chrome/Edge dengan Bluetooth aktif. Pengaturan
+            printer tersimpan di perangkat ini.
           </p>
         </div>
       </CardContent>

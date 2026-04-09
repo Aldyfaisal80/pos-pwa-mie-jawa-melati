@@ -69,7 +69,8 @@ test.describe("POS WebApp - Mobile View Tests", () => {
     await page.goto("/store-settings");
 
     // Check store name input is accessible
-    const storeNameInput = page.locator("#storeName");
+    // Use placeholder since #storeName renders twice (desktop hidden + mobile visible)
+    const storeNameInput = page.getByPlaceholder("Masukkan nama toko");
     await expect(storeNameInput).toBeVisible();
 
     // Can scroll down to save button

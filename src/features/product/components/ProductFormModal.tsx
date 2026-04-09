@@ -129,7 +129,6 @@ export const ProductFormModal = ({
                   <FormLabel>Nama Produk</FormLabel>
                   <FormControl>
                     <Input
-                      id="prod-name"
                       placeholder="Contoh: Nasi Goreng Spesial"
                       {...field}
                     />
@@ -147,7 +146,6 @@ export const ProductFormModal = ({
                   <FormLabel>Deskripsi (opsional)</FormLabel>
                   <FormControl>
                     <Input
-                      id="prod-desc"
                       placeholder="Contoh: Pedas, tanpa MSG"
                       {...field}
                     />
@@ -173,7 +171,6 @@ export const ProductFormModal = ({
                   <FormLabel>Harga (Rp)</FormLabel>
                   <FormControl>
                     <Input
-                      id="prod-price"
                       type="number"
                       min={0}
                       placeholder="Contoh: 15000"

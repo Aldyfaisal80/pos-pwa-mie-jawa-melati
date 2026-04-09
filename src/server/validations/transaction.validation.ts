@@ -59,3 +59,10 @@ export const exportReportSchema = reportFilterSchema.omit({
   limit: true,
   page: true,
 });
+
+// Validasi untuk statistik & chart halaman laporan
+export const reportStatsSchema = z.object({
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+  paymentMethod: z.nativeEnum(PaymentMethod).optional(),
+});

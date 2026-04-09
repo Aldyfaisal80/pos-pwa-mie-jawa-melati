@@ -25,6 +25,7 @@
     "preview": "npm run build && next start",
     "start": "next start",
     "test:blackbox": "playwright test -c playwright.blackbox.config.ts",
+    "test:blackbox:ui": "playwright test -c playwright.blackbox.config.ts --ui",
     "typecheck": "tsc --noEmit"
   },
   "prisma": {

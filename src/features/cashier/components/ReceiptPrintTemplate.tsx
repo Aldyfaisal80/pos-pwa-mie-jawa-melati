@@ -1,19 +1,11 @@
 import React from "react";
-import { Text, Row, Line, Image } from "react-thermal-printer";
+import { Text, Row, Line } from "react-thermal-printer";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
 
 const stripAccents = (text: string) =>
   text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-const getAbsoluteUrl = (url: string) => {
-  if (url.startsWith("http") || url.startsWith("data:")) return url;
-  if (typeof window !== "undefined") {
-    const origin = window.location.origin;
-    return `${origin}${url.startsWith("/") ? "" : "/"}${url}`;
-  }
-  return url;
-};
 
 const splitText = (text: string, maxLength: number) => {
   const words = text.split(" ");
@@ -45,6 +37,8 @@ interface ReceiptPrintTemplateProps {
   paymentAmount: string;
   invoiceNumber: string;
   transactionDate: Date;
+  showLogo?: boolean;
+  showFooter?: boolean;
 }
 
 // Headless component — used only as argument to render(), never mounted to DOM
@@ -56,11 +50,16 @@ export const ReceiptPrintTemplate = ({
   paymentAmount,
   invoiceNumber,
   transactionDate,
+  showLogo = true,
+  showFooter = true,
 }: ReceiptPrintTemplateProps) => {
   const changeAmount = Number(paymentAmount) - cartTotal;
 
   return (
     <>
+      {showLogo && store.logoUrl && (
+        <Text align="center">[Logo]</Text>
+      )}
       <Text align="center" bold={true}>================================</Text>
       <Text align="center" bold={true} size={{ width: 2, height: 2 }}>
         {stripAccents(store.name.toUpperCase())}
@@ -112,8 +111,12 @@ export const ReceiptPrintTemplate = ({
         <Row left="Kembali:" right={formatRupiah(changeAmount)} />
       )}
 
-      <Text align="center">*** TERIMA KASIH ***</Text>
-      <Text align="center">Selamat Menikmati</Text>
+      {showFooter && (
+        <>
+          <Text align="center">*** TERIMA KASIH ***</Text>
+          <Text align="center">Selamat Menikmati</Text>
+        </>
+      )}
 
       {/* Provide exact space for mobile POS manual tear, avoiding waste from <Cut /> */}
       <Text>{"\n"}</Text>

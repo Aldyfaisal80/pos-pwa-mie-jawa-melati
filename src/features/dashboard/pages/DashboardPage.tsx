@@ -2,7 +2,7 @@
 
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
-import { Wallet, Receipt, Star, TrendingUp } from "lucide-react";
+import { Wallet, Receipt, Star, TrendingUp, BarChart2 } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import { StatsCard } from "../components/StatsCard";
 import { RevenueChart } from "../components/RevenueChart";
@@ -32,7 +32,7 @@ export const DashboardPage = () => {
       <SectionContainer padded>
         <div className="flex flex-col space-y-6">
           {/* ── Kartu Statistik Harian ── */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             <StatsCard
               title="Omzet Hari Ini"
               icon={Wallet}
@@ -53,6 +53,14 @@ export const DashboardPage = () => {
               isLoading={isLoading}
               value={stats?.totalTransactions ?? 0}
               description="Transaksi hari ini"
+            />
+            <StatsCard
+              title="Rata-rata/Transaksi"
+              icon={BarChart2}
+              iconColorClass="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+              isLoading={isLoading}
+              value={formatRupiah(stats?.avgPerTransaction ?? 0)}
+              description="Per transaksi"
             />
             <StatsCard
               title="Menu Terlaris"

@@ -9,7 +9,7 @@ test.describe("Reporting & Export Engine", () => {
 
     // Tunggu sampai minimal tabel termuat dan tidak loading
     await expect(
-      page.getByRole("heading", { name: /Riwayat Transaksi/i }),
+      page.getByRole("heading", { name: /Laporan Penjualan/i }),
     ).toBeVisible();
     await expect(page.getByText(/Menampilkan/i)).toBeVisible({
       timeout: 10000,

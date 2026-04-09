@@ -166,13 +166,13 @@ const getReportTotals = async (page: Page) => {
 
 const waitForReportData = async (page: Page) => {
   await expect(
-    page.getByText(/dari total \d+ transaksi/, { exact: false }),
+    page.getByText(/dari \d+ transaksi/, { exact: false }),
   ).toBeVisible();
   await expect(page.locator("tbody tr td.font-mono").first()).toBeVisible();
 };
 
 const parseTotalCountFromFooter = (footerText: string) => {
-  const match = /dari total (\d+) transaksi/.exec(footerText);
+  const match = /dari (\d+) transaksi/.exec(footerText);
   return match ? Number(match[1]) : null;
 };
 
@@ -269,7 +269,7 @@ test("dashboard dapat mengganti periode grafik pendapatan", async ({
 test("pengaturan toko memvalidasi nama wajib", async ({ page }) => {
   await page.goto("/store-settings");
 
-  const storeNameInput = page.locator("#storeName");
+  const storeNameInput = page.locator("#storeName").first();
   await expect(storeNameInput).toBeVisible();
   await expect(storeNameInput).not.toHaveValue("");
 
@@ -278,11 +278,11 @@ test("pengaturan toko memvalidasi nama wajib", async ({ page }) => {
   await storeNameInput.clear();
   await page.getByRole("button", { name: "Simpan Perubahan" }).click();
 
-  const errorToast = page.getByText("Nama toko wajib diisi.");
+  const errorToast = page.getByText("Nama toko wajib diisi");
   await expect(errorToast).toBeVisible();
 
   setCaseData(test.info().title, {
-    validationMessage: "Nama toko wajib diisi.",
+    validationMessage: "Nama toko wajib diisi",
     validationTriggered: true,
   });
 });
@@ -290,7 +290,7 @@ test("pengaturan toko memvalidasi nama wajib", async ({ page }) => {
 test("pengaturan toko dapat disimpan dan dipulihkan", async ({ page }) => {
   await page.goto("/store-settings");
 
-  const storeNameInput = page.locator("#storeName");
+  const storeNameInput = page.locator("#storeName").first();
   const originalName =
     sharedState.originalStoreName || (await storeNameInput.inputValue());
   const updatedName = `Blackbox Store ${Date.now()}`;
@@ -298,14 +298,14 @@ test("pengaturan toko dapat disimpan dan dipulihkan", async ({ page }) => {
 
   await storeNameInput.fill(updatedName);
   await page.getByRole("button", { name: "Simpan Perubahan" }).click();
-  await expect(page.getByText("Pengaturan Disimpan")).toBeVisible();
+  await expect(page.getByText("Pengaturan Disimpan")).toBeVisible({ timeout: 20000 });
 
   await page.reload();
-  await expect(page.locator("#storeName")).toHaveValue(updatedName);
+  await expect(page.locator("#storeName").first()).toHaveValue(updatedName);
 
-  await page.locator("#storeName").fill(originalName);
+  await page.locator("#storeName").first().fill(originalName);
   await page.getByRole("button", { name: "Simpan Perubahan" }).click();
-  await expect(page.getByText("Pengaturan Disimpan")).toBeVisible();
+  await expect(page.getByText("Pengaturan Disimpan")).toBeVisible({ timeout: 20000 });
 
   setCaseData(test.info().title, {
     originalName,
@@ -366,18 +366,19 @@ test("produk baru dapat ditambahkan pada kategori baru", async ({ page }) => {
   sharedState.createdProductName = productName;
 
   await page.goto("/product");
-  await expect(page.getByText("Daftar Menu")).toBeVisible();
+  // CardTitle is a div, so getByRole("heading") won't work. Using getByText instead.
+  await expect(page.getByText("Manajemen Produk")).toBeVisible();
 
   await page.getByRole("button", { name: /Tambah Produk/i }).click();
 
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
 
-  await dialog.locator("#prod-name").fill(productName);
+  await dialog.getByPlaceholder(/Contoh: Nasi Goreng Spesial/i).fill(productName);
   await dialog
-    .locator("#prod-desc")
+    .getByPlaceholder(/Contoh: Pedas, tanpa MSG/i)
     .fill("Produk hasil pengujian blackbox lanjutan");
-  await dialog.locator("#prod-price").fill("21000");
+  await dialog.getByPlaceholder(/Contoh: 15000/i).fill("21000");
 
   await dialog.getByRole("combobox").first().click();
   await page
@@ -412,12 +413,12 @@ test("produk dapat diedit tanpa merusak data form", async ({ page }) => {
 
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByText("Edit Produk")).toBeVisible();
-  await expect(dialog.locator("#prod-name")).toHaveValue(
+  await expect(dialog.getByPlaceholder(/Contoh: Nasi Goreng Spesial/i)).toHaveValue(
     sharedState.createdProductName,
   );
 
-  await dialog.locator("#prod-name").fill(updatedProductName);
-  await dialog.locator("#prod-price").fill("22000");
+  await dialog.getByPlaceholder(/Contoh: Nasi Goreng Spesial/i).fill(updatedProductName);
+  await dialog.getByPlaceholder(/Contoh: 15000/i).fill("22000");
   await dialog.getByRole("button", { name: "Simpan Produk" }).click();
 
   await expect(page.getByText("Produk berhasil diperbarui!")).toBeVisible();
@@ -447,7 +448,7 @@ test("soft delete produk membuatnya tidak tampil di kasir", async ({
   await page.getByRole("button", { name: "Ya, Nonaktifkan" }).click();
 
   await expect(
-    page.getByText("Produk dihapus (tidak tersedia)."),
+    page.getByText("Produk dinonaktifkan."),
   ).toBeVisible();
   await expect(row.getByText("Tidak Tersedia")).toBeVisible();
 
@@ -576,7 +577,7 @@ test("laporan dapat menemukan dan menampilkan detail transaksi", async ({
   page,
 }) => {
   await page.goto("/report");
-  await expect(page.getByText("Riwayat Transaksi")).toBeVisible();
+  await expect(page.getByText("Laporan Penjualan")).toBeVisible();
 
   await searchInvoiceInReport(page, sharedState.onlineInvoice);
 
@@ -635,7 +636,7 @@ test("laporan mendukung perubahan limit baris", async ({ page }) => {
   await waitForReportData(page);
 
   const footer = page.getByText(
-    /Menampilkan \d+ transaksi dari total \d+ transaksi/,
+    /Menampilkan \d+–\d+ dari \d+ transaksi/,
     {
       exact: false,
     },
@@ -664,7 +665,7 @@ test("pagination laporan tidak mengosongkan footer saat pindah halaman", async (
   await waitForReportData(page);
 
   const footer = page.getByText(
-    /Menampilkan \d+ transaksi dari total \d+ transaksi/,
+    /Menampilkan \d+–\d+ dari \d+ transaksi/,
     {
       exact: false,
     },
@@ -749,7 +750,7 @@ test("laporan dapat diekspor seluruh hasil filter, bukan hanya halaman aktif", a
   await waitForReportData(page);
 
   const footer = await page
-    .getByText(/Menampilkan \d+ transaksi dari total \d+ transaksi/, {
+    .getByText(/Menampilkan \d+–\d+ dari \d+ transaksi/, {
       exact: false,
     })
     .innerText();

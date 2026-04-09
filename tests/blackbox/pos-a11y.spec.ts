@@ -37,7 +37,7 @@ test.describe("POS WebApp - Accessibility (A11y) Tests", () => {
     page,
   }) => {
     await page.goto("/store-settings");
-    await expect(page.locator("#storeName")).toBeVisible();
+    await expect(page.locator("#storeName").first()).toBeVisible();
 
     // Specifically test this section for forms
     const accessibilityScanResults = await new AxeBuilder({ page })

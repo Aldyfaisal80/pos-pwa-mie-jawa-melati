@@ -62,7 +62,7 @@ test.describe("POS WebApp - Edge Cases", () => {
   test("store settings fails nicely on huge store name", async ({ page }) => {
     await page.goto("/store-settings");
 
-    const storeNameInput = page.locator("#storeName");
+    const storeNameInput = page.locator("#storeName").first();
     await expect(storeNameInput).toBeVisible();
 
     const hugeName = "Toko Saya ".repeat(100);
@@ -71,7 +71,12 @@ test.describe("POS WebApp - Edge Cases", () => {
     await page.getByRole("button", { name: /Simpan Perubahan/i }).click();
 
     // Depending on schema length validation, it might fail or show error
-    await expect(page.getByText("Pengaturan Disimpan").or(page.getByText(/Gagal|Maksimal|terlalu panjang/i))).toBeVisible();
+    // Note: avoid /Maksimal/ as it matches the upload hint "Maksimal 5MB" in the DOM
+    await expect(
+      page.getByText("Pengaturan Disimpan").or(
+        page.getByText(/Gagal|terlalu panjang|karakter maksimal/i)
+      )
+    ).toBeVisible({ timeout: 20000 });
 
     // Since we don't know the exact schema, we just expect one of them to be visible
     // without the app crashing

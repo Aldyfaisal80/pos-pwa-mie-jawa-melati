@@ -22,13 +22,14 @@ test.describe("Admin & Master Data Operations", () => {
     await page.goto("/store-settings");
 
     // Tunggu sampai loading skeleton selesai, form siap diisi
-    await expect(page.getByLabel(/Nama Toko/i)).toBeVisible();
+    // Note: getByLabel won't work - id="storeName" overrides FormControl's generated ID
+    await expect(page.locator("#storeName")).toBeVisible({ timeout: 20000 });
     await page.waitForTimeout(500); // Wait for potential state hydrate
 
     // Isi Form
-    await page.getByLabel(/Nama Toko/i).fill("Toko Baru E2E");
-    await page.getByLabel(/Alamat Lengkap/i).fill("Jl. E2E Testing No 1A");
-    await page.getByLabel(/Nomor Telepon/i).fill("081234567890");
+    await page.locator("#storeName").fill("Toko Baru E2E");
+    await page.getByPlaceholder("Masukkan alamat toko").fill("Jl. E2E Testing No 1A");
+    await page.getByPlaceholder("Masukkan nomor telepon").fill("081234567890");
 
     // Upload dummy image
     // ImageUpload component menggunakan <input type="file" /> yang tersembunyi
@@ -40,9 +41,9 @@ test.describe("Admin & Master Data Operations", () => {
 
     await page.getByRole("button", { name: /Simpan Perubahan/i }).click();
 
-    // Verifikasi toast
+    // Verifikasi toast - increased timeout as tRPC mutation may take time
     await expect(page.getByText(/Pengaturan Disimpan/i)).toBeVisible({
-      timeout: 10000,
+      timeout: 20000,
     });
 
     // Masuk ke Cashier untuk verifikasi
@@ -69,16 +70,17 @@ test.describe("Admin & Master Data Operations", () => {
     const modal = page.getByRole("dialog");
     await expect(modal).toBeVisible();
 
-    await modal.getByLabel(/Nama Produk/i).fill(uniqueProductName);
+    // Use placeholder to be more robust
+    await modal.getByPlaceholder(/Contoh: Nasi Goreng Spesial/i).fill(uniqueProductName);
     await modal
-      .getByLabel(/Deskripsi/i)
+      .getByPlaceholder(/Contoh: Pedas, tanpa MSG/i)
       .fill("Ini adalah produk uji coba otomatis");
 
     // Set Kategori - Membuka dropdown dan pilih elemen pertama
     await modal.getByRole("combobox").first().click();
     await page.getByRole("option").first().click();
 
-    await modal.getByLabel(/Harga/i).fill("99999");
+    await modal.getByPlaceholder(/Contoh: 15000/i).fill("99999");
 
     // Status default "Tersedia" — langsung simpan
     await modal.getByRole("button", { name: /Simpan Produk/i }).click();

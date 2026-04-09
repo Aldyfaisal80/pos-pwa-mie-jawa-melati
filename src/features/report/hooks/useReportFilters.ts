@@ -139,6 +139,7 @@ export const useReportFilters = () => {
     isLoading,
     isFetching,
     isExporting,
+    stablePage: data?.currentPage ?? page,
     // enums re-exported for convenience
     PaymentMethod,
   };

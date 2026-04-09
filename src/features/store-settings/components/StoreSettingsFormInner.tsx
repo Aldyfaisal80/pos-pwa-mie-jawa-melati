@@ -82,6 +82,7 @@ export const StoreSettingsFormInner = ({
               <FormControl>
                 <Input
                   {...field}
+                  id="storeName"
                   placeholder="Masukkan nama toko"
                   maxLength={100}
                   value={field.value ?? ""}
