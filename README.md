@@ -157,40 +157,38 @@ npm run start
 
 ## 🧪 Blackbox Testing
 
-Proyek ini dilengkapi dokumentasi pengujian blackbox komprehensif — **53 skenario** yang mencakup
-seluruh modul aplikasi, divalidasi dengan Playwright E2E tests.
+This project includes a comprehensive blackbox testing suite — **53 scenarios** covering all
+application modules, validated with Playwright E2E tests.
 
-### Menjalankan Automated Tests
+### Running Automated Tests
 
 ```bash
 npm run test:blackbox
 ```
 
-### Melihat Laporan
+### Test Coverage
 
-Buka `generated/blackbox/blackbox-report.html` di browser untuk laporan interaktif.
-
-| Modul | Skenario | Nomor |
+| Module | Scenarios | Numbers |
 |---|---|---|
 | Dashboard | 4 | TC 1–4 |
-| Kasir | 12 | TC 5–16 |
-| Produk | 10 | TC 17–26 |
-| Laporan | 14 | TC 27–40 |
-| Pengaturan Toko | 8 | TC 41–48 |
-| Navigasi | 5 | TC 49–53 |
+| Cashier | 12 | TC 5–16 |
+| Products | 10 | TC 17–26 |
+| Reports | 14 | TC 27–40 |
+| Store Settings | 8 | TC 41–48 |
+| Navigation | 5 | TC 49–53 |
 | **Total** | **53** | — |
 
-### File Pengujian
+### Test Files
 
-| File | Deskripsi |
+| File | Description |
 |---|---|
-| `tests/blackbox/pos-blackbox.spec.ts` | Skenario utama (kasir, produk, laporan, pengaturan) |
-| `tests/blackbox/pos-navigation.spec.ts` | Alur navigasi sidebar |
-| `tests/blackbox/pos-mobile.spec.ts` | Layout dan interaksi mobile |
-| `tests/blackbox/pos-admin.spec.ts` | Admin: konfigurasi toko dan master data |
-| `tests/blackbox/pos-edge-cases.spec.ts` | Edge case: empty cart, input panjang, nama toko besar |
-| `tests/blackbox/pos-a11y.spec.ts` | Accessibility scan otomatis (axe-core) |
-| `tests/blackbox/pos-reports.spec.ts` | Filter, sort, export, dan hapus laporan |
+| `tests/blackbox/pos-blackbox.spec.ts` | Core scenarios (cashier, products, reports, settings) |
+| `tests/blackbox/pos-navigation.spec.ts` | Sidebar navigation flows |
+| `tests/blackbox/pos-mobile.spec.ts` | Mobile viewport layout and interactions |
+| `tests/blackbox/pos-admin.spec.ts` | Admin operations (store config, product master data) |
+| `tests/blackbox/pos-edge-cases.spec.ts` | Edge cases: empty cart, long inputs, boundary values |
+| `tests/blackbox/pos-a11y.spec.ts` | Automated accessibility scan (axe-core) |
+| `tests/blackbox/pos-reports.spec.ts` | Filter, sort, export, and delete reports |
 
 ---
 
@@ -202,8 +200,6 @@ Buka `generated/blackbox/blackbox-report.html` di browser untuk laporan interakt
 | [API Reference](./docs/API.md) | All tRPC procedures with input/output schemas |
 | [Database Schema](./docs/DATABASE.md) | ER diagram, model reference, indexes |
 | [UML Diagrams](./docs/UML.md) | Use Case, Class, Component, Activity diagrams |
-| [Blackbox Report](./generated/blackbox/blackbox-report.html) | 53 skenario pengujian manual — laporan interaktif |
-| [Blackbox JSON](./generated/blackbox/blackbox-testcases.json) | Data test cases terstruktur (JSON) |
 | [Changelog](./CHANGELOG.md) | Version history (Keep a Changelog) |
 | [Contributing](./CONTRIBUTING.md) | Development setup & contribution guide |
 

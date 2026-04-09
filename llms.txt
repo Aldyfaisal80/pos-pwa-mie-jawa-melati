@@ -43,8 +43,7 @@
 - [tests/blackbox/pos-reports.spec.ts]: Report filtering, sorting, pagination, CSV export
 
 ## Generated
-- [generated/blackbox/blackbox-testcases.json]: 53 manual blackbox test cases (JSON), 6 modules
-- [generated/blackbox/blackbox-report.html]: Interactive HTML report — all 53 TC passed
+- [generated/blackbox/blackbox-testcases.json]: 53 manual blackbox test cases, 6 modules (gitignored — generated locally via test runner)
 
 ## Documentation
 - [docs/ARCHITECTURE.md]: System architecture, data flow, ADRs
