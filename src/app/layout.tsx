@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
-import { AppProvider } from "@/components/layouts/AppProvider";
+import { Providers } from "@/components/layouts/providers/Providers";
 
 export const metadata: Metadata = {
   title: "Mie Jawa POS",
@@ -30,7 +30,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover", // enables safe-area-inset env() on iOS & Android
+  viewportFit: "cover",
 };
 
 const fontSans = Plus_Jakarta_Sans({
@@ -49,7 +49,9 @@ export default function RootLayout({
     >
       <body suppressHydrationWarning={true}>
         <TRPCReactProvider>
-          <AppProvider>{children}</AppProvider>
+          {/* Providers (Theme, Auth, Printer) are at root so both (auth) and (app)
+              route groups have access to useAuth, useTheme, etc */}
+          <Providers>{children}</Providers>
         </TRPCReactProvider>
       </body>
     </html>

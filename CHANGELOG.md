@@ -9,6 +9,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.0] - 2026-04-14
+
+### Added
+- **Supabase Authentication** — Email/password login via `@supabase/ssr`; server-side session validated in `middleware.ts` (first layer) + client-side auth guard in `(app)/layout.tsx` (second layer)
+- **`src/features/auth/`** — Self-contained auth module: `context/`, `hooks/useAuth`, `providers/AuthProvider`, `schemas/`, `index.ts` re-export barrel
+- **`src/app/(app)/` route group** — Protected layout wrapping all authenticated pages (`pos/`, `products/`, `reports/`, `settings/`)
+- **`src/app/(auth)/` route group** — Public layout for unauthenticated routes (`login/`)
+- **`src/trpc/vanilla-client.ts`** — Lifecycle-independent tRPC client for use outside React component trees (offline sync, background workers)
+- **`AccountProfileForm`** — New Settings tab showing Supabase Auth user display name and email, editable via `useAccountProfile` hook
+- **`src/features/store-settings/schemas/account.ts`** — Zod schema for account profile form
+- **`src/components/ui/avatar-initials.tsx`** — Avatar component rendering user initials as fallback when no photo is set
+- **`src/server/api/types.ts`** — Shared tRPC context and procedure type exports
+
+### Changed
+- **`middleware.ts`** — Rewritten to use `@supabase/ssr` `createServerClient`; validates session cookie, redirects unauthenticated users to `/login?redirect=<path>`, and prevents authenticated users from accessing `/login`
+- **Route structure** — All app pages moved from `src/app/<page>/` into `src/app/(app)/<page>/` route group; login moved to `src/app/(auth)/login/`
+- **`useOfflineSync` / `useSyncTransaction`** — Refactored to use `vanilla-client.ts` instead of `trpc.useUtils()` — sync no longer depends on React component lifecycle; more resilient to page refreshes mid-sync
+- **`src/features/cashier/components/`** — Split into `checkout/` and `receipt/` sub-folders
+- **`src/features/product/components/`** — Split into `product/` and `category/` sub-folders
+- **`src/features/report/components/`** — Split into `analytics/` and `transaction/` sub-folders
+- **`StoreSettingsForm`** — Refactored to multi-tab layout (Info Toko, Printer, Akun); Account tab delegates to `AccountProfileForm`
+- **`AppSidebar`** — Updated to use auth user data (display name, email) from `useAuth` hook; avatar shows user initials
+- **`AppProvider`** — Cleaned up; no longer contains legacy auth logic
+- **`src/server/api/trpc.ts`** — Context updated to pass Supabase session; procedures can now access `ctx.session`
+- **`transaction` router** — Improved error classification: FK violations → `BAD_REQUEST`; unknown errors → `INTERNAL_SERVER_ERROR`; cleaner response types
+
+### Removed
+- `src/components/layouts/providers/AuthProvider.tsx` — Replaced by `src/features/auth/providers/`
+- `src/components/config/navigation.ts` — Navigation config inlined/relocated
+- Legacy flat component files: `CheckoutCartSummary`, `CheckoutCashInput`, `CheckoutPaymentMethods`, `ReceiptPrintTemplate`, `CategoryFormModal`, `CategoryManagerModal`, `CategorySelectField`, `ProductFormModal`, `ProductImageField`, `ProductManager`, `ProductTable`, `ReportChart`, `ReportFilterBar`, `ReportPagination`, `ReportStatsCards`, `TransactionDetailModal`, `TransactionTable` — all replaced by sub-folder structure
+
+---
+
 ## [0.3.0] - 2026-04-09
 
 ### Added

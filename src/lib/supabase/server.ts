@@ -1,5 +1,6 @@
 // src/lib/supabase/server.ts
 // Server client — reads/writes session from COOKIES (for RSC, API routes, tRPC)
+import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { env } from "@/env";

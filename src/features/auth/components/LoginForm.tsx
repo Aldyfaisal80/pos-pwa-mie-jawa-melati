@@ -1,71 +1,19 @@
 // src/features/auth/components/LoginForm.tsx
 "use client";
 
-import { useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
-import { Loader2, LogIn } from "lucide-react";
-
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { AlertCircle, Loader2, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-// ─── Schema ──────────────────────────────────────────────────────────────────
-
-const loginSchema = z.object({
-  email: z.string().email("Format email tidak valid"),
-  password: z.string().min(6, "Password minimal 6 karakter"),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
-// ─── Component ───────────────────────────────────────────────────────────────
+import { useLoginForm } from "../hooks/use-login-form";
 
 export const LoginForm = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") ?? "/";
-  const [isLoading, setIsLoading] = useState(false);
-
-  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
-
+  const { form, isLoading, onSubmit, serverError } = useLoginForm();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-  });
-
-  const onSubmit = async (values: LoginFormValues) => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-      });
-
-      if (error) {
-        toast.error("Login gagal", {
-          description: "Email atau password salah. Silakan coba lagi.",
-        });
-        return;
-      }
-
-      router.push(redirectTo);
-      router.refresh();
-    } catch {
-      toast.error("Terjadi kesalahan", {
-        description: "Silakan coba beberapa saat lagi.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  } = form;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
@@ -78,6 +26,8 @@ export const LoginForm = () => {
           placeholder="admin@toko.com"
           autoComplete="email"
           disabled={isLoading}
+          aria-invalid={!!serverError || !!errors.email}
+          className={serverError ? "border-destructive focus-visible:ring-destructive/30" : ""}
           {...register("email")}
         />
         {errors.email && (
@@ -94,12 +44,25 @@ export const LoginForm = () => {
           placeholder="••••••••"
           autoComplete="current-password"
           disabled={isLoading}
+          aria-invalid={!!serverError || !!errors.password}
+          className={serverError ? "border-destructive focus-visible:ring-destructive/30" : ""}
           {...register("password")}
         />
         {errors.password && (
           <p className="text-destructive text-xs">{errors.password.message}</p>
         )}
       </div>
+
+      {/* Server error indicator */}
+      {serverError && (
+        <div
+          role="alert"
+          className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+        >
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>{serverError}</span>
+        </div>
+      )}
 
       {/* Submit */}
       <Button

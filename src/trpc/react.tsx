@@ -8,7 +8,7 @@ import { useState } from "react";
 import SuperJSON from "superjson";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-import { type AppRouter } from "@/server/api/root";
+import { type AppRouter } from "@/server/api/types";
 import { createQueryClient } from "./query-client";
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined;

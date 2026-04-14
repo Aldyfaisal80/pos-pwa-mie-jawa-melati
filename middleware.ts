@@ -29,7 +29,6 @@ export async function middleware(request: NextRequest) {
   });
 
   // Create Supabase server client that can read/write cookies
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const supabase = createServerClient(
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -52,7 +51,6 @@ export async function middleware(request: NextRequest) {
   );
 
   // Validate the user session (auto-refreshes expired tokens)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   const { data: { user } } = await supabase.auth.getUser();
 
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);

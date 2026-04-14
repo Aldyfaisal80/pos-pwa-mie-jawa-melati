@@ -6,10 +6,10 @@ import { SectionContainer } from "@/components/layouts/SectionContainer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useReportFilters } from "../hooks/useReportFilters";
-import { TransactionTable } from "../components/TransactionTable";
-import { ReportFilterBar } from "../components/ReportFilterBar";
-import { ReportPagination } from "../components/ReportPagination";
-import { ReportStatsCards } from "../components/ReportStatsCards";
+import { TransactionTable } from "../components/transaction/TransactionTable";
+import { ReportFilterBar } from "../components/analytics/ReportFilterBar";
+import { ReportPagination } from "../components/analytics/ReportPagination";
+import { ReportStatsCards } from "../components/analytics/ReportStatsCards";
 import { useLiveStats } from "@/features/dashboard/hooks/useLiveStats";
 
 export const ReportPage = () => {

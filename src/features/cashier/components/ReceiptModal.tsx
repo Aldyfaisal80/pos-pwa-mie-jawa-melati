@@ -9,7 +9,7 @@ import { api } from "@/trpc/react";
 import { render, Printer } from "react-thermal-printer";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
 import { usePrinter } from "@/components/layouts/providers/PrinterProvider";
-import { ReceiptPrintTemplate } from "./ReceiptPrintTemplate";
+import { ReceiptPrintTemplate } from "./receipt/ReceiptPrintTemplate";
 import { PrinterActionButtons } from "./PrinterActionButtons";
 
 interface ReceiptModalProps {
@@ -90,7 +90,7 @@ export const ReceiptModal = ({
 
   return (
     <Dialog open={open} onOpenChange={undefined}>
-      <DialogContent className="w-[calc(100vw-2rem)] max-w-85 overflow-hidden border-none bg-transparent p-0 shadow-none sm:w-85">
+      <DialogContent showCloseButton={false} className="w-[calc(100vw-2rem)] max-w-85 overflow-hidden border-none bg-transparent p-0 shadow-none sm:w-85">
         <DialogTitle className="sr-only">Struk Pembayaran</DialogTitle>
 
         <style>{`

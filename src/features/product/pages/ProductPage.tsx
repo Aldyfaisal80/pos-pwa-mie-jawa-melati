@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { ProductManager } from "../components/ProductManager";
+import { ProductManager } from "../components/product/ProductManager";
 
 export const ProductPage = () => (
   <PageContainer title="Manajemen Produk" withHeader>

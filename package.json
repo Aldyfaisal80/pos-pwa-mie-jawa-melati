@@ -6,6 +6,7 @@
   "scripts": {
     "build": "next build --webpack",
     "check": "next lint && tsc --noEmit",
+    "clean:cache": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && echo '.next cache cleared'",
     "db:generate": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
@@ -23,6 +24,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "npm run build && next start",
+    "safe-audit": "npm audit",
+    "safe-audit:fix": "npm run clean:cache && npm audit fix && npm run dev",
     "start": "next start",
     "test:blackbox": "playwright test -c playwright.blackbox.config.ts",
     "test:blackbox:ui": "playwright test -c playwright.blackbox.config.ts --ui",

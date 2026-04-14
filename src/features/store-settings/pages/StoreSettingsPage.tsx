@@ -3,21 +3,24 @@
 import { useState } from "react";
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
-import { Store, Printer } from "lucide-react";
+import { Store, Printer, UserCog } from "lucide-react";
 import { StoreSettingsForm } from "../components/StoreSettingsForm";
 import { PrinterSettingsCard } from "../components/PrinterSettingsCard";
+import { AccountProfileForm } from "../components/AccountProfileForm";
 import { cn } from "@/lib/utils";
 
-type Section = "store" | "printer";
+type Section = "store" | "printer" | "account";
 
 const NAV_ITEMS = [
   { id: "store" as Section, label: "Info Toko", icon: Store },
   { id: "printer" as Section, label: "Printer", icon: Printer },
+  { id: "account" as Section, label: "Akun", icon: UserCog },
 ];
 
 const SECTION_CONTENT: Record<Section, React.ReactNode> = {
   store: <StoreSettingsForm />,
   printer: <PrinterSettingsCard />,
+  account: <AccountProfileForm />,
 };
 
 export const StoreSettingsPage = () => {
@@ -46,7 +49,7 @@ export const StoreSettingsPage = () => {
         </div>
 
         {/* Unified layout: card on desktop, plain on mobile. Content rendered ONCE. */}
-        <div className="border-border bg-card md:flex md:overflow-hidden md:rounded-xl md:border md:shadow-sm">
+        <div className="md:flex md:overflow-hidden md:rounded-xl md:border md:shadow-sm">
           {/* Desktop sidebar nav — hidden on mobile */}
           <nav className="bg-muted/40 hidden w-44 shrink-0 border-r p-3 md:block">
             <p className="text-muted-foreground mb-2 px-2 text-[10px] font-semibold uppercase tracking-widest">
@@ -73,7 +76,7 @@ export const StoreSettingsPage = () => {
           </nav>
 
           {/* Content panel — rendered once for both mobile and desktop */}
-          <div className="md:min-w-0 md:flex-1 md:p-6">
+          <div className="min-w-0 flex-1 md:p-6">
             {SECTION_CONTENT[activeSection]}
           </div>
         </div>

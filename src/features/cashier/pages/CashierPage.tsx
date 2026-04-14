@@ -69,6 +69,7 @@ export const CashierPage = () => {
     cartTotal: 0,
     paymentMethod: "CASH" as PaymentMethod,
     paymentAmount: "",
+    wasOffline: false,
   });
 
   // --- handlers ---
@@ -100,7 +101,7 @@ export const CashierPage = () => {
       cartTotal,
       paymentMethod,
       paymentAmount,
-      onSuccess: (invoiceNumber) => {
+      onSuccess: (invoiceNumber, wasOffline) => {
         setReceiptData({
           invoiceNumber,
           transactionDate: new Date(),
@@ -108,6 +109,7 @@ export const CashierPage = () => {
           cartTotal,
           paymentMethod,
           paymentAmount,
+          wasOffline,
         });
         setIsCheckoutOpen(false);
         setIsReceiptOpen(true);
@@ -127,10 +129,16 @@ export const CashierPage = () => {
     clearCart();
     setPaymentAmount("");
     setPaymentMethod("CASH");
-    toast.success("Transaksi Berhasil!", {
-      description: "Data pesanan telah disimpan ke server.",
-    });
-  }, [clearCart]);
+    if (receiptData.wasOffline) {
+      toast.info("Transaksi Tersimpan Lokal", {
+        description: "Akan otomatis dikirim ke server saat koneksi kembali.",
+      });
+    } else {
+      toast.success("Transaksi Berhasil!", {
+        description: "Data pesanan telah disimpan ke server.",
+      });
+    }
+  }, [clearCart, receiptData.wasOffline]);
 
   return (
     <PageContainer title="Kasir" withHeader>

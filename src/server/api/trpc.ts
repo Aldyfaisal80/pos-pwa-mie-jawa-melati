@@ -1,3 +1,4 @@
+import "server-only";
 /**
  * YOU PROBABLY DON'T NEED TO EDIT THIS FILE, UNLESS:
  * 1. You want to modify request context (see Part 1).
@@ -36,12 +37,22 @@ export const createTRPCContext = async (opts: {
 }) => {
   let user: TRPCUser | null = opts.user ?? null;
 
-  // Validate Supabase bearer token from Authorization header
+  // Path 1: Bearer token — used by client-side tRPC (react.tsx injects it)
   const authHeader = opts.headers.get("authorization");
   if (!user && authHeader?.startsWith("Bearer ")) {
     const token = authHeader.slice(7);
     const serverSupabase = await createSupabaseServerClient();
     const { data } = await serverSupabase.auth.getUser(token);
+    if (data.user) {
+      user = { id: data.user.id, email: data.user.email };
+    }
+  }
+
+  // Path 2: Cookie session — used by RSC/server-side caller (server.ts)
+  // RSC request headers carry cookies but no Authorization header
+  if (!user) {
+    const serverSupabase = await createSupabaseServerClient();
+    const { data } = await serverSupabase.auth.getUser();
     if (data.user) {
       user = { id: data.user.id, email: data.user.email };
     }

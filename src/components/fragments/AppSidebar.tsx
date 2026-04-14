@@ -15,10 +15,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { navItems } from "../config/navigation";
+import { navItems } from "@/lib/config/navigation";
 import { api } from "@/trpc/react";
-import { useAuth } from "@/components/layouts/providers/AuthProvider";
+import { useAuth } from "@/features/auth";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
@@ -88,11 +89,11 @@ export const AppSidebar = () => {
 
       <SidebarFooter className="border-t p-3">
         <div className="flex items-center gap-3 overflow-hidden rounded-xl p-1">
-          <img
-            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.email ?? "Admin")}&background=d97706&color=fff`}
-            alt="Profil"
-            className="border-background h-9 w-9 shrink-0 rounded-full border-2 shadow-sm"
-          />
+          <Avatar className="border-background h-9 w-9 shrink-0 border-2 shadow-sm">
+            <AvatarFallback className="bg-amber-600 text-white text-sm font-semibold">
+              {(user?.email ?? "A")[0]!.toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
           <div className="flex min-w-0 flex-1 flex-col group-data-[collapsible=icon]:hidden">
             <p className="truncate text-sm leading-tight font-bold">
               {user?.email ?? "Admin"}

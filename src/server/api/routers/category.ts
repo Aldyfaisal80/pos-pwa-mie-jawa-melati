@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { errorFilter } from "@/server/filters/error.filter";
 import { TRPCError } from "@trpc/server";
 import { createCategorySchema } from "@/server/validations";
@@ -7,7 +7,7 @@ import { createCategorySchema } from "@/server/validations";
 const ARCHIVED_CATEGORY_NAME = "Arsip Produk";
 
 export const categoryRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     try {
       return await ctx.db.category.findMany({ orderBy: { id: "asc" } });
     } catch (error) {
@@ -15,7 +15,7 @@ export const categoryRouter = createTRPCRouter({
     }
   }),
 
-  create: publicProcedure
+  create: protectedProcedure
     .input(createCategorySchema)
     .mutation(async ({ ctx, input }) => {
       try {
@@ -25,7 +25,7 @@ export const categoryRouter = createTRPCRouter({
       }
     }),
 
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(z.object({ id: z.number().int().positive() }))
     .mutation(async ({ ctx, input }) => {
       try {

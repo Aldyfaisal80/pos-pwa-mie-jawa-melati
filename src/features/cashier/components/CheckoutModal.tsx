@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
-import { CheckoutCartSummary } from "./CheckoutCartSummary";
-import { CheckoutPaymentMethods } from "./CheckoutPaymentMethods";
-import { CheckoutCashInput } from "./CheckoutCashInput";
+import { CheckoutCartSummary } from "./checkout/CheckoutCartSummary";
+import { CheckoutPaymentMethods } from "./checkout/CheckoutPaymentMethods";
+import { CheckoutCashInput } from "./checkout/CheckoutCashInput";
 
 interface CheckoutModalProps {
   open: boolean;

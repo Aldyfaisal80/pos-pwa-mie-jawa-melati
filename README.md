@@ -8,13 +8,14 @@ Process orders offline, sync automatically when back online, and manage your bus
 
 ## 🚀 Key Features
 
+- **Authentication** — Supabase Auth with email/password login, server-side session via middleware, and client-side auth guard
 - **Offline-First Cashier** — Process orders, manage cart, and complete transactions without internet
-- **Background Sync** — Offline transactions queue in IndexedDB and auto-sync to Supabase
+- **Resilient Background Sync** — Offline transactions queue in IndexedDB; auto-sync via lifecycle-independent vanilla tRPC client
 - **PWA Ready** — Installable on Desktop, iOS, and Android with full offline caching (Serwist)
 - **Product Management** — CRUD with categories, image upload (Supabase Storage), and soft delete
 - **Transaction Reports** — Filterable, sortable, paginated reports with CSV export
 - **Dashboard Analytics** — Today's revenue, transaction count, top products chart
-- **Store Settings** — Configurable store name, address, phone, and logo
+- **Store Settings** — Configurable store name, address, phone, logo + Account Profile (display name & email)
 - **Responsive UI** — Mobile-first with bottom sheet drawers (Vaul) and dark mode support
 
 ---
@@ -41,7 +42,7 @@ Process orders offline, sync automatically when back online, and manage your bus
 
 - Node.js v20+
 - npm v11+
-- A Supabase project or local PostgreSQL instance
+- A [Supabase](https://supabase.com/) project (for Auth + Database + Storage)
 
 ### Installation
 
@@ -55,7 +56,7 @@ npm install
 
 # 3. Configure environment variables
 cp .env.example .env
-# Edit .env → set DATABASE_URL to your PostgreSQL connection string
+# Edit .env with your Supabase URL, anon key, and database connection string
 
 # 4. Push database schema
 npm run db:push
@@ -67,7 +68,16 @@ npm run db:seed:local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the app.
+Open [http://localhost:3000](http://localhost:3000). You will be redirected to **`/login`** — sign in with your Supabase credentials.
+
+### Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string (Supabase) |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase public anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-only) |
 
 ---
 
@@ -76,19 +86,31 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 ```
 post-pwa/
 ├── src/
-│   ├── app/                # Next.js App Router (routes & API)
+│   ├── app/
+│   │   ├── (app)/          # Protected route group — requires auth
+│   │   │   ├── layout.tsx  #   Client-side auth guard + AppProvider
+│   │   │   ├── page.tsx    #   Dashboard redirect
+│   │   │   ├── pos/        #   POS Cashier
+│   │   │   ├── products/   #   Product management
+│   │   │   ├── reports/    #   Transaction reports
+│   │   │   └── settings/   #   Store & account settings
+│   │   ├── (auth)/         # Public route group (unauthenticated)
+│   │   │   ├── layout.tsx
+│   │   │   └── login/
+│   │   └── api/trpc/       # tRPC HTTP handler
 │   ├── components/         # Shared UI (elements, form, fragments, icons, ui)
 │   ├── features/           # Feature modules
-│   │   ├── cashier/        #   POS cashier (cart, checkout, receipt)
+│   │   ├── auth/           #   Supabase auth (context, hooks, providers, schemas)
+│   │   ├── cashier/        #   POS cashier (checkout/, receipt/)
 │   │   ├── dashboard/      #   Analytics & charts
-│   │   ├── product/        #   Product & category management
-│   │   ├── report/         #   Transaction reports & export
-│   │   └── storeSettings/  #   Store configuration
-│   ├── hooks/              # Global custom hooks
-│   ├── lib/                # Utilities (offline-db, formatting)
+│   │   ├── product/        #   Product management (product/, category/)
+│   │   ├── report/         #   Reports (analytics/, transaction/)
+│   │   └── store-settings/ #   Store config + AccountProfileForm
+│   ├── hooks/              # Global custom hooks (useOfflineSync)
+│   ├── lib/                # Utilities (offline-db, supabase, timezone)
 │   ├── server/             # Backend (tRPC routers, validations, services)
 │   ├── styles/             # Global CSS
-│   └── trpc/               # Client tRPC setup
+│   └── trpc/               # Client tRPC setup + vanilla-client.ts
 ├── prisma/                 # Database schema & migrations
 ├── tests/                  # Playwright E2E tests
 └── docs/                   # Project documentation
@@ -105,11 +127,14 @@ post-pwa/
 | `npm run start` | Start production server |
 | `npm run preview` | Build + start combined |
 | `npm run check` | Lint + typecheck combined |
+| `npm run clean:cache` | Delete `.next/` build cache |
 | `npm run lint` | Run ESLint |
 | `npm run lint:fix` | ESLint with auto-fix |
 | `npm run typecheck` | TypeScript type checking |
 | `npm run format:check` | Check Prettier formatting |
 | `npm run format:write` | Auto-format with Prettier |
+| `npm run safe-audit` | Run `npm audit` (read-only) |
+| `npm run safe-audit:fix` | Safe: clear cache → audit fix → restart dev |
 | `npm run test:blackbox` | Run Playwright E2E tests |
 | `npm run db:push` | Push Prisma schema to DB |
 | `npm run db:push:local` | Push to local dev DB |
@@ -152,6 +177,45 @@ npm run start
 1. Uncheck **Offline** in DevTools (or restore Wi-Fi)
 2. Watch automatic sync — pending queue synchronizes to Supabase
 3. Check the **Report** page to see synced data
+
+---
+
+## 🪟 Windows Development Notes
+
+> **Windows users only** — Linux/macOS do not have this limitation.
+
+### ⚠️ EPERM Error When Updating Dependencies
+
+Windows uses mandatory file locking. Running `npm install`, `npm audit fix`, or `npm update` **while the dev server is active** can cause:
+
+```
+Error: EPERM: operation not permitted, rename
+.next\dev\server\*.tmp.xxx → .next\dev\server\*.js
+```
+
+**Safe way to update dependencies:**
+
+```bash
+# Option A: Use the built-in safe script (recommended)
+npm run safe-audit:fix
+# This: clears cache → runs audit fix → restarts dev server
+
+# Option B: Manual steps
+# 1. Stop dev server (Ctrl+C in the terminal running npm run dev)
+# 2. Run your npm command
+npm audit fix
+# 3. Clear cache (if you see any errors)
+npm run clean:cache
+# 4. Restart
+npm run dev
+```
+
+**If you already hit the EPERM error:**
+
+```bash
+# The server usually auto-restarts. If not:
+npm run clean:cache && npm run dev
+```
 
 ---
 

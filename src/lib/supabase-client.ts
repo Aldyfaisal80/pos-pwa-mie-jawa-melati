@@ -1,8 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
-import { env } from "@/env";
+// Re-export the singleton browser client to prevent duplicate GoTrueClient instances.
+// DO NOT use createClient() from @supabase/supabase-js here — it creates a separate
+// GoTrueClient that causes "Multiple GoTrueClient instances" warnings.
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-// Create a single supabase client for interacting with your database
-export const supabase = createClient(
-  env.NEXT_PUBLIC_SUPABASE_URL,
-  env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-);
+export const supabase = createSupabaseBrowserClient();

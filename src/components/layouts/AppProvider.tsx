@@ -1,10 +1,9 @@
-// src/providers/AppProvider.tsx
+// src/components/layouts/AppProvider.tsx
 "use client";
 
 import React, { forwardRef, Suspense, useEffect, useState } from "react";
 import { MainLoading } from "../elements";
 import { Toaster } from "../ui/sonner";
-import { Providers } from "./providers/Providers";
 import { cn } from "@/lib/utils";
 import { SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "../fragments/AppSidebar";
@@ -14,6 +13,11 @@ type AppProviderProps = React.ComponentProps<"main">;
 
 const SIDEBAR_STATE_KEY = "pos:sidebar-state";
 
+/**
+ * App shell — sidebar, bottom tabs, toaster.
+ * Providers (Auth, Theme, Printer) are in root layout.tsx — NOT here.
+ * This component is only rendered for authenticated routes in (app)/layout.tsx.
+ */
 export const AppProvider = forwardRef<
   HTMLElement,
   React.HTMLAttributes<HTMLElement> & AppProviderProps
@@ -45,30 +49,28 @@ export const AppProvider = forwardRef<
       className={cn("flex min-h-dvh flex-col", className)}
       {...props}
     >
-      <Providers>
-        {!isMounted ? (
-          <MainLoading />
-        ) : (
-          <>
-            <Suspense fallback={<MainLoading />}>
-              <SidebarProvider
-                defaultOpen={isSidebarOpen}
-                open={isSidebarOpen}
-                onOpenChange={handleSidebarChange}
-              >
-                <AppSidebar />
-                {/* pb-16 lg:pb-0 reserves space for the mobile bottom tab bar */}
-                <div className="flex w-full min-w-0 flex-col overflow-hidden pb-16 lg:pb-0">
-                  {children}
-                </div>
-              </SidebarProvider>
-            </Suspense>
-            {/* Mobile bottom tab navigation — hidden on desktop via lg:hidden */}
-            <BottomTabBar />
-            <Toaster />
-          </>
-        )}
-      </Providers>
+      {!isMounted ? (
+        <MainLoading />
+      ) : (
+        <>
+          <Suspense fallback={<MainLoading />}>
+            <SidebarProvider
+              defaultOpen={isSidebarOpen}
+              open={isSidebarOpen}
+              onOpenChange={handleSidebarChange}
+            >
+              <AppSidebar />
+              {/* pb-16 lg:pb-0 reserves space for the mobile bottom tab bar */}
+              <div className="flex w-full min-w-0 flex-col overflow-hidden pb-16 lg:pb-0">
+                {children}
+              </div>
+            </SidebarProvider>
+          </Suspense>
+          {/* Mobile bottom tab navigation — hidden on desktop via lg:hidden */}
+          <BottomTabBar />
+          <Toaster />
+        </>
+      )}
     </main>
   );
 });

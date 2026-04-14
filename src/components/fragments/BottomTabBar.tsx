@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { navItems } from "../config/navigation";
+import { navItems } from "@/lib/config/navigation";
 
 export const BottomTabBar = () => {
   const pathname = usePathname();
