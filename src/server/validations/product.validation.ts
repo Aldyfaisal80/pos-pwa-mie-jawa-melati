@@ -9,7 +9,7 @@ export const createProductSchema = z.object({
   price: z
     .number({ message: "Harga wajib diisi" })
     .min(0, "Harga tidak boleh negatif"),
-  image: z.string().url("URL gambar tidak valid").optional().nullable(),
+  image: z.string().url("URL gambar tidak valid").or(z.literal("")).optional().nullable(),
   categoryId: z.number({ message: "Kategori wajib dipilih" }).int().positive(),
   isAvailable: z.boolean().default(true).optional(),
 });

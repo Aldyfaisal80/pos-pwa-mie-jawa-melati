@@ -144,7 +144,7 @@ export const AccountProfileForm = () => {
                   id="display-name-form"
                   onSubmit={nameForm.handleSubmit(onDisplayNameSubmit)}
                   noValidate
-                  className="space-y-3"
+                  className="space-y-6"
                 >
                   <FormField
                     control={nameForm.control}

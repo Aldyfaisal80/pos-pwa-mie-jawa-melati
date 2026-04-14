@@ -46,7 +46,7 @@ export const AppSidebar = () => {
               className="h-9 w-auto max-w-30 shrink-0 object-contain drop-shadow-sm"
             />
           ) : (
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-600 text-white shadow-sm">
+            <div className="bg-primary text-primary-foreground flex h-9 w-9 shrink-0 items-center justify-center rounded-lg shadow-sm">
               <Store className="h-5 w-5" />
             </div>
           )}
@@ -62,7 +62,7 @@ export const AppSidebar = () => {
             const Icon = item.icon;
             const isActive =
               pathname === item.href ||
-              (pathname === undefined && item.id === "dashboard");
+              (pathname === undefined && item.id === "home");
 
             return (
               <SidebarMenuItem key={item.id}>
@@ -72,7 +72,7 @@ export const AppSidebar = () => {
                   tooltip={item.label}
                   className={
                     isActive
-                      ? "font-bold text-amber-700 dark:text-amber-400"
+                      ? "text-primary font-bold"
                       : "text-muted-foreground font-medium"
                   }
                 >
@@ -90,7 +90,7 @@ export const AppSidebar = () => {
       <SidebarFooter className="border-t p-3">
         <div className="flex items-center gap-3 overflow-hidden rounded-xl p-1">
           <Avatar className="border-background h-9 w-9 shrink-0 border-2 shadow-sm">
-            <AvatarFallback className="bg-amber-600 text-white text-sm font-semibold">
+            <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
               {(user?.email ?? "A")[0]!.toUpperCase()}
             </AvatarFallback>
           </Avatar>

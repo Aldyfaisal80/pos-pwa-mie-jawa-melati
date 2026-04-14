@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard,
+  Home,
   ShoppingCart,
   Package,
   BarChart3,
@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 export const navItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },
+  { id: "home", label: "Beranda", icon: Home, href: "/" },
   { id: "kasir", label: "Kasir", icon: ShoppingCart, href: "/pos" },
   { id: "produk", label: "Produk", icon: Package, href: "/products" },
   { id: "laporan", label: "Laporan", icon: BarChart3, href: "/reports" },

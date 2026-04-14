@@ -171,11 +171,14 @@ export const ProductFormModal = ({
                   <FormLabel>Harga (Rp)</FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
-                      min={0}
-                      placeholder="Contoh: 15000"
                       {...field}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      type="text"
+                      placeholder="Contoh: 15.000"
+                      value={field.value ? field.value.toLocaleString("id-ID") : ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/\D/g, "");
+                        field.onChange(rawValue ? Number(rawValue) : 0);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />

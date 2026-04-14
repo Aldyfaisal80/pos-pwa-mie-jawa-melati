@@ -26,7 +26,7 @@ export const BottomTabBar = () => {
         const Icon = item.icon;
         const isActive =
           pathname === item.href ||
-          (pathname === undefined && item.id === "dashboard");
+          (pathname === undefined && item.id === "home");
 
         return (
           <Link
@@ -39,7 +39,7 @@ export const BottomTabBar = () => {
               "active:scale-95",
               "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none",
               isActive
-                ? "text-amber-600 dark:text-amber-400"
+                ? "text-primary"
                 : "text-muted-foreground hover:text-foreground",
             )}
             aria-current={isActive ? "page" : undefined}
@@ -49,7 +49,7 @@ export const BottomTabBar = () => {
                 "relative flex h-8 w-12 items-center justify-center rounded-full",
                 "transition-all duration-200 ease-out",
                 isActive
-                  ? "bg-amber-100 dark:bg-amber-900/30"
+                  ? "bg-primary/15"
                   : "bg-transparent",
               )}
             >
