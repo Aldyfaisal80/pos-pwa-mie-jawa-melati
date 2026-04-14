@@ -1,26 +1,43 @@
 # Post PWA — Offline-First Point of Sales
-> A modern, offline-first POS progressive web app for small businesses, built on the T3 Stack.
+> A modern, offline-first POS progressive web app for small businesses, built on the T3 Stack with Supabase Authentication.
+
+## Auth & Security
+- [middleware.ts]: Server-side auth gate — validates Supabase session cookie; redirects unauthenticated users to /login
+- [src/app/(app)/layout.tsx]: Client-side auth guard (second layer) using useAuth(); shows MainLoading during validation
+- [src/features/auth/]: Self-contained auth module — context/, hooks/useAuth, providers/AuthProvider, schemas/
+- [src/features/auth/index.ts]: Barrel re-export for the entire auth module
 
 ## Core Files
-- [src/app/layout.tsx]: Root layout — providers, sidebar, theme
+- [src/app/layout.tsx]: Root layout — global providers and fonts
 - [src/app/sw.ts]: Serwist service worker — asset caching & offline
 - [src/server/api/root.ts]: tRPC router aggregation (product, category, transaction, store)
 - [src/server/api/routers/]: tRPC procedure handlers
+- [src/server/api/trpc.ts]: tRPC context factory — includes Supabase session in ctx
+- [src/server/api/types.ts]: Shared tRPC context and procedure type exports
 - [src/server/validations/]: Zod input schemas
 - [src/lib/offline-db.ts]: IndexedDB wrapper for offline transactions
-- [src/hooks/use-offline-sync.ts]: Background sync orchestrator
+- [src/hooks/useOfflineSync.ts]: Background sync orchestrator — uses vanilla-client.ts
+- [src/trpc/vanilla-client.ts]: Lifecycle-independent tRPC client; used by sync hooks outside React tree
 - [prisma/schema.prisma]: Database schema (Category, Product, Transaction, TransactionItem, StoreConfig)
 
+## Route Groups
+- [src/app/(app)/]: Protected route group — requires Supabase auth session
+  - pos/, products/, reports/, settings/
+- [src/app/(auth)/]: Public route group — accessible without login
+  - login/
+
 ## Features
-- [src/features/cashier/]: POS cashier — cart, checkout, receipt, notes
-- [src/features/product/]: Product & category CRUD management
-- [src/features/report/]: Transaction report with filters, pagination, export
+- [src/features/cashier/]: POS cashier — checkout/ (cart, modal, payment), receipt/ (modal, template)
+- [src/features/product/]: Product management — product/ (form, table, image), category/ (form, manager)
+- [src/features/report/]: Transaction reports — analytics/ (charts, stats), transaction/ (table, detail, filter)
 - [src/features/dashboard/]: Today's stats, revenue chart, top products
-- [src/features/storeSettings/]: Store profile configuration
+- [src/features/store-settings/]: Store profile + AccountProfileForm (display name, email via Supabase Auth)
 
 ## Key Concepts
-- **Offline-First**: Transactions save to IndexedDB, batch sync to Supabase on reconnect
-- **Feature Modules**: Each feature is self-contained (components/hooks/pages/types/utils)
+- **Auth Flow**: middleware.ts (server) → (app)/layout.tsx (client) → useAuth() — dual-layer protection
+- **Offline-First**: Transactions save to IndexedDB, batch sync to Supabase on reconnect via vanilla-client.ts
+- **Vanilla tRPC Client**: `src/trpc/vanilla-client.ts` creates a tRPC client without React hooks — used by `useOfflineSync` to avoid lifecycle-dependent sync failures on page refresh
+- **Feature Modules**: Each feature is self-contained (components/hooks/pages/types/schemas/utils)
 - **tRPC + Zod**: End-to-end type safety from DB to UI, no REST endpoints
 - **Soft Delete**: Products marked `isAvailable=false`; Transactions set `deletedAt` timestamp — data preserved for reporting
 - **WIB Timezone Storage Convention**: `Transaction.date` is `timestamp WITHOUT time zone`. The server pre-shifts UTC dates to WIB (+7h) before storing so Postgres `DATE(date AT TIME ZONE 'Asia/Jakarta')` always resolves the correct local calendar day. Chart queries use `TO_CHAR(..., 'YYYY-MM-DD')` string comparison to avoid node-postgres `Date` object UTC-shift pitfalls.
@@ -28,7 +45,7 @@
 - **Responsive Drawer/Dialog**: Vaul bottom sheets on mobile, standard dialogs on desktop
 
 ## Tech Stack
-- Next.js 16 (App Router) + tRPC 11 + Prisma 7 + Supabase (PostgreSQL)
+- Next.js 16 (App Router) + tRPC 11 + Prisma 7 + Supabase (PostgreSQL + Auth + Storage)
 - Tailwind CSS v4 + Shadcn UI + Radix UI + Vaul + Recharts
 - Serwist (PWA/Service Worker) + IndexedDB + TanStack React Query 5
 - Playwright (E2E blackbox testing) + axe-core (accessibility)
@@ -50,5 +67,5 @@
 - [docs/API.md]: Complete tRPC API reference
 - [docs/DATABASE.md]: Schema docs with ER diagram
 - [docs/UML.md]: Use Case, Class, Component, Activity diagrams
-- [CHANGELOG.md]: Version history — current: v0.3.0
+- [CHANGELOG.md]: Version history — current: v0.4.0
 - [CONTRIBUTING.md]: Contribution guidelines
