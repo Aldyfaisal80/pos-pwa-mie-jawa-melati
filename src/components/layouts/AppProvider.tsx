@@ -61,7 +61,7 @@ export const AppProvider = forwardRef<
             >
               <AppSidebar />
               {/* pb-16 lg:pb-0 reserves space for the mobile bottom tab bar */}
-              <div className="flex w-full min-w-0 flex-col overflow-hidden pb-16 lg:pb-0">
+              <div className="flex w-full min-w-0 flex-col overflow-x-clip pb-16 lg:pb-0">
                 {children}
               </div>
             </SidebarProvider>
