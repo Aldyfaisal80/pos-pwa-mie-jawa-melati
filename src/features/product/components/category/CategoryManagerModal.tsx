@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Trash2, Plus, Loader2 } from "lucide-react";
+import { Trash2, Plus, Loader2, Pencil, Check, X } from "lucide-react";
 import { useCategories } from "../../hooks/useCategories";
 import { useCategoryMutations } from "../../hooks/useCategoryMutations";
 
@@ -34,13 +34,19 @@ export const CategoryManagerModal = ({
   onOpenChange,
 }: CategoryManagerModalProps) => {
   const { data: categories, isLoading } = useCategories();
-  const { createCategory, deleteCategory } = useCategoryMutations();
+  const { createCategory, updateCategory, deleteCategory } =
+    useCategoryMutations();
   const [newName, setNewName] = useState("");
   const [pendingDelete, setPendingDelete] = useState<{
     id: number;
     name: string;
   } | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const editInputRef = useRef<HTMLInputElement>(null);
+
   const isDeletingCategory = deleteCategory.isPending;
+  const isUpdatingCategory = updateCategory.isPending;
 
   const handleCreate = () => {
     if (!newName.trim()) return;
@@ -63,8 +69,38 @@ export const CategoryManagerModal = ({
     );
   };
 
+  const handleStartEdit = (id: number, name: string) => {
+    setEditingId(id);
+    setEditValue(name);
+    // autoFocus via ref after state update
+    setTimeout(() => editInputRef.current?.focus(), 0);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditValue("");
+  };
+
+  const handleConfirmEdit = () => {
+    if (!editingId || !editValue.trim()) return;
+    updateCategory.mutate(
+      { id: editingId, name: editValue.trim() },
+      { onSuccess: handleCancelEdit },
+    );
+  };
+
+  const handleEditKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleConfirmEdit();
+    if (e.key === "Escape") handleCancelEdit();
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) handleCancelEdit();
+    onOpenChange(isOpen);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
@@ -110,24 +146,92 @@ export const CategoryManagerModal = ({
                 Belum ada kategori.
               </p>
             ) : (
-              categories.map((cat) => (
-                <div
-                  key={cat.id}
-                  className="hover:bg-muted/50 flex items-center justify-between rounded-md px-3 py-2"
-                >
-                  <span className="text-sm font-medium">{cat.name}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-destructive h-7 w-7"
-                    onClick={() => handleDelete(cat.id, cat.name)}
-                    disabled={deleteCategory.isPending}
-                    title={`Hapus "${cat.name}"`}
+              categories.map((cat) => {
+                const isEditing = editingId === cat.id;
+                const isAnotherEditing =
+                  editingId !== null && editingId !== cat.id;
+
+                return (
+                  <div
+                    key={cat.id}
+                    className={`flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors ${
+                      isEditing
+                        ? "bg-muted/60 ring-primary/30 ring-1"
+                        : "hover:bg-muted/50"
+                    }`}
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              ))
+                    {isEditing ? (
+                      /* === MODE EDIT === */
+                      <>
+                        <Input
+                          ref={editInputRef}
+                          className="h-7 flex-1 text-sm"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          onKeyDown={handleEditKeyDown}
+                          disabled={isUpdatingCategory}
+                          autoFocus
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 shrink-0 text-emerald-500 hover:text-emerald-600"
+                          onClick={handleConfirmEdit}
+                          disabled={
+                            isUpdatingCategory || !editValue.trim()
+                          }
+                          title="Simpan perubahan"
+                        >
+                          {isUpdatingCategory ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <Check className="h-3.5 w-3.5" />
+                          )}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-muted-foreground hover:text-foreground h-7 w-7 shrink-0"
+                          onClick={handleCancelEdit}
+                          disabled={isUpdatingCategory}
+                          title="Batal"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </Button>
+                      </>
+                    ) : (
+                      /* === MODE NORMAL === */
+                      <>
+                        <span className="flex-1 truncate text-sm font-medium">
+                          {cat.name}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-muted-foreground hover:text-foreground h-7 w-7 shrink-0"
+                          onClick={() => handleStartEdit(cat.id, cat.name)}
+                          disabled={isAnotherEditing}
+                          title={`Edit "${cat.name}"`}
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-muted-foreground hover:text-destructive h-7 w-7 shrink-0"
+                          onClick={() => handleDelete(cat.id, cat.name)}
+                          disabled={
+                            deleteCategory.isPending || isAnotherEditing
+                          }
+                          title={`Hapus "${cat.name}"`}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                );
+              })
             )}
           </div>
         </DialogContent>

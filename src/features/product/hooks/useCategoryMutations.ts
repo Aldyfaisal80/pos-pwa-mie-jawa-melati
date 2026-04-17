@@ -14,6 +14,14 @@ export const useCategoryMutations = () => {
     onError: (err) => toast.error(err.message),
   });
 
+  const updateCategory = api.category.update.useMutation({
+    onSuccess: () => {
+      toast.success("Kategori berhasil diperbarui!");
+      void refreshCategories();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   const deleteCategory = api.category.delete.useMutation({
     onSuccess: () => {
       toast.success("Kategori berhasil dihapus!");
@@ -22,5 +30,5 @@ export const useCategoryMutations = () => {
     onError: (err) => toast.error(err.message),
   });
 
-  return { createCategory, deleteCategory };
+  return { createCategory, updateCategory, deleteCategory };
 };

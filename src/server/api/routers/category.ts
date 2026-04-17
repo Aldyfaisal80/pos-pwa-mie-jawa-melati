@@ -18,8 +18,52 @@ export const categoryRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createCategorySchema)
     .mutation(async ({ ctx, input }) => {
+      // Pre-check duplikasi (case-insensitive) — thrown before try/catch so message surfaces correctly
+      const existing = await ctx.db.category.findFirst({
+        where: { name: { equals: input.name, mode: "insensitive" } },
+      });
+
+      if (existing) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `Kategori "${input.name}" sudah ada.`,
+        });
+      }
+
       try {
         return await ctx.db.category.create({ data: { name: input.name } });
+      } catch (error) {
+        errorFilter(error);
+      }
+    }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().int().positive(),
+        name: z.string().min(1).max(50),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.category.findFirst({
+        where: {
+          name: { equals: input.name, mode: "insensitive" },
+          NOT: { id: input.id },
+        },
+      });
+
+      if (existing) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `Kategori "${input.name}" sudah ada.`,
+        });
+      }
+
+      try {
+        return await ctx.db.category.update({
+          where: { id: input.id },
+          data: { name: input.name },
+        });
       } catch (error) {
         errorFilter(error);
       }
