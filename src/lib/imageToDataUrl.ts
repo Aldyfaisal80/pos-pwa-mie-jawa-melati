@@ -3,14 +3,17 @@ export const getBase64ImageFromUrl = async (
   targetWidth = 145,
 ): Promise<string | null> => {
   try {
-    const response = await fetch(imageUrl);
+    // Fetch with explicit CORS mode so the response is usable cross-origin
+    const response = await fetch(imageUrl, { mode: "cors" });
     const blob = await response.blob();
 
     return new Promise<string>((resolve, reject) => {
-      const img = new Image();
       const reader = new FileReader();
 
       reader.onloadend = () => {
+        const img = new Image();
+        // data: URLs are same-origin so crossOrigin must NOT be set.
+        // Setting crossOrigin on a data: URL breaks loading in some browsers.
         img.onload = () => {
           // Scale proportionally
           const scale = targetWidth / img.width;

@@ -1,7 +1,41 @@
 import React from "react";
-import { Text, Row, Line } from "react-thermal-printer";
+import { Text, Row, Line, Image } from "react-thermal-printer";
 import { formatRupiah } from "@/lib/format";
 import type { CartItem, PaymentMethod } from "../../types/cashier.types";
+
+/**
+ * Custom image reader for react-thermal-printer.
+ * The library's default reader uses `img.crossOrigin = ""` (invalid string)
+ * which taints the canvas and causes a SecurityError in getImageData().
+ * Since store.logoUrl is already a base64 data URL when passed here,
+ * we can load it without any CORS concerns.
+ */
+const base64ImageReader = async (
+  elem: React.ReactElement,
+): Promise<{ data: Uint8Array; width: number; height: number }> => {
+  const src = (elem.props as { src: string }).src;
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    // Do NOT set crossOrigin for data: URLs — it causes onerror in Chrome.
+    // src here is always a base64 data: URL (converted by getBase64ImageFromUrl),
+    // so there are no CORS concerns anyway.
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        reject(new Error("Cannot get 2D canvas context"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, img.width, img.height);
+      resolve({ data: new Uint8Array(data), width: img.width, height: img.height });
+    };
+    img.onerror = () => reject(new Error(`Failed to load image: ${src.slice(0, 40)}...`));
+    img.src = src; // base64 data: URL — no CORS, no tainted canvas
+  });
+};
 
 const stripAccents = (text: string) =>
   text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -57,7 +91,7 @@ export const ReceiptPrintTemplate = ({
   return (
     <>
       {showLogo && store.logoUrl && (
-        <Text align="center">[Logo]</Text>
+        <Image src={store.logoUrl} align="center" reader={base64ImageReader} />
       )}
       <Text align="center" bold={true}>================================</Text>
       <Text align="center" bold={true} size={{ width: 2, height: 2 }}>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { UtensilsCrossed } from "lucide-react";
 import type { RouterOutputs } from "@/trpc/react";
@@ -42,6 +43,7 @@ export const ReceiptModal = ({
 
   const {
     isConnected,
+    isReconnecting,
     isPrinting,
     connect,
     disconnect,
@@ -58,12 +60,23 @@ export const ReceiptModal = ({
     const { showLogo, showFooter } = loadPrinterPrefs();
 
     try {
-      let b64Logo = store.logoUrl;
-      if (showLogo && store.logoUrl && !store.logoUrl.startsWith("data:")) {
-         const converted = await getBase64ImageFromUrl(store.logoUrl);
-         if (converted) b64Logo = converted;
+      // Convert logo to base64 JPEG so base64ImageReader can safely draw it to canvas.
+      // If conversion fails, b64Logo stays null and the logo section is skipped.
+      let b64Logo: string | null = null;
+      if (showLogo && store.logoUrl) {
+        if (store.logoUrl.startsWith("data:")) {
+          b64Logo = store.logoUrl; // already base64, use as-is
+        } else {
+          const converted = await getBase64ImageFromUrl(store.logoUrl);
+          if (converted) {
+            b64Logo = converted;
+          } else {
+            console.warn("[Print] Logo conversion failed — printing without logo.");
+          }
+        }
       }
-      const storeWithB64 = { ...store, logoUrl: showLogo ? b64Logo : null };
+
+      const storeWithB64 = { ...store, logoUrl: b64Logo };
 
       const data = await render(
         <Printer type="epson" width={32}>
@@ -87,6 +100,30 @@ export const ReceiptModal = ({
       );
     }
   };
+
+  // Keep a fresh ref to handlePrint so the auto-print effect never captures a stale closure.
+  // Assigning directly (not inside useEffect) updates the ref on every render.
+  const handlePrintRef = useRef(handlePrint);
+  handlePrintRef.current = handlePrint;
+
+  // Auto-print: trigger automatically when modal opens if pref is enabled
+  const autoPrintTriggeredRef = useRef(false);
+  useEffect(() => {
+    if (!open) {
+      autoPrintTriggeredRef.current = false;
+      return;
+    }
+    const { autoPrint } = loadPrinterPrefs();
+    if (!autoPrint || !isConnected || autoPrintTriggeredRef.current) return;
+
+    autoPrintTriggeredRef.current = true;
+    // 1200ms: gives store tRPC query AND logo fetch enough time to complete
+    const timerId = setTimeout(() => {
+      console.log("[AutoPrint] Triggering print...");
+      void handlePrintRef.current();
+    }, 1200);
+    return () => clearTimeout(timerId);
+  }, [open, isConnected]);
 
   return (
     <Dialog open={open} onOpenChange={undefined}>
@@ -217,6 +254,7 @@ export const ReceiptModal = ({
             )}
             <PrinterActionButtons
               isConnected={isConnected}
+              isReconnecting={isReconnecting}
               isPrinting={isPrinting}
               savedPrinterName={savedPrinterName}
               onConnect={connect}

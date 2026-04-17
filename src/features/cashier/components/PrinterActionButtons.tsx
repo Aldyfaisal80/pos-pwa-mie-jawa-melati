@@ -1,8 +1,9 @@
-import { Bluetooth, BluetoothConnected, Loader2, Printer } from "lucide-react";
+import { Bluetooth, BluetoothConnected, Loader2, Printer, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PrinterActionButtonsProps {
   isConnected: boolean;
+  isReconnecting?: boolean;
   isPrinting: boolean;
   savedPrinterName: string | null;
   onConnect: () => void;
@@ -15,6 +16,7 @@ interface PrinterActionButtonsProps {
 
 export const PrinterActionButtons = ({
   isConnected,
+  isReconnecting = false,
   isPrinting,
   savedPrinterName,
   onConnect,
@@ -28,16 +30,23 @@ export const PrinterActionButtons = ({
     <div className={cn("flex flex-col gap-2", className)}>
       {/* Connect status row */}
       {!isConnected ? (
-        <button
-          type="button"
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-50 py-2.5 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40"
-          onClick={onConnect}
-        >
-          <Bluetooth className="h-4 w-4" />
-          {savedPrinterName
-            ? `Hubungkan: ${savedPrinterName}`
-            : "Hubungkan Printer Bluetooth"}
-        </button>
+        isReconnecting ? (
+          <div className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-50 py-2.5 text-xs font-semibold text-amber-600">
+            <RotateCcw className="h-4 w-4 animate-spin" />
+            Menghubungkan ulang printer...
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-50 py-2.5 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40"
+            onClick={onConnect}
+          >
+            <Bluetooth className="h-4 w-4" />
+            {savedPrinterName
+              ? `Hubungkan: ${savedPrinterName}`
+              : "Hubungkan Printer Bluetooth"}
+          </button>
+        )
       ) : (
         <div className="mb-1 flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
