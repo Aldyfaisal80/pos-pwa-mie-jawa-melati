@@ -21,6 +21,7 @@ interface CheckoutModalProps {
   onPaymentMethodChange: (m: PaymentMethod) => void;
   onPaymentAmountChange: (v: string) => void;
   onUpdateQty: (cartId: string, delta: number) => void;
+  onSetAbsoluteQty: (cartId: string, qty: number) => void;
   onOpenNote: (cartId: string) => void;
   onProcess: () => void;
   isPending: boolean;
@@ -36,6 +37,7 @@ export const CheckoutModal = ({
   onPaymentMethodChange,
   onPaymentAmountChange,
   onUpdateQty,
+  onSetAbsoluteQty,
   onOpenNote,
   onProcess,
   isPending,
@@ -54,6 +56,7 @@ export const CheckoutModal = ({
           cart={cart}
           onOpenNote={onOpenNote}
           onUpdateQty={onUpdateQty}
+          onSetAbsoluteQty={onSetAbsoluteQty}
         />
 
         <div className="text-center">

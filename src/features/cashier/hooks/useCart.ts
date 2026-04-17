@@ -53,6 +53,17 @@ export const useCart = () => {
     );
   }, []);
 
+  const setAbsoluteQty = useCallback((cartId: string, qty: number) => {
+    const safeQty = Math.max(0, Math.floor(qty));
+    setCart((prev) =>
+      prev
+        .map((item) =>
+          item.cartId === cartId ? { ...item, qty: safeQty } : item,
+        )
+        .filter((item) => item.qty > 0),
+    );
+  }, []);
+
   const updateNote = useCallback(
     (cartId: string, note: string, splitQty?: number) => {
       setCart((prev) => {
@@ -96,6 +107,7 @@ export const useCart = () => {
     hasNotes,
     addToCart,
     updateQty,
+    setAbsoluteQty,
     updateNote,
     clearCart,
   };

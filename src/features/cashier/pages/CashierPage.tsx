@@ -39,6 +39,7 @@ export const CashierPage = () => {
     hasNotes,
     addToCart,
     updateQty,
+    setAbsoluteQty,
     updateNote,
     clearCart,
   } = useCart();
@@ -160,6 +161,7 @@ export const CashierPage = () => {
               cart={cart}
               cartTotal={cartTotal}
               onUpdateQty={updateQty}
+              onSetAbsoluteQty={setAbsoluteQty}
               onOpenNote={handleOpenNote}
               onClearNote={handleClearNote}
               onClear={handleClearCart}
@@ -227,6 +229,7 @@ export const CashierPage = () => {
             onPaymentMethodChange={setPaymentMethod}
             onPaymentAmountChange={setPaymentAmount}
             onUpdateQty={updateQty}
+            onSetAbsoluteQty={setAbsoluteQty}
             onOpenNote={handleOpenNote}
             onProcess={handleProcess}
             isPending={isPending}
