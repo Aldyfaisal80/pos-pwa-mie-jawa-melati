@@ -40,6 +40,7 @@ export const TransactionDetailModal = ({
   const { data: store } = api.store.getProfile.useQuery();
   const {
     isConnected,
+    isReconnecting,
     isPrinting,
     connect,
     disconnect,
@@ -176,6 +177,7 @@ export const TransactionDetailModal = ({
           <div className="mt-2 rounded-lg bg-gray-50 p-3 dark:bg-gray-900/50">
             <PrinterActionButtons
               isConnected={isConnected}
+              isReconnecting={isReconnecting}
               isPrinting={isPrinting}
               savedPrinterName={savedPrinterName}
               onConnect={connect}
