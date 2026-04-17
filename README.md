@@ -9,10 +9,11 @@ Process orders offline, sync automatically when back online, and manage your bus
 ## 🚀 Key Features
 
 - **Authentication** — Supabase Auth with email/password login, server-side session via middleware, and client-side auth guard
-- **Offline-First Cashier** — Process orders, manage cart, and complete transactions without internet
+- **Offline-First Cashier** — Process orders, manage cart with editable quantity input, and complete transactions without internet
 - **Resilient Background Sync** — Offline transactions queue in IndexedDB; auto-sync via lifecycle-independent vanilla tRPC client
+- **Bluetooth Receipt Printing** — Web Bluetooth API integration with auto-reconnect on page load; supports 58mm thermal printers
 - **PWA Ready** — Installable on Desktop, iOS, and Android with full offline caching (Serwist)
-- **Product Management** — CRUD with categories, image upload (Supabase Storage), and soft delete
+- **Product Management** — CRUD with categories (inline edit/delete), image upload (Supabase Storage), and soft delete
 - **Transaction Reports** — Filterable, sortable, paginated reports with CSV export
 - **Dashboard Analytics** — Today's revenue, transaction count, top products chart
 - **Store Settings** — Configurable store name, address, phone, logo + Account Profile (display name & email)
@@ -221,8 +222,10 @@ npm run clean:cache && npm run dev
 
 ## 🧪 Blackbox Testing
 
-This project includes a comprehensive blackbox testing suite — **53 scenarios** covering all
-application modules, validated with Playwright E2E tests.
+This project includes a comprehensive manual blackbox testing suite — **104 test cases** covering all
+7 functional modules, validated using Equivalence Partitioning and Boundary Value Analysis methods.
+
+**Pass Rate: 100% (104/104 TC)** — See [`docs/PENGUJIAN-BLACKBOX.md`](./docs/PENGUJIAN-BLACKBOX.md) for full results.
 
 ### Running Automated Tests
 
@@ -230,19 +233,21 @@ application modules, validated with Playwright E2E tests.
 npm run test:blackbox
 ```
 
-### Test Coverage
+### Manual Blackbox Test Coverage
 
-| Module | Scenarios | Numbers |
-|---|---|---|
-| Dashboard | 4 | TC 1–4 |
-| Cashier | 12 | TC 5–16 |
-| Products | 10 | TC 17–26 |
-| Reports | 14 | TC 27–40 |
-| Store Settings | 8 | TC 41–48 |
-| Navigation | 5 | TC 49–53 |
-| **Total** | **53** | — |
+| Module | Code | Test Cases | Pass Rate |
+|--------|------|------------|-----------|
+| Authentication | F-01 | 10 | 100% |
+| Home Hub (Beranda) | F-02 | 9 | 100% |
+| Analytics Dashboard | F-03 | 7 | 100% |
+| Cashier — Cart | F-04a | 12 | 100% |
+| Cashier — Checkout & Offline | F-04b | 14 | 100% |
+| Product Management | F-05 | 17 | 100% |
+| Reports | F-06 | 11 | 100% |
+| Settings | F-07 | 24 | 100% |
+| **Total** | — | **104** | **100%** |
 
-### Test Files
+### Playwright E2E Test Files
 
 | File | Description |
 |---|---|

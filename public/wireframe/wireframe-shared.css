@@ -1,0 +1,692 @@
+/* ═══════════════════════════════════════════
+   wireframe-shared.css — CLASSIC LIGHT STYLE
+   Lo-fi wireframe: gray placeholders, white
+   frames, readable text, light canvas
+═══════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Frame Size Tokens — edit here to resize ALL wireframes at once ── */
+:root {
+  --wf-mobile-w: 200px; /* mobile frame width */
+  --wf-mobile-h: 440px; /* mobile screen min-height */
+  --wf-desktop-w: 800px; /* desktop frame width */
+  --wf-desktop-h: 400px; /* desktop content area height */
+}
+body {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #c4c4c4;
+  color: #1a1a1a;
+  min-height: 100vh;
+}
+
+/* ── Top Bar (Tool chrome — still dark) ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #222;
+  border-bottom: 1px solid #333;
+  padding: 0 20px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.topbar-logo {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+.topbar-sep {
+  color: #555;
+  font-size: 16px;
+}
+.topbar-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #ccc;
+}
+.topbar-badge {
+  background: #555;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.topbar-spacer {
+  flex: 1;
+}
+.topbar-nav {
+  display: flex;
+  gap: 4px;
+}
+.topbar-nav a {
+  color: #999;
+  font-size: 11px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 5px 9px;
+  border-radius: 4px;
+  transition: all 0.12s;
+}
+.topbar-nav a:hover {
+  background: #333;
+  color: #fff;
+}
+.topbar-nav a.active {
+  background: #fff;
+  color: #222;
+}
+
+/* ── Sub-tabs ── */
+.subtabs {
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+  padding: 0 20px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.stab {
+  padding: 9px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.12s;
+}
+.stab:hover {
+  color: #333;
+}
+.stab.active {
+  color: #111;
+  border-bottom-color: #333;
+}
+
+/* ── Canvas ── */
+.canvas {
+  padding: 40px 36px;
+  min-height: calc(100vh - 110px);
+}
+.canvas-section {
+  margin-bottom: 60px;
+  overflow-x: auto;
+}
+.canvas-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.canvas-section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+/* ── Frames Row ── */
+.frames-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.frame-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 0 0;
+  border-radius: 8px;
+  width: 100%;
+}
+.frame-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+.frame-id {
+  display: inline-block;
+  background: #888;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+
+/* ── Desktop Frame ── */
+.desktop-frame {
+  width: var(--wf-desktop-w);
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #999;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+.desktop-chrome {
+  height: 26px;
+  background: #333;
+  display: flex;
+  align-items: center;
+  padding: 0 9px;
+  gap: 5px;
+}
+.chrome-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.chrome-dot.r {
+  background: #ff5f57;
+}
+.chrome-dot.y {
+  background: #febc2e;
+}
+.chrome-dot.g {
+  background: #28c840;
+}
+.chrome-urlbar {
+  flex: 1;
+  height: 13px;
+  background: #555;
+  border-radius: 6px;
+  margin: 0 8px;
+}
+/* Announcement bar */
+.ann-bar {
+  background: #222;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #ccc;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ── Mobile Frame ── */
+.mobile-frame {
+  width: var(--wf-mobile-w);
+  background: #fff;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 5px solid #555;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+.mobile-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55px;
+  height: 14px;
+  background: #555;
+  border-radius: 0 0 12px 12px;
+  z-index: 10;
+}
+.mobile-screen {
+  border-radius: 22px;
+  overflow: hidden;
+  min-height: var(--wf-mobile-h);
+}
+
+/* ── Screen Base ── */
+.screen {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.screen-header {
+  height: 42px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+}
+
+/* ── Sidebar ── */
+.screen-sidebar {
+  width: 140px;
+  background: #f5f5f5;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.sb-header {
+  height: 42px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 7px;
+}
+.sb-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: #888;
+  flex-shrink: 0;
+}
+.sb-name {
+  flex: 1;
+  height: 8px;
+  border-radius: 2px;
+  background: #bbb;
+}
+.sb-nav {
+  padding: 6px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.sb-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 7px;
+  border-radius: 3px;
+}
+.sb-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: #bbb;
+  flex-shrink: 0;
+}
+.sb-text {
+  height: 8px;
+  border-radius: 2px;
+  flex: 1;
+  background: #ccc;
+}
+.sb-item.active {
+  background: #ddd;
+}
+.sb-item.active .sb-icon {
+  background: #555;
+}
+.sb-item.active .sb-text {
+  background: #888;
+}
+.sb-footer {
+  height: 40px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 6px;
+}
+.sb-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #bbb;
+  flex-shrink: 0;
+}
+
+/* ── Bottom Tab Bar ── */
+.bottom-tab {
+  height: 48px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  display: grid;
+  flex-shrink: 0;
+}
+.btab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.btab-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ccc;
+}
+.btab-label {
+  width: 22px;
+  height: 5px;
+  border-radius: 2px;
+  background: #ddd;
+}
+.btab-icon.on {
+  background: #333;
+}
+.btab-label.on {
+  background: #333;
+}
+
+/* ── Placeholder System (Grayscale) ── */
+/* Image placeholder */
+.ph {
+  background: #c8c8c8;
+  position: relative;
+}
+.ph::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 255, 255, 0.3) 4px,
+    rgba(255, 255, 255, 0.3) 5px
+  );
+}
+/* Text/bar placeholders by shade */
+.ph-d {
+  background: #999;
+  border-radius: 2px;
+} /* dark */
+.ph-m {
+  background: #bbb;
+  border-radius: 2px;
+} /* medium */
+.ph-l {
+  background: #d4d4d4;
+  border-radius: 2px;
+} /* light */
+.ph-xl {
+  background: #e4e4e4;
+  border-radius: 2px;
+} /* extra light */
+/* Semantic */
+.ph-btn {
+  background: #444;
+  border-radius: 3px;
+}
+.ph-btn-out {
+  background: #fff;
+  border: 1.5px solid #777;
+  border-radius: 3px;
+}
+.ph-btn-sm {
+  background: #555;
+  border-radius: 3px;
+  height: 22px;
+}
+.ph-input {
+  background: #fff;
+  border: 1.5px solid #bbb;
+  border-radius: 3px;
+  height: 26px;
+}
+.ph-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.ph-divider {
+  height: 1px;
+  background: #ddd;
+}
+.ph-badge {
+  background: #555;
+  border-radius: 10px;
+  display: inline-block;
+}
+.ph-badge-out {
+  background: #fff;
+  border: 1px solid #888;
+  border-radius: 10px;
+}
+.ph-tag {
+  background: #ddd;
+  border-radius: 2px;
+}
+
+/* ── Callout Annotations ── */
+.callout-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+.callout {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: #333;
+}
+.callout-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.callout-body {
+  flex: 1;
+}
+.callout-id {
+  font-weight: 800;
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+
+/* Callout marker in frame */
+.cn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  vertical-align: middle;
+  flex-shrink: 0;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 5;
+}
+
+.annotated-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+/* ── Modal Stage — gray canvas for modal/panel frames ── */
+.modal-stage {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 40px 60px;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 400px;
+}
+
+/* ── Export Button ── */
+.export-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.export-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.5px;
+}
+.btn-export {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+}
+.btn-export:hover {
+  background: #111;
+}
+.btn-export svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Annotation Table ── */
+.annot-table-wrap {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.annot-table-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+.academic-desc {
+  font-size: 11px;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  text-align: justify;
+}
+.annot-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.annot-table th {
+  background: #f5f5f5;
+  text-align: left;
+  padding: 7px 10px;
+  border: 1px solid #ddd;
+  font-weight: 700;
+  color: #555;
+}
+.annot-table td {
+  padding: 7px 10px;
+  border: 1px solid #e8e8e8;
+  color: #444;
+  vertical-align: top;
+}
+.annot-table tr:hover td {
+  background: #fafafa;
+}
+.cid {
+  background: #333;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+/* ── Nav Footer ── */
+.nav-footer {
+  background: #f0f0f0;
+  border-top: 1px solid #ccc;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-btn {
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  color: #555;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.12s;
+  background: #fff;
+}
+.nav-btn:hover {
+  background: #eee;
+}
+.nav-btn.primary {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+.nav-btn.primary:hover {
+  background: #111;
+}
+
+/* ── Wireframe content helpers ── */
+.wf-text {
+  font-size: 9px;
+  font-weight: 500;
+  color: #555;
+  font-style: italic;
+}
+.wf-label {
+  font-size: 8px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}

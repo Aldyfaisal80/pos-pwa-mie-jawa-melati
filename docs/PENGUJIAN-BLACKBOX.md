@@ -15,13 +15,13 @@ Pengujian mencakup **7 modul fungsional** utama sistem POS PWA:
 
 | Kode | Modul | Deskripsi |
 |------|-------|-----------|
-| F-01 | Autentikasi | Proses login, logout, dan proteksi rute |
-| F-02 | Beranda (*Home Hub*) | Dasbor akses cepat dengan statistik ringkas |
-| F-03 | Dashboard Analitik | Grafik dan statistik penjualan |
-| F-04 | Kasir (*Point of Sale*) | Transaksi, keranjang, pembayaran, dan struk |
-| F-05 | Manajemen Produk | CRUD produk dan kelola kategori |
-| F-06 | Laporan | Riwayat dan filter transaksi |
-| F-07 | Pengaturan | Info toko, printer, dan profil akun |
+| F-01 | Autentikasi | Proses login, logout, proteksi rute, dan persistensi sesi |
+| F-02 | Beranda (*Home Hub*) | Dasbor akses cepat dengan statistik ringkas dan status koneksi |
+| F-03 | Dashboard Analitik | Grafik dan statistik penjualan dengan filter periode |
+| F-04 | Kasir (*Point of Sale*) | Transaksi, keranjang, pembayaran, struk, dan dukungan offline |
+| F-05 | Manajemen Produk | CRUD produk, kelola kategori, dan toggle status |
+| F-06 | Laporan | Riwayat, filter transaksi, dan sinkronisasi offline |
+| F-07 | Pengaturan | Info toko, printer Bluetooth, dan profil akun |
 
 ### 1.3 Metodologi
 
@@ -31,8 +31,8 @@ Pengujian menggunakan metode **Black-Box Testing** dengan pendekatan:
 - **Boundary Value Analysis (BVA):** Menguji nilai-nilai batas kritis pada setiap partisi input untuk mendeteksi kesalahan pada kondisi tepi.
 
 **Kriteria Kelulusan:**
-- `✅ Pass` — Sistem menghasilkan output yang identik dengan *Expected Output*
-- `❌ Fail` — Sistem menghasilkan output yang berbeda dari *Expected Output*
+- `Berhasil` — Sistem menghasilkan output yang identik dengan *Hasil Diharapkan*
+- `Tidak Berhasil` — Sistem menghasilkan output yang berbeda dari *Hasil Diharapkan*
 
 ### 1.4 Lingkungan Pengujian
 
@@ -43,161 +43,213 @@ Pengujian menggunakan metode **Black-Box Testing** dengan pendekatan:
 | Koneksi | Online (WiFi) dan Offline (DevTools → Offline) |
 | Sistem Operasi | Windows 11 |
 | URL Aplikasi | `http://localhost:3000` (Development) |
+| Versi Aplikasi | v0.5.0 |
+| Tanggal Pengujian | 2026-04-15 |
 
 ---
 
 ## 2. Tabel Pengujian
 
-### 2.1 F-01 — Autentikasi
+### Tabel 4.1 — Tes Skenario Modul F-01: Autentikasi
 
-> **Precondition Umum:** Aplikasi berjalan, halaman `/login` terbuka.
+> *Precondition Umum: Aplikasi berjalan, halaman `/login` terbuka.*
 
-| ID | Nama Skenario | Precondition | Input | Expected Output | Hasil |
-|----|---------------|--------------|-------|-----------------|-------|
-| F-01-TC001 | Login dengan kredensial valid | Halaman `/login` terbuka, pengguna belum login | Email terdaftar + password benar, klik "Masuk" | Pengguna diarahkan ke halaman Beranda (`/`), tidak ada pesan error | ✅ Pass |
-| F-01-TC002 | Login dengan email kosong | Halaman `/login` terbuka | Field email dibiarkan kosong, password diisi, klik "Masuk" | Muncul pesan validasi "Email tidak boleh kosong", form tidak terkirim | ✅ Pass |
-| F-01-TC003 | Login dengan password kosong | Halaman `/login` terbuka | Email diisi, field password dibiarkan kosong, klik "Masuk" | Muncul pesan validasi "Password tidak boleh kosong", form tidak terkirim | ✅ Pass |
-| F-01-TC004 | Login dengan password salah | Halaman `/login` terbuka, email terdaftar | Email terdaftar + password salah, klik "Masuk" | Muncul pesan error "Invalid login credentials", pengguna tetap di halaman login | ✅ Pass |
-| F-01-TC005 | Login dengan email tidak terdaftar | Halaman `/login` terbuka | Email tidak terdaftar + password sembarang, klik "Masuk" | Muncul pesan error autentikasi, pengguna tetap di halaman login | ✅ Pass |
-| F-01-TC006 | Akses halaman terproteksi tanpa login | Pengguna belum login | Navigasi langsung ke URL `/products` atau `/pos` | Sistem otomatis mengarahkan pengguna ke halaman `/login` | ✅ Pass |
-| F-01-TC007 | Logout berhasil | Pengguna sudah login, berada di halaman mana pun | Klik tombol logout / avatar pengguna → pilih "Keluar" | Session dihapus, pengguna diarahkan ke `/login`, halaman terproteksi tidak dapat diakses | ✅ Pass |
-| F-01-TC008 | Session persisten setelah refresh | Pengguna sudah login | Tekan `F5` atau reload halaman browser | Pengguna tetap dalam keadaan terlogin, tidak diarahkan ke `/login` | ✅ Pass |
-
----
-
-### 2.2 F-02 — Beranda (*Home Hub*)
-
-> **Precondition Umum:** Pengguna sudah login, berada di halaman Beranda (`/`).
-
-| ID | Nama Skenario | Precondition | Input | Expected Output | Hasil |
-|----|---------------|--------------|-------|-----------------|-------|
-| F-02-TC001 | Sapaan dinamis sesuai waktu | Sudah login, membuka halaman Beranda | Akses halaman pukul 06.00–11.59 | Komponen *GreetingBanner* menampilkan teks "Selamat Pagi," diikuti nama toko | ✅ Pass |
-| F-02-TC002 | MiniStats menampilkan data hari ini | Sudah login, terdapat transaksi hari ini | Halaman Beranda dibuka | Kartu "Omzet Hari Ini" menampilkan nilai Rp dan "Total Transaksi" menampilkan angka sesuai data server | ✅ Pass |
-| F-02-TC003 | Badge status koneksi Online | Sudah login, koneksi internet aktif | Halaman Beranda dibuka dengan koneksi normal | Badge menampilkan indikator hijau dan teks "Online" | ✅ Pass |
-| F-02-TC004 | Navigasi QuickAction ke Kasir | Sudah login, berada di Beranda | Klik kartu "Mulai Kasir" pada *QuickActionGrid* | Pengguna diarahkan ke halaman Kasir (`/pos`) | ✅ Pass |
-| F-02-TC005 | Navigasi QuickAction ke Produk | Sudah login, berada di Beranda | Klik kartu "Kelola Produk" pada *QuickActionGrid* | Pengguna diarahkan ke halaman Manajemen Produk (`/products`) | ✅ Pass |
-| F-02-TC006 | Tab navigasi Beranda aktif (Mobile) | Sudah login, layar ≤768px | Halaman Beranda dibuka di perangkat mobile | Tab "Beranda" pada *Bottom Tab Bar* aktif (berwarna/tebal), tab lain tidak aktif | ✅ Pass |
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 1 | *User* ingin login dengan kredensial yang valid | - *User* membuka halaman `/login` <br> - *User* memasukkan email terdaftar dan password yang benar <br> - *User* klik tombol "Masuk" | - *User* berhasil masuk ke sistem <br> - Halaman diarahkan ke Beranda (`/`) <br> - Tidak ada pesan error yang ditampilkan | - *User* berhasil masuk ke sistem <br> - Halaman diarahkan ke Beranda (`/`) <br> - Tidak ada pesan error yang ditampilkan | Berhasil |
+| 2 | *User* mencoba login dengan field email yang kosong | - *User* membuka halaman `/login` <br> - *User* mengosongkan field email <br> - *User* mengisi password <br> - *User* klik "Masuk" | - Muncul pesan validasi "Email tidak boleh kosong" <br> - Form tidak terkirim ke server <br> - *User* tetap di halaman `/login` | - Muncul pesan validasi "Email tidak boleh kosong" <br> - Form tidak terkirim ke server <br> - *User* tetap di halaman `/login` | Berhasil |
+| 3 | *User* mencoba login dengan field password yang kosong | - *User* membuka halaman `/login` <br> - *User* mengisi email dengan benar <br> - *User* mengosongkan field password <br> - *User* klik "Masuk" | - Muncul pesan validasi "Password tidak boleh kosong" <br> - Form tidak terkirim <br> - *User* tetap di halaman `/login` | - Muncul pesan validasi "Password tidak boleh kosong" <br> - Form tidak terkirim <br> - *User* tetap di halaman `/login` | Berhasil |
+| 4 | *User* mencoba login dengan password yang salah | - *User* membuka halaman `/login` <br> - *User* memasukkan email terdaftar <br> - *User* memasukkan password yang salah <br> - *User* klik "Masuk" | - Muncul pesan error "Invalid login credentials" <br> - *User* tetap berada di halaman `/login` | - Muncul pesan error "Invalid login credentials" <br> - *User* tetap berada di halaman `/login` | Berhasil |
+| 5 | *User* mencoba login dengan email yang tidak terdaftar | - *User* membuka halaman `/login` <br> - *User* memasukkan email yang tidak terdaftar <br> - *User* memasukkan password sembarang <br> - *User* klik "Masuk" | - Muncul pesan error autentikasi <br> - *User* tetap di halaman `/login` | - Muncul pesan error autentikasi <br> - *User* tetap di halaman `/login` | Berhasil |
+| 6 | *User* mencoba mengakses halaman terproteksi tanpa login | - *User* belum melakukan login <br> - *User* mengetik URL `/products` atau `/pos` langsung di browser | - Sistem otomatis mengarahkan *User* ke halaman `/login` <br> - Halaman terproteksi tidak dapat diakses | - Sistem otomatis mengarahkan *User* ke halaman `/login` <br> - Halaman terproteksi tidak dapat diakses | Berhasil |
+| 7 | *User* ingin logout dari aplikasi melalui sidebar (Desktop) | - *User* sudah login dan berada di halaman mana pun <br> - *User* klik area avatar pengguna di bagian bawah *AppSidebar* <br> - *User* klik opsi "Keluar" pada *DropdownMenu* | - Sesi *User* dihapus dari sistem <br> - *User* diarahkan ke halaman `/login` <br> - Halaman terproteksi tidak dapat diakses kembali | - Sesi *User* dihapus dari sistem <br> - *User* diarahkan ke halaman `/login` <br> - Halaman terproteksi tidak dapat diakses kembali | Berhasil |
+| 8 | *User* ingin logout dari aplikasi melalui Drawer (Mobile) | - *User* sudah login, viewport ≤768px <br> - *User* tap tab "Akun" pada *Bottom Tab Bar* <br> - *User* tap tombol "Keluar" (warna merah) | - Sesi *User* dihapus <br> - *Drawer* menutup <br> - *User* diarahkan ke `/login` tanpa *redirect loop* | - Sesi *User* dihapus <br> - *Drawer* menutup <br> - *User* diarahkan ke `/login` tanpa *redirect loop* | Berhasil |
+| 9 | *User* ingin sesi tetap aktif setelah melakukan *refresh* halaman | - *User* sudah login <br> - *User* menekan tombol `F5` atau tombol *reload* browser | - *User* tetap dalam keadaan terlogin <br> - Tidak ada *redirect* ke halaman `/login` | - *User* tetap dalam keadaan terlogin <br> - Tidak ada *redirect* ke halaman `/login` | Berhasil |
+| 10 | *User* ingin diarahkan ke halaman asal setelah login | - *User* belum login, mencoba akses `/products` <br> - Sistem *redirect* ke `/login?redirect=/products` <br> - *User* memasukkan kredensial yang benar dan klik "Masuk" | - Setelah login berhasil, *User* langsung diarahkan ke `/products` <br> - *User* tidak diarahkan ke halaman Beranda (`/`) | - Setelah login berhasil, *User* langsung diarahkan ke `/products` <br> - *User* tidak diarahkan ke halaman Beranda (`/`) | Berhasil |
 
 ---
 
-### 2.3 F-03 — Dashboard Analitik
+### Tabel 4.2 — Tes Skenario Modul F-02: Beranda (*Home Hub*)
 
-> **Precondition Umum:** Pengguna sudah login, berada di halaman Dashboard (`/dashboard`).
+> *Precondition Umum: Pengguna sudah login, berada di halaman Beranda (`/`).*
 
-| ID | Nama Skenario | Precondition | Input | Expected Output | Hasil |
-|----|---------------|--------------|-------|-----------------|-------|
-| F-03-TC001 | Empat kartu statistik tampil | Sudah login, halaman Dashboard dibuka | — (halaman di-load) | Empat StatsCard ditampilkan: Omzet Hari Ini, Total Transaksi, Rata-rata/Transaksi, Menu Terlaris | ✅ Pass |
-| F-03-TC002 | Grafik pendapatan 7 hari tampil | Sudah login, halaman Dashboard dibuka | — (halaman di-load) | *RevenueChart* menampilkan 7 batang grafik dengan label hari (Sen–Min) | ✅ Pass |
-| F-03-TC003 | Filter periode grafik berfungsi | Sudah login, grafik tampil | Pilih opsi "30 Hari" dari dropdown filter grafik | Grafik memperbarui data dan menampilkan 30 titik data periode yang dipilih | ✅ Pass |
-| F-03-TC004 | Daftar produk terlaris tampil | Sudah login, terdapat transaksi | — (halaman di-load) | Komponen *TopProducts* menampilkan maksimal 5 produk terlaris dengan progress bar relatif | ✅ Pass |
-| F-03-TC005 | Item sidebar Dashboard aktif | Sudah login, berada di halaman Dashboard | — | Item navigasi "Dashboard" pada sidebar (desktop) ditampilkan dalam keadaan aktif/terpilih | ✅ Pass |
-
----
-
-### 2.4 F-04 — Kasir (*Point of Sale*)
-
-> **Precondition Umum:** Pengguna sudah login, berada di halaman Kasir (`/pos`), terdapat produk tersedia.
-
-| ID | Nama Skenario | Precondition | Input | Expected Output | Hasil |
-|----|---------------|--------------|-------|-----------------|-------|
-| F-04-TC001 | Filter produk berdasarkan kategori | Terdapat produk dari minimal 2 kategori | Klik tab kategori "Minuman" | Katalog hanya menampilkan produk dari kategori "Minuman" | ✅ Pass |
-| F-04-TC002 | Tambah produk ke keranjang | Keranjang kosong | Klik tombol "+" pada produk "Kopi Hitam" | Produk masuk keranjang dengan qty=1, total tagihan diperbarui | ✅ Pass |
-| F-04-TC003 | Tambah produk yang sudah ada di keranjang | Produk A sudah ada di keranjang (qty=1) | Klik tombol "+" pada produk A yang sama | Qty produk di keranjang bertambah menjadi 2, tidak terjadi duplikasi baris | ✅ Pass |
-| F-04-TC004 | Ubah qty item di keranjang | Produk A di keranjang (qty=2) | Ketik angka "5" pada input qty item A | Qty berubah menjadi 5, total tagihan dihitung ulang secara otomatis | ✅ Pass |
-| F-04-TC005 | Hapus satu item dari keranjang | Keranjang berisi 2 item | Klik tombol hapus (ikon tempat sampah) pada item B | Item B dihapus dari keranjang, item A tetap ada, total diperbarui | ✅ Pass |
-| F-04-TC006 | Kosongkan keranjang — muncul konfirmasi | Keranjang berisi minimal 1 item | Klik tombol "Kosongkan" | Muncul *AlertDialog* konfirmasi dengan teks "Kosongkan semua pesanan?" beserta tombol "Ya, Kosongkan" dan "Batal" | ✅ Pass |
-| F-04-TC007 | Konfirmasi kosongkan keranjang | *AlertDialog* konfirmasi terbuka | Klik tombol "Ya, Kosongkan" | Semua item dihapus dari keranjang, keranjang menjadi kosong, dialog tertutup | ✅ Pass |
-| F-04-TC008 | Batal kosongkan keranjang | *AlertDialog* konfirmasi terbuka | Klik tombol "Batal" | Dialog tertutup, keranjang tidak berubah, semua item tetap ada | ✅ Pass |
-| F-04-TC009 | Tambah catatan pada item | Produk A ada di keranjang | Klik ikon catatan pada item A → ketik "Tanpa gula" → klik "Simpan" | Catatan "Tanpa gula" tersimpan, ikon catatan pada item A berubah (teraktivasi) | ✅ Pass |
-| F-04-TC010 | Split qty dari modal catatan | Produk A di keranjang (qty=3) | Buka catatan A → ubah split qty menjadi 2 → simpan | Produk A terpecah menjadi 2 baris: 1 item dengan catatan (qty=2) dan 1 item tanpa catatan (qty=1) | ✅ Pass |
-| F-04-TC011 | Floating cart button muncul di mobile | Layar ≤768px, keranjang berisi item | Tambah produk ke keranjang | Muncul tombol melayang di atas *Bottom Tab Bar* yang menampilkan jumlah item dan total tagihan | ✅ Pass |
-| F-04-TC012 | Checkout dengan metode CASH | Keranjang berisi item, buka *CheckoutModal* | Pilih metode "Tunai", masukkan nominal bayar Rp 20.000 (total Rp 15.000) | Informasi kembalian Rp 5.000 ditampilkan, tombol "Proses" aktif | ✅ Pass |
-| F-04-TC013 | Checkout dengan metode QRIS | Keranjang berisi item, buka *CheckoutModal* | Pilih metode "QRIS" | Field nominal bayar disembunyikan/tidak relevan, tombol "Proses" langsung aktif | ✅ Pass |
-| F-04-TC014 | Validasi pembayaran kurang dari total | Keranjang berisi item, total Rp 15.000 | Pilih metode "Tunai", masukkan nominal bayar Rp 10.000 | Tombol "Proses Pembayaran" tetap nonaktif atau muncul pesan peringatan pembayaran kurang | ✅ Pass |
-| F-04-TC015 | Proses transaksi saat koneksi online | Keranjang terisi, checkout siap, koneksi online | Klik "Proses Pembayaran" | *CheckoutModal* tertutup, *ReceiptModal* terbuka menampilkan nomor invoice dan detail transaksi | ✅ Pass |
-| F-04-TC016 | Proses transaksi saat offline | Keranjang terisi, checkout siap, koneksi dimatikan via DevTools | Klik "Proses Pembayaran" | Transaksi tersimpan di *IndexedDB* lokal, *ReceiptModal* terbuka, setelah selesai muncul *toast* "Transaksi Tersimpan Lokal" | ✅ Pass |
-| F-04-TC017 | Struk menampilkan informasi lengkap | Transaksi berhasil diproses | — (*ReceiptModal* terbuka) | Struk menampilkan: nomor invoice, tanggal/waktu transaksi, daftar item beserta qty dan harga, total tagihan, dan metode pembayaran | ✅ Pass |
-| F-04-TC018 | Keranjang kosong setelah transaksi selesai | *ReceiptModal* terbuka setelah transaksi sukses | Klik tombol "Selesai" pada *ReceiptModal* | *ReceiptModal* tertutup, keranjang kembali kosong, halaman kasir siap untuk transaksi berikutnya | ✅ Pass |
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 1 | *User* ingin melihat sapaan dinamis sesuai waktu pagi | - *User* sudah login <br> - *User* membuka halaman Beranda pada pukul 06.00–11.59 | - Komponen *GreetingBanner* menampilkan teks "Selamat Pagi," diikuti nama toko | - Komponen *GreetingBanner* menampilkan teks "Selamat Pagi," diikuti nama toko | Berhasil |
+| 2 | *User* ingin melihat sapaan dinamis sesuai waktu siang | - *User* sudah login <br> - *User* membuka halaman Beranda pada pukul 12.00–14.59 | - Komponen *GreetingBanner* menampilkan teks "Selamat Siang," diikuti nama toko | - Komponen *GreetingBanner* menampilkan teks "Selamat Siang," diikuti nama toko | Berhasil |
+| 3 | *User* ingin melihat sapaan dinamis sesuai waktu sore/malam | - *User* sudah login <br> - *User* membuka halaman Beranda pada pukul 15.00–23.59 | - Komponen *GreetingBanner* menampilkan teks "Selamat Sore" atau "Selamat Malam," diikuti nama toko | - Komponen *GreetingBanner* menampilkan teks "Selamat Sore" atau "Selamat Malam," diikuti nama toko | Berhasil |
+| 4 | *User* ingin melihat statistik penjualan hari ini di Beranda | - *User* sudah login, terdapat transaksi hari ini <br> - *User* membuka halaman Beranda | - Kartu "Omzet Hari Ini" menampilkan nilai Rp sesuai data server <br> - Kartu "Total Transaksi" menampilkan angka yang sesuai | - Kartu "Omzet Hari Ini" menampilkan nilai Rp sesuai data server <br> - Kartu "Total Transaksi" menampilkan angka yang sesuai | Berhasil |
+| 5 | *User* ingin melihat status koneksi internet yang aktif | - *User* sudah login, koneksi internet aktif <br> - *User* membuka halaman Beranda | - *Badge* menampilkan indikator hijau dan teks "Online" | - *Badge* menampilkan indikator hijau dan teks "Online" | Berhasil |
+| 6 | *User* ingin melihat status koneksi saat offline | - *User* sudah login <br> - Koneksi internet dimatikan melalui DevTools (Offline) <br> - *User* membuka halaman Beranda | - *Badge* menampilkan indikator merah/abu dan teks "Offline" | - *Badge* menampilkan indikator merah/abu dan teks "Offline" | Berhasil |
+| 7 | *User* ingin navigasi cepat ke halaman Kasir | - *User* sudah login, berada di Beranda <br> - *User* klik kartu "Mulai Kasir" pada *QuickActionGrid* | - *User* diarahkan ke halaman Kasir (`/pos`) | - *User* diarahkan ke halaman Kasir (`/pos`) | Berhasil |
+| 8 | *User* ingin navigasi cepat ke halaman Manajemen Produk | - *User* sudah login, berada di Beranda <br> - *User* klik kartu "Kelola Produk" pada *QuickActionGrid* | - *User* diarahkan ke halaman Manajemen Produk (`/products`) | - *User* diarahkan ke halaman Manajemen Produk (`/products`) | Berhasil |
+| 9 | *User* ingin melihat tab navigasi Beranda aktif di perangkat mobile | - *User* sudah login, layar ≤768px <br> - *User* membuka halaman Beranda | - Tab "Beranda" pada *Bottom Tab Bar* tampil dalam keadaan aktif (berwarna/tebal) <br> - Tab lain tidak aktif | - Tab "Beranda" pada *Bottom Tab Bar* tampil dalam keadaan aktif (berwarna/tebal) <br> - Tab lain tidak aktif | Berhasil |
 
 ---
 
-### 2.5 F-05 — Manajemen Produk
+### Tabel 4.3 — Tes Skenario Modul F-03: Dashboard Analitik
 
-> **Precondition Umum:** Pengguna sudah login, membuka halaman Produk (`/products`).
+> *Precondition Umum: Pengguna sudah login, berada di halaman Dashboard (`/dashboard`).*
 
-| ID | Nama Skenario | Precondition | Input | Expected Output | Hasil |
-|----|---------------|--------------|-------|-----------------|-------|
-| F-05-TC001 | Daftar produk tampil di tabel | Terdapat minimal 1 produk di database | — (halaman di-load) | Tabel menampilkan daftar produk dengan kolom: Nama, Kategori, Harga, Status, Aksi | ✅ Pass |
-| F-05-TC002 | Pencarian produk berdasarkan nama | Terdapat produk dengan nama "Kopi Hitam" | Ketik "Kopi" pada *search bar* | Tabel hanya menampilkan produk yang mengandung kata "Kopi" secara *real-time* | ✅ Pass |
-| F-05-TC003 | Tambah produk dengan data valid | Form tambah produk (`ProductFormModal`) terbuka | Nama: "Es Lemon Tea", Kategori: "Minuman", Harga: 8000, Status: Aktif → klik "Simpan" | Modal tertutup, produk baru muncul di daftar, muncul notifikasi sukses | ✅ Pass |
-| F-05-TC004 | Tambah produk — nama kosong | Form tambah produk terbuka | Field nama dibiarkan kosong, isi field lainnya → klik "Simpan" | Muncul pesan validasi di bawah field nama ("Nama produk wajib diisi"), form tidak tersimpan | ✅ Pass |
-| F-05-TC005 | Tambah produk — harga nol (0) | Form tambah produk terbuka | Nama diisi, Harga: 0 → klik "Simpan" | Muncul pesan validasi "Harga harus lebih dari 0", form tidak tersimpan | ✅ Pass |
-| F-05-TC006 | Tambah produk — harga negatif | Form tambah produk terbuka | Nama diisi, Harga: -5000 → klik "Simpan" | Muncul pesan validasi, form tidak tersimpan | ✅ Pass |
-| F-05-TC007 | Tambah produk — kategori tidak dipilih | Form tambah produk terbuka | Nama dan Harga diisi, Kategori tidak dipilih → klik "Simpan" | Muncul pesan validasi "Kategori wajib dipilih", form tidak tersimpan | ✅ Pass |
-| F-05-TC008 | Edit produk yang sudah ada | Terdapat produk "Kopi Susu" di daftar | Klik tombol edit produk "Kopi Susu" → ubah harga menjadi 7000 → klik "Simpan" | Modal tertutup, harga produk "Kopi Susu" diperbarui menjadi Rp 7.000 di tabel | ✅ Pass |
-| F-05-TC009 | Hapus produk — muncul dialog konfirmasi | Terdapat produk di daftar | Klik tombol hapus (ikon merah) pada suatu produk | Muncul *AlertDialog* konfirmasi penghapusan produk dengan tombol "Hapus" dan "Batal" | ✅ Pass |
-| F-05-TC010 | Konfirmasi hapus produk berhasil | *AlertDialog* hapus terbuka | Klik tombol "Hapus" / "Ya, Hapus" | Produk dihapus dari daftar, muncul notifikasi sukses | ✅ Pass |
-| F-05-TC011 | Batal hapus produk | *AlertDialog* hapus terbuka | Klik tombol "Batal" | Dialog tertutup, produk tidak dihapus, daftar tidak berubah | ✅ Pass |
-| F-05-TC012 | Toggle status produk menjadi Nonaktif | Terdapat produk berstatus Aktif | Klik *toggle* status pada produk aktif | Status produk berubah menjadi "Tidak Tersedia", produk tidak tampil di katalog kasir | ✅ Pass |
-| F-05-TC013 | Tambah kategori baru | Modal Kelola Kategori terbuka | Ketik "Dessert" pada field kategori baru → klik "Tambah" | Kategori "Dessert" muncul di daftar kategori dan tersedia di *dropdown* form produk | ✅ Pass |
-| F-05-TC014 | Hapus kategori yang sudah ada | Terdapat kategori "Snack" di daftar | Klik tombol hapus pada kategori "Snack" → konfirmasi | Kategori "Snack" dihapus dari daftar | ✅ Pass |
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 1 | *User* ingin melihat empat kartu statistik di Dashboard | - *User* sudah login <br> - *User* membuka halaman Dashboard | - Empat kartu statistik ditampilkan: Omzet Hari Ini, Total Transaksi, Rata-rata/Transaksi, Menu Terlaris | - Empat kartu statistik ditampilkan: Omzet Hari Ini, Total Transaksi, Rata-rata/Transaksi, Menu Terlaris | Berhasil |
+| 2 | *User* ingin melihat grafik pendapatan 7 hari terakhir | - *User* sudah login <br> - *User* membuka halaman Dashboard | - *RevenueChart* menampilkan 7 batang grafik dengan label hari (Sen–Min) | - *RevenueChart* menampilkan 7 batang grafik dengan label hari (Sen–Min) | Berhasil |
+| 3 | *User* ingin melihat grafik pendapatan 30 hari terakhir | - *User* berada di halaman Dashboard, grafik tampil <br> - *User* klik *dropdown* filter grafik <br> - *User* pilih opsi "30 Hari" | - Grafik memperbarui data dan menampilkan 30 titik data periode yang dipilih | - Grafik memperbarui data dan menampilkan 30 titik data periode yang dipilih | Berhasil |
+| 4 | *User* ingin melihat grafik pendapatan 90 hari terakhir | - *User* berada di halaman Dashboard, grafik tampil <br> - *User* klik *dropdown* filter grafik <br> - *User* pilih opsi "90 Hari" | - Grafik memperbarui data dan menampilkan 90 titik data periode yang dipilih | - Grafik memperbarui data dan menampilkan 90 titik data periode yang dipilih | Berhasil |
+| 5 | *User* ingin melihat daftar produk terlaris | - *User* sudah login, terdapat data transaksi <br> - *User* membuka halaman Dashboard | - Komponen *TopProducts* menampilkan maksimal 5 produk terlaris dengan *progress bar* relatif | - Komponen *TopProducts* menampilkan maksimal 5 produk terlaris dengan *progress bar* relatif | Berhasil |
+| 6 | *User* ingin melihat item navigasi "Dashboard" aktif di sidebar | - *User* sudah login <br> - *User* berada di halaman Dashboard | - Item navigasi "Dashboard" pada *sidebar* ditampilkan dalam keadaan aktif/terpilih | - Item navigasi "Dashboard" pada *sidebar* ditampilkan dalam keadaan aktif/terpilih | Berhasil |
+| 7 | *User* ingin melihat statistik Dashboard diperbarui setelah transaksi baru | - *User* membuka halaman Dashboard di satu tab <br> - *User* memproses 1 transaksi baru di tab lain (`/pos`) <br> - *User* kembali ke tab Dashboard | - Kartu "Omzet Hari Ini" dan "Total Transaksi" memperbarui nilainya secara otomatis (*live invalidation*) | - Kartu "Omzet Hari Ini" dan "Total Transaksi" memperbarui nilainya secara otomatis (*live invalidation*) | Berhasil |
 
 ---
 
-### 2.6 F-06 — Laporan
+### Tabel 4.4 — Tes Skenario Modul F-04: Kasir (*Point of Sale*)
 
-> **Precondition Umum:** Pengguna sudah login, membuka halaman Laporan (`/reports`).
+> *Precondition Umum: Pengguna sudah login, berada di halaman Kasir (`/pos`), terdapat produk tersedia di minimal 2 kategori.*
 
-| ID | Nama Skenario | Precondition | Input | Expected Output | Hasil |
-|----|---------------|--------------|-------|-----------------|-------|
-| F-06-TC001 | Daftar transaksi hari ini tampil | Terdapat minimal 1 transaksi pada hari ini | — (halaman di-load) | Halaman menampilkan daftar transaksi hari ini secara *default* | ✅ Pass |
-| F-06-TC002 | Filter laporan berdasarkan tanggal kemarin | Terdapat transaksi pada hari sebelumnya | Pilih tanggal kemarin pada filter kalender | Daftar transaksi diperbarui menampilkan hanya transaksi dari tanggal yang dipilih | ✅ Pass |
-| F-06-TC003 | Filter laporan berdasarkan periode minggu | — | Pilih opsi filter "Minggu Ini" atau pilih rentang 7 hari | Daftar transaksi menampilkan semua transaksi dalam rentang 7 hari tersebut | ✅ Pass |
-| F-06-TC004 | Detail transaksi lengkap | Terdapat transaksi di daftar | Klik baris transaksi atau ikon detail | Tampil detail: daftar item pesanan (nama, qty, harga), total, metode pembayaran, tanggal/waktu | ✅ Pass |
-| F-06-TC005 | Transaksi offline tersinkronisasi muncul | Terdapat transaksi yang disimpan offline | Koneksi online kembali aktif, buka halaman Laporan | Transaksi yang sebelumnya offline (telah tersinkronisasi) muncul di daftar laporan | ✅ Pass |
-| F-06-TC006 | Laporan kosong pada hari tanpa transaksi | Tidak ada transaksi pada tanggal tertentu | Pilih tanggal di mana tidak ada transaksi | Halaman menampilkan pesan atau tampilan *empty state* "Belum ada transaksi" | ✅ Pass |
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 1 | *User* ingin memfilter produk berdasarkan kategori tertentu | - *User* berada di halaman Kasir <br> - *User* klik tab kategori "Minuman" | - Katalog hanya menampilkan produk dari kategori "Minuman" <br> - Produk kategori lain tidak tampil | - Katalog hanya menampilkan produk dari kategori "Minuman" <br> - Produk kategori lain tidak tampil | Berhasil |
+| 2 | *User* ingin menampilkan kembali semua produk setelah filter | - *User* sedang dalam kondisi filter kategori aktif <br> - *User* klik tab "Semua" | - Seluruh produk yang berstatus aktif kembali tampil di katalog | - Seluruh produk yang berstatus aktif kembali tampil di katalog | Berhasil |
+| 3 | *User* ingin menambahkan produk ke keranjang | - *User* berada di halaman Kasir, keranjang kosong <br> - *User* klik tombol "+" pada produk "Kopi Hitam" | - Produk "Kopi Hitam" masuk ke keranjang dengan qty = 1 <br> - Total tagihan diperbarui | - Produk "Kopi Hitam" masuk ke keranjang dengan qty = 1 <br> - Total tagihan diperbarui | Berhasil |
+| 4 | *User* ingin menambahkan produk yang sudah ada di keranjang | - Produk A sudah ada di keranjang (qty = 1) <br> - *User* klik tombol "+" pada produk A yang sama lagi | - Qty produk A di keranjang bertambah menjadi 2 <br> - Tidak terjadi duplikasi baris baru | - Qty produk A di keranjang bertambah menjadi 2 <br> - Tidak terjadi duplikasi baris baru | Berhasil |
+| 5 | *User* ingin mengubah jumlah (*qty*) item di keranjang | - Produk A sudah ada di keranjang (qty = 2) <br> - *User* mengetik angka "5" pada *input* qty item A | - Qty berubah menjadi 5 <br> - Total tagihan dihitung ulang secara otomatis | - Qty berubah menjadi 5 <br> - Total tagihan dihitung ulang secara otomatis | Berhasil |
+| 6 | *User* ingin menghapus satu item dari keranjang | - Keranjang berisi 2 item (A dan B) <br> - *User* klik tombol hapus (ikon tempat sampah) pada item B | - Item B dihapus dari keranjang <br> - Item A tetap ada <br> - Total tagihan diperbarui | - Item B dihapus dari keranjang <br> - Item A tetap ada <br> - Total tagihan diperbarui | Berhasil |
+| 7 | *User* ingin mengosongkan seluruh keranjang dan melihat konfirmasi | - Keranjang berisi minimal 1 item <br> - *User* klik tombol "Kosongkan" | - Muncul *AlertDialog* konfirmasi dengan teks "Kosongkan semua pesanan?" <br> - Tersedia tombol "Ya, Kosongkan" dan "Batal" | - Muncul *AlertDialog* konfirmasi dengan teks "Kosongkan semua pesanan?" <br> - Tersedia tombol "Ya, Kosongkan" dan "Batal" | Berhasil |
+| 8 | *User* ingin mengonfirmasi pengosongan keranjang sepenuhnya | - *AlertDialog* konfirmasi terbuka <br> - *User* klik tombol "Ya, Kosongkan" | - Semua item dihapus dari keranjang <br> - Keranjang menjadi kosong <br> - *Dialog* tertutup secara otomatis | - Semua item dihapus dari keranjang <br> - Keranjang menjadi kosong <br> - *Dialog* tertutup secara otomatis | Berhasil |
+| 9 | *User* ingin membatalkan pengosongan keranjang | - *AlertDialog* konfirmasi terbuka <br> - *User* klik tombol "Batal" | - *Dialog* tertutup <br> - Keranjang tidak berubah <br> - Semua item sebelumnya tetap ada | - *Dialog* tertutup <br> - Keranjang tidak berubah <br> - Semua item sebelumnya tetap ada | Berhasil |
+| 10 | *User* ingin menambahkan catatan pada item di keranjang | - Produk A ada di keranjang <br> - *User* klik ikon catatan pada item A <br> - *User* ketik "Tanpa gula" <br> - *User* klik "Simpan" | - Catatan "Tanpa gula" tersimpan pada item A <br> - Ikon catatan pada item A berubah menjadi teraktivasi | - Catatan "Tanpa gula" tersimpan pada item A <br> - Ikon catatan pada item A berubah menjadi teraktivasi | Berhasil |
+| 11 | *User* ingin memisahkan item berdasarkan catatan (*split qty*) | - Produk A ada di keranjang (qty = 3) <br> - *User* buka modal catatan item A <br> - *User* ubah *split qty* menjadi 2 <br> - *User* klik "Simpan" | - Produk A terpecah menjadi 2 baris: 1 item dengan catatan (qty = 2) dan 1 item tanpa catatan (qty = 1) | - Produk A terpecah menjadi 2 baris: 1 item dengan catatan (qty = 2) dan 1 item tanpa catatan (qty = 1) | Berhasil |
+| 12 | *User* ingin melihat tombol keranjang melayang di perangkat mobile | - Layar ≤768px <br> - *User* menambahkan produk ke keranjang | - Muncul tombol melayang (*floating button*) di atas *Bottom Tab Bar* <br> - Tombol menampilkan jumlah item dan total tagihan | - Muncul tombol melayang di atas *Bottom Tab Bar* <br> - Tombol menampilkan jumlah item dan total tagihan | Berhasil |
+| 13 | *User* ingin melakukan *checkout* dengan metode pembayaran tunai | - Keranjang berisi item, total = Rp 15.000 <br> - *User* buka *CheckoutModal* <br> - *User* pilih metode "Tunai" <br> - *User* masukkan nominal bayar Rp 20.000 | - Informasi kembalian Rp 5.000 ditampilkan <br> - Tombol "Proses Pembayaran" menjadi aktif | - Informasi kembalian Rp 5.000 ditampilkan <br> - Tombol "Proses Pembayaran" menjadi aktif | Berhasil |
+| 14 | *User* ingin melakukan *checkout* dengan metode QRIS | - Keranjang berisi item <br> - *User* buka *CheckoutModal* <br> - *User* pilih metode "QRIS" | - *Field* nominal bayar disembunyikan (tidak relevan) <br> - Tombol "Proses Pembayaran" langsung aktif | - *Field* nominal bayar disembunyikan <br> - Tombol "Proses Pembayaran" langsung aktif | Berhasil |
+| 15 | *User* memasukkan nominal bayar yang kurang dari total tagihan | - Keranjang berisi item, total = Rp 15.000 <br> - *User* buka *CheckoutModal*, pilih "Tunai" <br> - *User* masukkan nominal bayar Rp 10.000 | - Tombol "Proses Pembayaran" tetap nonaktif <br> - Muncul peringatan bahwa pembayaran kurang | - Tombol "Proses Pembayaran" tetap nonaktif <br> - Muncul peringatan bahwa pembayaran kurang | Berhasil |
+| 16 | *User* ingin memproses transaksi saat koneksi internet aktif (*online*) | - Keranjang terisi, *checkout* siap, koneksi aktif <br> - *User* klik "Proses Pembayaran" | - *CheckoutModal* tertutup <br> - *ReceiptModal* terbuka menampilkan nomor *invoice* dan detail transaksi | - *CheckoutModal* tertutup <br> - *ReceiptModal* terbuka menampilkan nomor *invoice* dan detail transaksi | Berhasil |
+| 17 | *User* ingin memproses transaksi saat tidak ada koneksi internet (*offline*) | - Keranjang terisi, koneksi dimatikan via DevTools <br> - *User* klik "Proses Pembayaran" | - Transaksi tersimpan di *IndexedDB* lokal <br> - *ReceiptModal* terbuka <br> - Muncul *toast* "Transaksi Tersimpan Lokal" | - Transaksi tersimpan di *IndexedDB* lokal <br> - *ReceiptModal* terbuka <br> - Muncul *toast* "Transaksi Tersimpan Lokal" | Berhasil |
+| 18 | *User* ingin transaksi offline tersinkronisasi otomatis saat kembali *online* | - Terdapat transaksi *offline* di *IndexedDB* <br> - *User* mengaktifkan kembali koneksi internet | - Sistem otomatis mendeteksi koneksi aktif <br> - Transaksi *pending* terkirim ke server <br> - Muncul *toast* notifikasi sinkronisasi berhasil | - Sistem otomatis mendeteksi koneksi aktif <br> - Transaksi *pending* terkirim ke server <br> - Muncul *toast* notifikasi sinkronisasi berhasil | Berhasil |
+| 19 | *User* ingin melihat struk transaksi yang berisi informasi lengkap | - Transaksi berhasil diproses, *ReceiptModal* terbuka | - Struk menampilkan: nomor *invoice*, tanggal/waktu, daftar item beserta qty dan harga, total tagihan, metode pembayaran | - Struk menampilkan: nomor *invoice*, tanggal/waktu, daftar item beserta qty dan harga, total tagihan, metode pembayaran | Berhasil |
+| 20 | *User* ingin menyelesaikan transaksi dan mengosongkan keranjang | - *ReceiptModal* terbuka setelah transaksi sukses <br> - *User* klik tombol "Selesai" pada *ReceiptModal* | - *ReceiptModal* tertutup <br> - Keranjang kembali kosong <br> - Halaman kasir siap untuk transaksi berikutnya | - *ReceiptModal* tertutup <br> - Keranjang kembali kosong <br> - Halaman kasir siap untuk transaksi berikutnya | Berhasil |
+| 21 | *User* ingin mencetak struk fisik via printer *Bluetooth* | - Printer *Bluetooth* (58mm) sudah tersambung <br> - *ReceiptModal* terbuka setelah transaksi sukses <br> - *User* klik tombol "Cetak Struk" | - Sistem mengirim data ESC/POS ke printer *Bluetooth* <br> - Struk fisik tercetak dengan informasi transaksi lengkap | - Sistem mengirim data ESC/POS ke printer *Bluetooth* <br> - Struk fisik tercetak dengan informasi transaksi lengkap | Berhasil |
+| 22 | *User* ingin memilih tag preset catatan berdasarkan kategori produk | - Produk A ada di keranjang <br> - *User* klik ikon catatan pada item A <br> - *NoteModal* terbuka, tersedia daftar tag preset berdasarkan kategori produk <br> - *User* memilih tag (mis. "Tanpa Gula") dari daftar `TagGroupList` | - Tag yang dipilih muncul di area *preview* catatan <br> - Catatan terisi otomatis sesuai kombinasi tag yang dipilih | - Tag yang dipilih muncul di area *preview* catatan <br> - Catatan terisi otomatis sesuai kombinasi tag yang dipilih | Berhasil |
+| 23 | *User* ingin membersihkan semua tag dan catatan yang telah dipilih | - *NoteModal* terbuka, tag dan/atau catatan bebas sudah terisi <br> - *User* klik tombol "Hapus Semua" / "Clear All" | - Semua tag yang dipilih menjadi tidak aktif <br> - *Field* catatan bebas dikosongkan <br> - *Preview* catatan kembali kosong | - Semua tag yang dipilih menjadi tidak aktif <br> - *Field* catatan bebas dikosongkan <br> - *Preview* catatan kembali kosong | Berhasil |
+| 24 | *User* ingin membuka *CheckoutModal* di perangkat mobile — tampil sebagai *Bottom Sheet Drawer* | - Keranjang berisi item, viewport ≤768px <br> - *User* tap tombol *Checkout* atau *floating button* keranjang | - *CheckoutModal* tampil bukan sebagai *dialog* tengah, melainkan sebagai *Drawer* dari bawah layar <br> - Dapat ditutup dengan menggesek layar ke bawah (*swipe-to-dismiss*) | - *CheckoutModal* tampil sebagai *Drawer* dari bawah layar dan dapat digesek untuk ditutup | Berhasil |
+| 25 | *User* mengetik catatan bebas hingga mendekati batas karakter — counter berubah merah | - *NoteModal* terbuka, *field* "Catatan Bebas" aktif <br> - *User* mengetik teks panjang hingga sisa karakter tersisa ≤20 dari batas maksimum | - Counter sisa karakter berubah warna menjadi merah (gaya *destructive*) sebagai peringatan visual <br> - *User* tidak dapat mengetik melebihi batas maksimum karakter yang ditentukan | - Counter sisa karakter berubah warna merah <br> - *User* tidak bisa mengetik melebihi batas | Berhasil |
+| 26 | *User* melihat produk tanpa foto — sistem menampilkan ikon kategori berwarna sebagai *fallback* | - Terdapat produk yang tidak memiliki foto yang diunggah <br> - *User* membuka halaman Kasir (`/pos`) | - Kartu produk menampilkan ikon kategori yang sesuai (mis. ikon kopi untuk kategori "Minuman") dengan latar belakang berwarna dinamis <br> - Tidak ada gambar rusak (*broken image*) yang tampil | - Kartu produk menampilkan ikon kategori berwarna yang sesuai <br> - Tidak ada gambar rusak yang tampil | Berhasil |
 
 ---
 
-### 2.7 F-07 — Pengaturan
+### Tabel 4.5 — Tes Skenario Modul F-05: Manajemen Produk
 
-> **Precondition Umum:** Pengguna sudah login, membuka halaman Pengaturan (`/settings`).
+> *Precondition Umum: Pengguna sudah login, membuka halaman Produk (`/products`).*
 
-| ID | Nama Skenario | Precondition | Input | Expected Output | Hasil |
-|----|---------------|--------------|-------|-----------------|-------|
-| F-07-TC001 | Tab Info Toko tampil dengan data tersimpan | Pengguna memiliki data toko tersimpan | Buka tab/panel "Info Toko" | Form menampilkan nilai tersimpan: nama toko, alamat, nomor telepon | ✅ Pass |
-| F-07-TC002 | Simpan info toko dengan data valid | Tab "Info Toko" aktif | Ubah nama toko menjadi nama baru, klik "Simpan" | Muncul notifikasi sukses, data toko diperbarui | ✅ Pass |
-| F-07-TC003 | Simpan info toko — nama toko kosong | Tab "Info Toko" aktif | Hapus isi field nama toko, klik "Simpan" | Muncul pesan validasi "Nama toko wajib diisi", data tidak tersimpan | ✅ Pass |
-| F-07-TC004 | Test print printer (tab Printer) | Tab "Printer" aktif, printer terkonfigurasi | Klik tombol "Test Print" | Sistem mengirim perintah cetak ke printer yang terkonfigurasi | ✅ Pass |
-| F-07-TC005 | Email akun ditampilkan sebagai read-only | Tab "Akun" aktif | — (panel di-load) | Field email ditampilkan dengan nilai email pengguna yang login, field tidak dapat diubah (read-only) | ✅ Pass |
-| F-07-TC006 | Ubah Display Name dengan nama baru valid | Tab "Akun" aktif | Hapus nama lama, isi field "Nama Tampilan" dengan "Mie Jawa Melati", klik "Simpan" | Muncul notifikasi sukses, nama tampilan diperbarui | ✅ Pass |
-| F-07-TC007 | Ubah Display Name — field kosong | Tab "Akun" aktif | Kosongkan field "Nama Tampilan", klik "Simpan" | Muncul pesan validasi, data tidak tersimpan | ✅ Pass |
-| F-07-TC008 | Ganti password — password lama benar | Tab "Akun" aktif, bagian ganti password | Isi "Password Lama" dengan password saat ini yang benar, isi "Password Baru" dan "Konfirmasi Password" yang sama, klik "Simpan" | Muncul notifikasi sukses perubahan password | ✅ Pass |
-| F-07-TC009 | Ganti password — password lama salah | Tab "Akun" aktif | Isi "Password Lama" dengan nilai yang salah, klik "Simpan" | Muncul pesan error bahwa password lama tidak cocok, password tidak diubah | ✅ Pass |
-| F-07-TC010 | Ganti password — password baru terlalu pendek | Tab "Akun" aktif | Isi "Password Baru" dengan 5 karakter, klik "Simpan" | Muncul pesan validasi "Password minimal 8 karakter", password tidak diubah | ✅ Pass |
-| F-07-TC011 | Ganti password — konfirmasi tidak cocok | Tab "Akun" aktif | Isi "Password Baru": "abcdefgh", "Konfirmasi": "12345678", klik "Simpan" | Muncul pesan validasi "Konfirmasi password tidak cocok", password tidak diubah | ✅ Pass |
-| F-07-TC012 | Navigasi antar tab Pengaturan | Halaman Pengaturan terbuka | Klik tab "Printer" (sebelumnya di "Info Toko") | Panel konten beralih menampilkan pengaturan Printer, tab "Printer" menjadi aktif | ✅ Pass |
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 1 | *User* ingin melihat daftar semua produk yang tersedia | - *User* sudah login <br> - *User* membuka halaman `/products` | - Tabel menampilkan daftar produk dengan kolom: Nama, Kategori, Harga, Status, Aksi | - Tabel menampilkan daftar produk dengan kolom: Nama, Kategori, Harga, Status, Aksi | Berhasil |
+| 2 | *User* ingin mencari produk berdasarkan nama secara *real-time* | - Terdapat produk "Kopi Hitam" di database <br> - *User* mengetik "Kopi" pada *search bar* | - Tabel hanya menampilkan produk yang mengandung kata "Kopi" <br> - Hasil diperbarui otomatis tanpa perlu menekan *Enter* | - Tabel hanya menampilkan produk yang mengandung kata "Kopi" <br> - Hasil diperbarui otomatis | Berhasil |
+| 3 | *User* ingin menambahkan produk baru dengan data yang lengkap dan valid | - *User* klik tombol "Tambah Produk" <br> - *User* mengisi: Nama "Es Lemon Tea", Kategori "Minuman", Harga 8000, Status Aktif <br> - *User* klik "Simpan" | - *Modal* tertutup <br> - Produk baru muncul di daftar tabel <br> - Muncul notifikasi sukses | - *Modal* tertutup <br> - Produk baru muncul di daftar tabel <br> - Muncul notifikasi sukses | Berhasil |
+| 4 | *User* mencoba menambahkan produk dengan nama yang kosong | - *User* membuka form tambah produk <br> - *User* mengosongkan *field* nama produk, mengisi *field* lainnya <br> - *User* klik "Simpan" | - Muncul pesan validasi "Nama produk wajib diisi" di bawah *field* nama <br> - Form tidak tersimpan | - Muncul pesan validasi "Nama produk wajib diisi" <br> - Form tidak tersimpan | Berhasil |
+| 5 | *User* mencoba menambahkan produk dengan harga bernilai nol | - *User* membuka form tambah produk <br> - *User* mengisi nama produk, memasukkan Harga: 0 <br> - *User* klik "Simpan" | - Muncul pesan validasi "Harga harus lebih dari 0" <br> - Form tidak tersimpan | - Muncul pesan validasi "Harga harus lebih dari 0" <br> - Form tidak tersimpan | Berhasil |
+| 6 | *User* mencoba menambahkan produk dengan harga yang negatif | - *User* membuka form tambah produk <br> - *User* mengisi nama produk, memasukkan Harga: -5000 <br> - *User* klik "Simpan" | - Muncul pesan validasi bahwa harga tidak valid <br> - Form tidak tersimpan | - Muncul pesan validasi bahwa harga tidak valid <br> - Form tidak tersimpan | Berhasil |
+| 7 | *User* mencoba menambahkan produk tanpa memilih kategori | - *User* membuka form tambah produk <br> - *User* mengisi nama dan harga, namun tidak memilih kategori <br> - *User* klik "Simpan" | - Muncul pesan validasi "Kategori wajib dipilih" <br> - Form tidak tersimpan | - Muncul pesan validasi "Kategori wajib dipilih" <br> - Form tidak tersimpan | Berhasil |
+| 8 | *User* ingin mengedit data produk yang sudah ada | - Terdapat produk "Kopi Susu" di daftar <br> - *User* klik tombol edit pada produk "Kopi Susu" <br> - *User* mengubah harga menjadi 7000 <br> - *User* klik "Simpan" | - *Modal* tertutup <br> - Harga produk "Kopi Susu" diperbarui menjadi Rp 7.000 di tabel | - *Modal* tertutup <br> - Harga produk "Kopi Susu" diperbarui menjadi Rp 7.000 di tabel | Berhasil |
+| 9 | *User* ingin menghapus produk dan melihat konfirmasi terlebih dahulu | - Terdapat produk di daftar <br> - *User* klik tombol hapus (ikon merah) pada suatu produk | - Muncul *AlertDialog* konfirmasi penghapusan produk <br> - Tersedia tombol "Hapus" dan "Batal" | - Muncul *AlertDialog* konfirmasi penghapusan produk <br> - Tersedia tombol "Hapus" dan "Batal" | Berhasil |
+| 10 | *User* ingin mengonfirmasi penghapusan produk | - *AlertDialog* hapus produk terbuka <br> - *User* klik tombol "Hapus" / "Ya, Hapus" | - Produk dihapus dari daftar <br> - *AlertDialog* menutup <br> - Muncul notifikasi sukses | - Produk dihapus dari daftar <br> - *AlertDialog* menutup <br> - Muncul notifikasi sukses | Berhasil |
+| 11 | *User* ingin membatalkan penghapusan produk | - *AlertDialog* hapus produk terbuka <br> - *User* klik tombol "Batal" | - *Dialog* tertutup <br> - Produk tidak dihapus <br> - Daftar produk tidak berubah | - *Dialog* tertutup <br> - Produk tidak dihapus <br> - Daftar produk tidak berubah | Berhasil |
+| 12 | *User* ingin menonaktifkan produk yang sedang aktif | - Terdapat produk berstatus "Aktif" di daftar <br> - *User* klik *toggle* status pada produk aktif tersebut | - Status produk berubah menjadi "Tidak Tersedia" <br> - Produk tidak lagi tampil di katalog halaman Kasir | - Status produk berubah menjadi "Tidak Tersedia" <br> - Produk tidak lagi tampil di katalog halaman Kasir | Berhasil |
+| 13 | *User* ingin mengaktifkan kembali produk yang nonaktif | - Terdapat produk berstatus "Tidak Tersedia" di daftar <br> - *User* klik *toggle* status pada produk nonaktif tersebut | - Status produk berubah kembali menjadi "Aktif" <br> - Produk kembali tampil di katalog halaman Kasir | - Status produk berubah kembali menjadi "Aktif" <br> - Produk kembali tampil di katalog halaman Kasir | Berhasil |
+| 14 | *User* ingin menambahkan kategori produk baru | - *User* membuka modal Kelola Kategori <br> - *User* mengetik "Dessert" pada *field* kategori baru <br> - *User* klik "Tambah" | - Kategori "Dessert" muncul di daftar kategori <br> - Kategori tersedia di *dropdown* form produk | - Kategori "Dessert" muncul di daftar kategori <br> - Kategori tersedia di *dropdown* form produk | Berhasil |
+| 15 | *User* ingin mengubah nama kategori yang sudah ada | - *User* membuka modal Kelola Kategori <br> - *User* klik ikon *Pencil* pada kategori "Dessert" <br> - *User* mengubah nama menjadi "Snack Manis" <br> - *User* klik tombol centang atau tekan *Enter* | - *Toast* sukses "Kategori berhasil diperbarui!" muncul <br> - Nama kategori berubah menjadi "Snack Manis" di daftar <br> - Nama baru tersedia di *dropdown* form produk | - *Toast* sukses muncul <br> - Nama kategori berubah menjadi "Snack Manis" di daftar <br> - Nama baru tersedia di *dropdown* form produk | Berhasil |
+| 16 | *User* ingin menghapus kategori dan melihat konfirmasi terlebih dahulu | - Terdapat kategori "Snack" di daftar <br> - *User* klik tombol hapus pada kategori "Snack" | - Muncul *AlertDialog* konfirmasi penghapusan kategori | - Muncul *AlertDialog* konfirmasi penghapusan kategori | Berhasil |
+| 17 | *User* ingin mengonfirmasi penghapusan kategori | - *AlertDialog* hapus kategori terbuka <br> - *User* klik "Ya, Hapus" | - *Dialog* menutup (baik sukses maupun *error*) <br> - Muncul *toast* informasi hasil operasi <br> - Kategori "Snack" dihapus dari daftar | - *Dialog* menutup <br> - Muncul *toast* informasi hasil operasi <br> - Kategori "Snack" dihapus dari daftar | Berhasil |
+
+
+---
+
+### Tabel 4.6 — Tes Skenario Modul F-06: Laporan
+
+> *Precondition Umum: Pengguna sudah login, membuka halaman Laporan (`/reports`).*
+
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 1 | *User* ingin melihat daftar transaksi hari ini secara *default* | - Terdapat minimal 1 transaksi pada hari ini <br> - *User* membuka halaman `/reports` | - Halaman menampilkan daftar transaksi hari ini secara *default* | - Halaman menampilkan daftar transaksi hari ini secara *default* | Berhasil |
+| 2 | *User* ingin memfilter laporan berdasarkan tanggal kemarin | - Terdapat transaksi pada hari sebelumnya <br> - *User* pilih tanggal kemarin pada *filter* kalender | - Daftar transaksi diperbarui <br> - Hanya transaksi dari tanggal yang dipilih yang ditampilkan | - Daftar transaksi diperbarui <br> - Hanya transaksi dari tanggal yang dipilih yang ditampilkan | Berhasil |
+| 3 | *User* ingin memfilter laporan berdasarkan periode minggu ini | - *User* berada di halaman Laporan <br> - *User* pilih opsi filter "Minggu Ini" atau rentang 7 hari | - Daftar transaksi menampilkan semua transaksi dalam rentang 7 hari tersebut | - Daftar transaksi menampilkan semua transaksi dalam rentang 7 hari tersebut | Berhasil |
+| 4 | *User* ingin melihat detail lengkap sebuah transaksi | - Terdapat transaksi di daftar <br> - *User* klik pada baris transaksi atau ikon detail | - *Modal* detail terbuka menampilkan: daftar item pesanan (nama, qty, harga), total tagihan, metode pembayaran, tanggal/waktu | - *Modal* detail terbuka menampilkan semua informasi yang diperlukan | Berhasil |
+| 5 | *User* ingin mencetak ulang struk dari riwayat transaksi | - Terdapat transaksi di daftar, printer *Bluetooth* tersambung <br> - *User* buka detail transaksi <br> - *User* klik tombol "Cetak Ulang" | - Sistem mengirim data ESC/POS ke printer *Bluetooth* <br> - Struk fisik tercetak sesuai data transaksi historis | - Sistem mengirim data ESC/POS ke printer *Bluetooth* <br> - Struk fisik tercetak sesuai data transaksi historis | Berhasil |
+| 6 | *User* ingin melihat transaksi *offline* yang sudah tersinkronisasi | - Terdapat transaksi yang sebelumnya disimpan secara *offline* <br> - Koneksi internet kembali aktif dan sinkronisasi telah berhasil <br> - *User* membuka halaman Laporan | - Transaksi yang sebelumnya *offline* (telah tersinkronisasi) muncul di daftar laporan | - Transaksi yang sebelumnya *offline* muncul di daftar laporan | Berhasil |
+| 7 | *User* ingin melihat tampilan ketika tidak ada transaksi pada hari yang dipilih | - Tidak ada transaksi pada tanggal tertentu <br> - *User* pilih tanggal tersebut di *filter* kalender | - Halaman menampilkan pesan atau tampilan *empty state* "Belum ada transaksi" | - Halaman menampilkan pesan atau tampilan *empty state* "Belum ada transaksi" | Berhasil |
+| 8 | *User* ingin menghapus transaksi dari daftar laporan dan melihat dialog konfirmasi terlebih dahulu | - Terdapat minimal 1 transaksi di daftar <br> - *User* klik tombol hapus (ikon merah) pada baris transaksi yang dipilih | - Muncul *AlertDialog* konfirmasi yang menyebutkan nomor *invoice* transaksi secara spesifik <br> - Tersedia tombol "Ya, Hapus" dan "Batal" | - Muncul *AlertDialog* konfirmasi yang menyebutkan nomor *invoice* transaksi <br> - Tersedia tombol "Ya, Hapus" dan "Batal" | Berhasil |
+| 9 | *User* ingin mengonfirmasi penghapusan transaksi dari laporan | - *AlertDialog* hapus transaksi terbuka <br> - *User* klik tombol "Ya, Hapus" | - Transaksi dihapus (*soft delete*) dari daftar <br> - *AlertDialog* menutup secara otomatis <br> - Muncul notifikasi sukses | - Transaksi dihapus dari daftar <br> - *AlertDialog* menutup <br> - Muncul notifikasi sukses | Berhasil |
+| 10 | *User* ingin membatalkan penghapusan transaksi | - *AlertDialog* hapus transaksi terbuka <br> - *User* klik tombol "Batal" | - *AlertDialog* menutup <br> - Transaksi tidak dihapus <br> - Daftar transaksi tidak berubah | - *AlertDialog* menutup <br> - Transaksi tidak dihapus <br> - Daftar transaksi tidak berubah | Berhasil |
+| 11 | *User* ingin mengurutkan daftar laporan berdasarkan kolom "Total" secara *descending* | - Terdapat minimal 2 transaksi dengan total berbeda di daftar <br> - *User* klik *header* kolom "Total" pada tabel laporan | - Kolom "Total" menampilkan ikon panah ke bawah (↓) yang menandakan urutan dari terbesar ke terkecil <br> - Transaksi diurutkan dari nilai total tertinggi ke terendah <br> - Klik kedua mengubah arah pengurutan ke *ascending* (↑) | - Kolom "Total" menampilkan ikon panah yang sesuai <br> - Transaksi diurutkan dengan benar dari total tertinggi ke terendah | Berhasil |
+
+---
+
+### Tabel 4.7 — Tes Skenario Modul F-07: Pengaturan
+
+> *Precondition Umum: Pengguna sudah login, membuka halaman Pengaturan (`/settings`).*
+
+#### a. Sub-Modul: Info Toko & Printer
+
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 1 | *User* ingin melihat panel Info Toko dengan data yang tersimpan | - *User* memiliki data toko tersimpan <br> - *User* membuka halaman `/settings` | - Form menampilkan nilai tersimpan: nama toko, alamat, nomor telepon | - Form menampilkan nilai tersimpan: nama toko, alamat, nomor telepon | Berhasil |
+| 2 | *User* ingin menyimpan perubahan data info toko dengan data yang valid | - Panel "Info Toko" aktif <br> - *User* mengubah nama toko menjadi nama baru <br> - *User* klik "Simpan" | - Muncul notifikasi sukses <br> - Data toko berhasil diperbarui | - Muncul notifikasi sukses <br> - Data toko berhasil diperbarui | Berhasil |
+| 3 | *User* mencoba menyimpan info toko dengan nama toko yang dikosongkan | - Panel "Info Toko" aktif <br> - *User* menghapus isi *field* nama toko <br> - *User* klik "Simpan" | - Muncul pesan validasi "Nama toko wajib diisi" <br> - Data tidak tersimpan | - Muncul pesan validasi "Nama toko wajib diisi" <br> - Data tidak tersimpan | Berhasil |
+| 4 | *User* ingin berpindah antar tab navigasi Pengaturan | - Halaman Pengaturan terbuka, panel "Info Toko" aktif <br> - *User* klik item "Printer" di navigasi sidebar Pengaturan | - Panel konten beralih menampilkan pengaturan Printer <br> - Item "Printer" menjadi aktif di navigasi | - Panel konten beralih menampilkan pengaturan Printer <br> - Item "Printer" menjadi aktif di navigasi | Berhasil |
+| 5 | *User* ingin menghubungkan printer *Bluetooth* ke aplikasi | - Tab "Printer" aktif, perangkat printer *Bluetooth* 58mm tersedia <br> - *User* klik tombol "Hubungkan Printer" | - *Browser* menampilkan dialog pemilihan perangkat *Bluetooth* <br> - Setelah perangkat dipilih, status berubah menjadi "Terhubung" beserta nama printer | - *Browser* menampilkan dialog pemilihan perangkat *Bluetooth* <br> - Status berubah menjadi "Terhubung" | Berhasil |
+| 6 | *User* ingin melakukan *test print* ke printer yang sudah terhubung | - Tab "Printer" aktif, printer *Bluetooth* sudah terhubung <br> - *User* klik tombol "Test Print" | - Sistem mengirim perintah cetak ke printer <br> - Struk uji tercetak atau muncul pesan konfirmasi berhasil | - Sistem mengirim perintah cetak ke printer <br> - Struk uji tercetak atau muncul pesan konfirmasi berhasil | Berhasil |
+| 7 | *User* ingin memastikan tab "Akun" tidak ada di sidebar halaman Pengaturan (Desktop) | - *User* sudah login, viewport ≥1024px <br> - *User* membuka halaman `/settings` | - Sidebar navigasi halaman Pengaturan **hanya** menampilkan "Info Toko" dan "Printer" <br> - Tab "Akun" **tidak ada** di sidebar Pengaturan | - Sidebar navigasi halaman Pengaturan hanya menampilkan "Info Toko" dan "Printer" <br> - Tab "Akun" tidak ada | Berhasil |
+
+#### b. Sub-Modul: Profil Akun via *Dropdown* (Desktop)
+
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 8 | *User* ingin membuka menu profil dari *AppSidebar* (Desktop) | - *User* sudah login, viewport ≥1024px <br> - *User* klik area avatar/nama pengguna di bagian bawah *AppSidebar* utama | - Muncul *DropdownMenu Shadcn* tepat di atas area klik <br> - Menampilkan opsi "Edit Profil" dan "Keluar" | - Muncul *DropdownMenu Shadcn* <br> - Menampilkan opsi "Edit Profil" dan "Keluar" | Berhasil |
+| 9 | *User* ingin membuka form edit profil dari *DropdownMenu* (Desktop) | - *DropdownMenu* AppSidebar terbuka <br> - *User* klik opsi "Edit Profil" | - Muncul modal *Shadcn Dialog* yang memuat form profil akun lengkap <br> - *Layout* halaman di belakang *dialog* tidak rusak | - Muncul modal *Shadcn Dialog* yang memuat form profil akun lengkap <br> - *Layout* tidak rusak | Berhasil |
+| 10 | *User* ingin melihat email akun yang ditampilkan secara *read-only* | - *Dialog* Profil Akun terbuka <br> - *User* melihat *field* email | - *Field* email menampilkan nilai email akun yang sedang login <br> - *Field* tidak dapat diubah (*disabled*) | - *Field* email menampilkan nilai yang benar dan bersifat *read-only* | Berhasil |
+| 11 | *User* ingin mengubah nama tampilan (*display name*) dengan nama baru yang valid | - *Dialog* Profil Akun terbuka <br> - *User* menghapus nama lama, mengisi "Mie Jawa Melati" <br> - *User* klik "Simpan Nama" | - Muncul notifikasi sukses <br> - Nama tampilan berhasil diperbarui | - Muncul notifikasi sukses <br> - Nama tampilan berhasil diperbarui | Berhasil |
+| 12 | *User* mencoba menyimpan nama tampilan yang dikosongkan | - *Dialog* Profil Akun terbuka <br> - *User* mengosongkan *field* "Nama Tampilan" <br> - *User* klik "Simpan Nama" | - Muncul pesan validasi bahwa nama tidak boleh kosong <br> - Data tidak tersimpan | - Muncul pesan validasi <br> - Data tidak tersimpan | Berhasil |
+| 13 | *User* ingin mengganti *password* dengan kredensial yang benar | - *Dialog* Profil Akun terbuka <br> - *User* mengisi "Password Saat Ini" dengan *password* yang benar <br> - *User* mengisi "Password Baru" dan "Konfirmasi Password Baru" yang sama (min. 8 karakter) <br> - *User* klik "Ubah Password" | - Muncul notifikasi sukses <br> - Form *password* di-*reset* secara otomatis | - Muncul notifikasi sukses <br> - Form *password* di-*reset* | Berhasil |
+| 14 | *User* mencoba mengganti *password* dengan *password* baru yang terlalu pendek | - *Dialog* Profil Akun terbuka <br> - *User* mengisi "Password Baru" dengan hanya 5 karakter <br> - *User* klik "Ubah Password" | - Muncul pesan validasi "Password minimal 8 karakter" <br> - *Password* tidak diubah | - Muncul pesan validasi "Password minimal 8 karakter" <br> - *Password* tidak diubah | Berhasil |
+| 15 | *User* mencoba mengganti *password* dengan konfirmasi yang tidak cocok | - *Dialog* Profil Akun terbuka <br> - *User* mengisi "Password Baru": "abcdefgh" <br> - *User* mengisi "Konfirmasi": "12345678" <br> - *User* klik "Ubah Password" | - Muncul pesan validasi "Konfirmasi password tidak cocok" <br> - *Password* tidak diubah | - Muncul pesan validasi "Konfirmasi password tidak cocok" <br> - *Password* tidak diubah | Berhasil |
+| 16 | *User* ingin melihat/menyembunyikan isi *field* password | - *Dialog* Profil Akun terbuka <br> - *User* klik ikon mata (👁) pada *field* "Password Saat Ini" | - Teks *password* berubah dari tersamar (`••••`) menjadi terbaca (*plaintext*) <br> - Klik kembali untuk menyembunyikan | - Teks *password* berubah dari tersamar menjadi terbaca <br> - Klik kembali menyembunyikan | Berhasil |
+
+#### c. Sub-Modul: Profil Akun via *Drawer* (Mobile)
+
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 17 | *User* ingin melihat tab "Akun" pada navigasi bawah di perangkat mobile | - *User* sudah login, viewport ≤768px <br> - *User* membuka aplikasi | - *Bottom Tab Bar* menampilkan 5 item navigasi <br> - Item ke-5 bertulisan "Akun" dengan ikon *user* | - *Bottom Tab Bar* menampilkan 5 item navigasi <br> - Item ke-5 bertulisan "Akun" | Berhasil |
+| 18 | *User* ingin membuka menu akun dengan menekan tab "Akun" di mobile | - *User* sudah login, viewport ≤768px <br> - *User* tap tab "Akun" pada *Bottom Tab Bar* | - Muncul *Shadcn Drawer* dari bawah layar dengan *drag handle* <br> - *Drawer* menampilkan: inisial avatar, email, role "Administrator", serta tiga item: "Edit Profil", "Pengaturan Toko", dan "Keluar" | - Muncul *Shadcn Drawer* dari bawah layar <br> - Semua elemen yang diharapkan tampil | Berhasil |
+| 19 | *User* ingin membuka form edit profil di dalam *Drawer* tanpa berpindah halaman | - *Drawer* Akun aktif di mobile <br> - *User* tap tombol "Edit Profil" di dalam *Drawer* | - *Drawer* **tidak menutup** dan **tidak berpindah halaman** <br> - Konten *Drawer* langsung berganti menampilkan `AccountProfileForm` dengan *field* email, nama tampilan, dan ganti *password* | - *Drawer* tidak menutup dan tidak berpindah halaman <br> - Konten berganti ke form profil akun | Berhasil |
+| 20 | *User* ingin kembali ke menu utama *Drawer* setelah membuka form profil | - Form profil akun tampil di dalam *Drawer* <br> - *User* tap tombol "← Kembali" | - Konten *Drawer* kembali ke tampilan menu utama (Edit Profil, Pengaturan Toko, Keluar) | - Konten *Drawer* kembali ke tampilan menu awal | Berhasil |
+| 21 | *User* ingin berpindah ke halaman Pengaturan Toko dari *Drawer* | - *Drawer* Akun aktif di mobile <br> - *User* tap item "Pengaturan Toko" | - *Drawer* menutup <br> - *User* dinavigasikan ke halaman `/settings` | - *Drawer* menutup <br> - *User* dinavigasikan ke halaman `/settings` | Berhasil |
+| 22 | *User* ingin keluar dari aplikasi melalui *Drawer* di mobile | - *Drawer* Akun aktif di mobile <br> - *User* tap tombol "Keluar" (warna merah) | - Sesi *User* dihapus (`signOut()`) <br> - *User* di-*redirect* ke halaman `/login` <br> - Tidak ada *redirect loop* atau *reload* berulang | - Sesi *User* dihapus <br> - *User* di-*redirect* ke `/login` tanpa loop | Berhasil |
+| 23 | *User* ingin mengubah nama tampilan dari form profil di *Drawer* | - Form profil terbuka di dalam *Drawer* <br> - *User* mengubah *field* "Nama Tampilan" <br> - *User* klik "Simpan Nama" | - Muncul notifikasi sukses <br> - Nama tampilan berhasil diperbarui | - Muncul notifikasi sukses <br> - Nama tampilan berhasil diperbarui | Berhasil |
+| 24 | *User* ingin menggunakan fitur tampilkan/sembunyikan *password* di form profil (Mobile) | - Form profil terbuka di dalam *Drawer* <br> - *User* klik ikon mata (👁) pada *field* *password* | - Tipe *input* berubah dari `password` (tersamar) menjadi `text` (terbaca) <br> - Klik kembali menyembunyikan isi *field* | - Tipe *input* berubah sesuai ekspektasi <br> - Klik kembali menyembunyikan isi *field* | Berhasil |
 
 ---
 
 ## 3. Rekapitulasi Hasil Pengujian
 
-| Kode | Modul | Total TC | Pass | Fail | % Keberhasilan |
-|------|-------|----------|------|------|----------------|
-| F-01 | Autentikasi | 8 | 8 | 0 | 100% |
-| F-02 | Beranda | 6 | 6 | 0 | 100% |
-| F-03 | Dashboard Analitik | 5 | 5 | 0 | 100% |
-| F-04 | Kasir (*Point of Sale*) | 18 | 18 | 0 | 100% |
-| F-05 | Manajemen Produk | 14 | 14 | 0 | 100% |
-| F-06 | Laporan | 6 | 6 | 0 | 100% |
-| F-07 | Pengaturan | 12 | 12 | 0 | 100% |
-| | **TOTAL** | **69** | **69** | **0** | **100%** |
+| Kode | Modul | Total TC | Berhasil | Tidak Berhasil | % Keberhasilan |
+|------|-------|----------|----------|----------------|----------------|
+| F-01 | Autentikasi | 10 | 10 | 0 | 100% |
+| F-02 | Beranda | 9 | 9 | 0 | 100% |
+| F-03 | Dashboard Analitik | 7 | 7 | 0 | 100% |
+| F-04 | Kasir (*Point of Sale*) | 26 | 26 | 0 | 100% |
+| F-05 | Manajemen Produk | 16 | 16 | 0 | 100% |
+| F-06 | Laporan | 11 | 11 | 0 | 100% |
+| F-07 | Pengaturan | 24 | 24 | 0 | 100% |
+| | **TOTAL** | **103** | **103** | **0** | **100%** |
 
 ### Kesimpulan
 
-Berdasarkan hasil pengujian *black-box* yang telah dilakukan terhadap **69 kasus uji** yang mencakup 7 modul fungsional utama aplikasi POS PWA, seluruh kasus uji menghasilkan output yang sesuai dengan *expected output* yang telah ditetapkan. Tingkat keberhasilan pengujian mencapai **100%**, yang menandakan bahwa sistem telah memenuhi seluruh spesifikasi kebutuhan fungsional yang dirancang.
+Berdasarkan hasil pengujian *black-box* yang telah dilakukan terhadap **103 kasus uji** yang mencakup 7 modul fungsional utama aplikasi POS PWA (versi 0.5.0), seluruh kasus uji menghasilkan hasil yang sesuai dengan *Hasil Diharapkan* yang telah ditetapkan. Tingkat keberhasilan pengujian mencapai **100%**, yang menandakan bahwa sistem telah memenuhi seluruh spesifikasi kebutuhan fungsional yang dirancang.
 
-Pengujian mencakup skenario positif (input valid) maupun skenario negatif (validasi input tidak valid, kondisi *offline*, dan kondisi batas), sehingga memberikan kepercayaan yang memadai bahwa sistem siap untuk digunakan pada lingkungan nyata.
+Pengujian mencakup skenario positif (input valid dan alur normal) maupun skenario negatif (validasi input tidak valid, kondisi *offline*, pembayaran kurang, dan nilai batas), serta diuji pada dua *viewport* berbeda yaitu Desktop (≥1024px) dan Mobile (≤768px). Dengan demikian, dapat disimpulkan bahwa sistem POS PWA berfungsi dengan baik sesuai harapan dan layak untuk digunakan.
+
+$$Akurasi = \frac{Pengujian\ Berhasil}{Total\ Pengujian} \times 100\% = \frac{103}{103} \times 100\% = 100\%$$
 
 ---
 
