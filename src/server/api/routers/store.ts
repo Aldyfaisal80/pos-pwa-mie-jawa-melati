@@ -1,9 +1,9 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { errorFilter } from "@/server/filters/error.filter";
 import { updateStoreProfileSchema } from "@/server/validations";
 
 export const storeRouter = createTRPCRouter({
-  getProfile: publicProcedure.query(async ({ ctx }) => {
+  getProfile: protectedProcedure.query(async ({ ctx }) => {
     try {
       const profile = await ctx.db.storeConfig.findFirst({
         where: { id: 1 },
@@ -22,7 +22,7 @@ export const storeRouter = createTRPCRouter({
     }
   }),
 
-  updateProfile: publicProcedure
+  updateProfile: protectedProcedure
     .input(updateStoreProfileSchema)
     .mutation(async ({ ctx, input }) => {
       try {

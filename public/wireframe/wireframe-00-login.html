@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WF-00 Login — Wireframe POS PWA</title>
+<link rel="stylesheet" href="wireframe-shared.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="wireframe-shared.js"></script>
+<style>
+/* Login page: no sidebar, centered card on dark canvas */
+.login-canvas {
+  background: #e0e0e0;
+  border: 1px solid #ccc;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100%;
+  padding: 24px;
+}
+.login-card {
+  background: #fff;
+  border: 1.5px solid #bbb;
+  border-radius: 8px;
+  padding: 28px 24px 22px;
+  width: 240px;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+}
+.login-logo {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: #888;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+.login-logo-inner {
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  background: #fff;
+  opacity: .5;
+}
+.login-app-name {
+  font-size: 13px; font-weight: 800;
+  color: #111; margin-bottom: 3px; text-align: center;
+}
+.login-subtitle {
+  font-size: 9px; color: #888;
+  margin-bottom: 20px; text-align: center;
+}
+.login-form { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.login-field { display: flex; flex-direction: column; gap: 4px; }
+.login-label { font-size: 8px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: .3px; }
+.login-input {
+  height: 28px; background: #fff; border: 1.5px solid #bbb;
+  border-radius: 4px; width: 100%;
+  display: flex; align-items: center; padding: 0 8px;
+  font-size: 9px; color: #666;
+}
+.login-input.password { letter-spacing: 2px; color: #333; font-size: 11px; }
+.login-btn {
+  margin-top: 4px; height: 32px; background: #444;
+  border-radius: 5px; width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+}
+.login-btn-icon { width: 12px; height: 12px; border-radius: 2px; background: rgba(255,255,255,.4); }
+.login-btn-text { font-size: 10px; font-weight: 800; color: #fff; }
+.login-footer {
+  width: 100%; text-align: center;
+  font-size: 8px; color: #aaa;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #eee;
+}
+/* Error state */
+.login-error {
+  background: #fef2f2; border: 1px solid #fecaca;
+  border-radius: 4px; padding: 6px 8px;
+  font-size: 8px; color: #991b1b;
+  display: flex; align-items: center; gap: 5px;
+}
+.login-error-dot { width: 8px; height: 8px; border-radius: 50%; background: #f87171; flex-shrink: 0; }
+.login-input.error-state { border-color: #fca5a5; background: #fff5f5; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">POS PWA</span><span class="topbar-sep">/</span>
+  <span class="topbar-title">WF-00 — Halaman Login</span>
+  <span class="topbar-badge">0 / 5</span>
+  <div class="topbar-spacer"></div>
+  <nav class="topbar-nav">
+    <a href="wireframe-index.html">← Indeks</a>
+    <a href="wireframe-00-login.html" class="active">Login</a>
+    <a href="wireframe-01-dashboard.html">Dashboard →</a>
+  </nav>
+</div>
+
+<div class="subtabs">
+  <div class="stab active" onclick="show('desktop',this)">🖥 Desktop</div>
+  <div class="stab" onclick="show('mobile',this)">📱 Mobile</div>
+  <div class="stab" onclick="show('state-error',this)">⚠️ State Error</div>
+</div>
+
+<div class="canvas">
+
+<!-- DESKTOP -->
+<div id="view-desktop">
+  <div class="canvas-section">
+    <div class="canvas-section-label">Tampilan Desktop — WF-00-D</div>
+    <div class="export-bar"><span class="export-label">DESKTOP FRAME</span>
+      <button class="btn-export" onclick="exportSection('wf00d','WF-00-Login-Desktop')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG</button>
+    </div>
+    <div class="annotated-row">
+      <div id="wf00d" class="frame-unit">
+        <div class="frame-id">WF-00-D</div>
+        <div class="desktop-frame">
+          <div class="desktop-chrome"><div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div><div class="chrome-urlbar"></div></div>
+          <!-- Dark login canvas — no sidebar, full centered -->
+          <div class="login-canvas" style="min-height:var(--wf-desktop-h);">
+            <div>
+              <!-- Login Card -->
+              <div class="login-card">
+                <!-- Logo circle placeholder -->
+                <div class="login-logo">
+                  <div class="login-logo-inner"></div>
+                </div>
+                <!-- App name -->
+                <div class="login-app-name">Mie Jawa POS</div>
+                <div class="login-subtitle">Masuk untuk melanjutkan</div>
+                <!-- Form -->
+                <div class="login-form">
+                  <div class="login-field">
+                    <div class="login-label">Email</div>
+                    <div class="login-input">admin@toko.com</div>
+                  </div>
+                  <div class="login-field">
+                    <div class="login-label">Password</div>
+                    <div class="login-input password">••••••••</div>
+                  </div>
+                  <!-- Submit Button -->
+                  <div class="login-btn">
+                    <div class="login-btn-icon"></div>
+                    <span class="login-btn-text">Masuk</span>
+                  </div>
+                </div>
+                <!-- Footer -->
+                <div class="login-footer">© 2026 Mie Jawa POS. All rights reserved.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annot-table-wrap">
+      <div class="annot-table-title">Keterangan — WF-00-D</div>
+      <p class="academic-desc">Antarmuka <em>Login Desktop</em> mengimplementasikan pola <em>centered card</em> di atas latar berwarna gelap, menciptakan focal point tunggal yang memandu perhatian pengguna langsung ke formulir autentikasi. Desain ini mengikuti prinsip <em>progressive disclosure</em>, di mana hanya elemen yang relevan dengan tugas autentikasi yang ditampilkan, mengeliminasi distraksi navigasional. Tidak ada sidebar atau navigasi utama karena pengguna belum terotentikasi. Setelah login berhasil, aplikasi melakukan redirect ke halaman Dashboard sebagai halaman utama pascaautentikasi.</p>
+      <table class="annot-table">
+        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
+        <tr><td><span class="cid">A1</span></td><td>Logo Toko (circle)</td><td>Ikon identitas aplikasi ditampilkan di bagian atas kartu login. Membangun kepercayaan brand dan konteks visual bahwa ini adalah halaman masuk POS.</td><td>Tidak ada interaksi — ornamental</td></tr>
+        <tr><td><span class="cid">A2</span></td><td>Nama & Subjudul Aplikasi</td><td>Label "Mie Jawa POS" dan teks "Masuk untuk melanjutkan" sebagai identifikasi aplikasi dan instruksi singkat bagi pengguna.</td><td>Tidak ada interaksi — deklaratif</td></tr>
+        <tr><td><span class="cid">B1</span></td><td>Input Email</td><td>Field email pengguna terdaftar. Terhubung ke Supabase Auth. Placeholder: "admin@toko.com". Validasi format email dilakukan sisi klien sebelum request dikirim.</td><td>Input → validasi format → submit</td></tr>
+        <tr><td><span class="cid">B2</span></td><td>Input Password</td><td>Field password tersembunyi (type="password"). Karakter diganti dengan ikon •. Validasi: tidak boleh kosong.</td><td>Input → submit; tombol show/hide opsional</td></tr>
+        <tr><td><span class="cid">C1</span></td><td>Tombol Masuk</td><td>Tombol submit utama yang mengirimkan kredensial ke Supabase Auth via signInWithPassword(). Menampilkan loading state saat proses berlangsung.</td><td>Klik → loading → redirect Dashboard / tampil error</td></tr>
+        <tr><td><span class="cid">D1</span></td><td>Footer Copyright</td><td>Teks hak cipta aplikasi di bagian bawah kartu. Memberikan informasi kepemilikan dan tahun rilis.</td><td>Tidak ada interaksi — legal text</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE -->
+<div id="view-mobile" style="display:none;">
+  <div class="canvas-section">
+    <div class="canvas-section-label">Tampilan Mobile — WF-00-M</div>
+    <div class="export-bar"><span class="export-label">MOBILE FRAME</span>
+      <button class="btn-export" onclick="exportSection('wf00m','WF-00-Login-Mobile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG</button>
+    </div>
+    <div class="annotated-row" style="align-items:center;">
+      <div id="wf00m" class="frame-unit">
+        <div class="frame-id">WF-00-M</div>
+        <div class="mobile-frame">
+          <div class="mobile-notch"></div>
+          <div class="mobile-screen screen" style="background:#f0f0f0;position:relative;display:flex;align-items:center;justify-content:center;padding:12px;">
+            <!-- Login card scaled for mobile — same structure -->
+            <div style="width:100%;">
+              <div style="background:#fff;border:1px solid #ccc;border-radius:8px;padding:20px 16px 16px;display:flex;flex-direction:column;align-items:center;">
+                <!-- Logo -->
+                <div style="width:36px;height:36px;border-radius:50%;background:#888;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                  <div style="width:18px;height:18px;border-radius:3px;background:#fff;opacity:.5;"></div>
+                </div>
+                <!-- Name -->
+                <div style="font-size:11px;font-weight:800;color:#111;margin-bottom:2px;">Mie Jawa POS</div>
+                <div style="font-size:8px;color:#888;margin-bottom:14px;">Masuk untuk melanjutkan</div>
+                <!-- Form -->
+                <div style="width:100%;display:flex;flex-direction:column;gap:9px;">
+                  <div>
+                    <div style="font-size:7px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">Email</div>
+                    <div class="ph-input" style="height:24px;display:flex;align-items:center;padding:0 8px;font-size:8px;color:#777;">admin@toko.com</div>
+                  </div>
+                  <div>
+                    <div style="font-size:7px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">Password</div>
+                    <div class="ph-input" style="height:24px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:#333;letter-spacing:2px;">••••••••</div>
+                  </div>
+                  <!-- Submit button -->
+                  <div class="ph-btn" style="height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;gap:5px;margin-top:2px;">
+                    <div style="width:10px;height:10px;border-radius:2px;background:rgba(255,255,255,.4);"></div>
+                    <span style="font-size:9px;font-weight:800;color:#fff;">Masuk</span>
+                  </div>
+                </div>
+                <!-- Footer -->
+                <div style="margin-top:14px;padding-top:10px;border-top:1px solid #eee;width:100%;text-align:center;font-size:7px;color:#bbb;">© 2026 Mie Jawa POS. All rights reserved.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annot-table-wrap">
+      <div class="annot-table-title">Keterangan — WF-00-M</div>
+      <p class="academic-desc">Tampilan <em>Login Mobile</em> memanfaatkan desain yang identik dengan versi desktop karena komponen kartu login (<em>centered card</em>) bersifat responsif dan sudah mobile-first secara alami. Tidak ada perbedaan struktural atau navigasional antara tampilan desktop dan mobile pada halaman ini, karena halaman login tidak memiliki elemen navigasi yang perlu disesuaikan. Ukuran tipografi dan proporsi kartu disesuaikan secara proporsional terhadap konstrain layar perangkat genggam.</p>
+      <table class="annot-table">
+        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
+        <tr><td><span class="cid">A1</span></td><td>Login Card (Responsif)</td><td>Kartu login menggunakan lebar penuh kontainer dengan padding internal. Sama persis dengan desktop karena tidak butuh adaptasi layout besar.</td><td>Vertikal scroll jika keyboard muncul</td></tr>
+        <tr><td><span class="cid">B1</span></td><td>Input Email & Password</td><td>Form input standar, dioptimalkan untuk keyboard mobile (type="email" memunculkan keyboard @ otomatis, type="password" menyembunyikan karakter).</td><td>Tap → keyboard muncul → input</td></tr>
+        <tr><td><span class="cid">C1</span></td><td>Tombol Masuk</td><td>Full-width button yang mudah dijangkau ibu jari. Background gelap dengan label putih untuk visibilitas maksimal sebagai CTA (Call to Action) utama.</td><td>Tap → loading → redirect / error</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- STATE: ERROR -->
+<div id="view-state-error" style="display:none;">
+  <div class="canvas-section">
+    <div class="canvas-section-label">State Gagal Login — WF-00-E</div>
+    <div class="export-bar"><span class="export-label">ERROR STATE FRAME</span>
+      <button class="btn-export" onclick="exportSection('wf00e','WF-00-Login-ErrorState')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG</button>
+    </div>
+    <div class="annotated-row">
+      <div id="wf00e" class="frame-unit">
+        <div class="frame-id">WF-00-E</div>
+        <div class="desktop-frame">
+          <div class="desktop-chrome"><div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div><div class="chrome-urlbar"></div></div>
+          <div class="login-canvas" style="min-height:var(--wf-desktop-h);">
+            <div>
+              <div class="login-card">
+                <div class="login-logo">
+                  <div class="login-logo-inner"></div>
+                </div>
+                <div class="login-app-name">Mie Jawa POS</div>
+                <div class="login-subtitle">Masuk untuk melanjutkan</div>
+
+                <div class="login-form">
+                  <!-- Error alert -->
+                  <div class="login-error">
+                    <div class="login-error-dot"></div>
+                    <span style="font-size:8px;color:#991b1b;">Email atau password salah. Silakan coba lagi.</span>
+                  </div>
+                  <div class="login-field">
+                    <div class="login-label">Email</div>
+                    <div class="login-input error-state">salah@email.com</div>
+                  </div>
+                  <div class="login-field">
+                    <div class="login-label">Password</div>
+                    <div class="login-input password error-state">••••••••</div>
+                  </div>
+                  <div class="login-btn">
+                    <div class="login-btn-icon"></div>
+                    <span class="login-btn-text">Masuk</span>
+                  </div>
+                </div>
+                <div class="login-footer">© 2026 Mie Jawa POS. All rights reserved.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annot-table-wrap">
+      <div class="annot-table-title">Keterangan — WF-00-E</div>
+      <p class="academic-desc"><em>State Error Login</em> menampilkan umpan balik negatif ketika kredensial yang dimasukkan tidak valid. Pesan error muncul di atas form sebagai <em>alert banner</em> berwarna merah muda (bg-red-50 dengan border merah), mengikuti konvensi UI desain sistem yang membedakan error level regional (di dalam form) dari error level global (toast). Bidang input yang gagal mendapat border merah sebagai penanda visual tambahan.</p>
+      <table class="annot-table">
+        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
+        <tr><td><span class="cid">E1</span></td><td>Error Alert Banner</td><td>Banner merah di atas form menampilkan pesan "Email atau password salah". Muncul setelah Supabase Auth mengembalikan error AuthApiError.</td><td>Auto-tampil saat auth gagal; hilang saat form diisi ulang</td></tr>
+        <tr><td><span class="cid">E2</span></td><td>Input Error State</td><td>Border input berubah menjadi merah (border-red-300) sebagai visual cue tambahan bahwa data yang dimasukkan tidak valid.</td><td>Error state reset saat user mulai mengetik ulang</td></tr>
+        <tr><td><span class="cid">E3</span></td><td>Tombol Masuk (aktif)</td><td>Tombol tetap aktif pada error state, memungkinkan pengguna untuk mengisi ulang dan mencoba login kembali tanpa refresh halaman.</td><td>Klik ulang → kirim request baru ke Supabase Auth</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .canvas -->
+
+<div class="nav-footer">
+  <a class="nav-btn" href="wireframe-index.html">← Indeks</a>
+  <div style="flex:1"></div>
+  <span style="font-size:10px;color:#888;">WF-00 — Halaman Login (Autentikasi)</span>
+  <div style="flex:1"></div>
+  <a class="nav-btn primary" href="wireframe-01-dashboard.html">WF-01: Dashboard →</a>
+</div>
+
+<script>
+function show(v,tab){
+  ['desktop','mobile','state-error'].forEach(id=>document.getElementById('view-'+id).style.display=id===v?'':'none');
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+}
+// exportSection — defined in wireframe-shared.js
+</script>
+</body>
+</html>

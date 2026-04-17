@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { errorFilter } from "@/server/filters/error.filter";
 import { TRPCError } from "@trpc/server";
 import { createCategorySchema } from "@/server/validations";
@@ -7,7 +7,7 @@ import { createCategorySchema } from "@/server/validations";
 const ARCHIVED_CATEGORY_NAME = "Arsip Produk";
 
 export const categoryRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     try {
       return await ctx.db.category.findMany({ orderBy: { id: "asc" } });
     } catch (error) {
@@ -15,9 +15,21 @@ export const categoryRouter = createTRPCRouter({
     }
   }),
 
-  create: publicProcedure
+  create: protectedProcedure
     .input(createCategorySchema)
     .mutation(async ({ ctx, input }) => {
+      // Pre-check duplikasi (case-insensitive) — thrown before try/catch so message surfaces correctly
+      const existing = await ctx.db.category.findFirst({
+        where: { name: { equals: input.name, mode: "insensitive" } },
+      });
+
+      if (existing) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `Kategori "${input.name}" sudah ada.`,
+        });
+      }
+
       try {
         return await ctx.db.category.create({ data: { name: input.name } });
       } catch (error) {
@@ -25,7 +37,39 @@ export const categoryRouter = createTRPCRouter({
       }
     }),
 
-  delete: publicProcedure
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().int().positive(),
+        name: z.string().min(1).max(50),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.category.findFirst({
+        where: {
+          name: { equals: input.name, mode: "insensitive" },
+          NOT: { id: input.id },
+        },
+      });
+
+      if (existing) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `Kategori "${input.name}" sudah ada.`,
+        });
+      }
+
+      try {
+        return await ctx.db.category.update({
+          where: { id: input.id },
+          data: { name: input.name },
+        });
+      } catch (error) {
+        errorFilter(error);
+      }
+    }),
+
+  delete: protectedProcedure
     .input(z.object({ id: z.number().int().positive() }))
     .mutation(async ({ ctx, input }) => {
       try {

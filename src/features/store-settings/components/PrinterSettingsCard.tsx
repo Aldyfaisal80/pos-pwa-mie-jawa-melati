@@ -5,7 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Bluetooth, BluetoothConnected, Printer, Info } from "lucide-react";
+import {
+  Bluetooth,
+  BluetoothConnected,
+  Printer,
+  Info,
+  Loader2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePrinterPrefs } from "../hooks/usePrinterPrefs";
 
@@ -16,8 +22,14 @@ const TOGGLE_ITEMS = [
 ] as const;
 
 export const PrinterSettingsCard = () => {
-  const { isConnected, isPrinting, savedPrinterName, connect, disconnect } =
-    usePrinter();
+  const {
+    isConnected,
+    isReconnecting,
+    isPrinting,
+    savedPrinterName,
+    connect,
+    disconnect,
+  } = usePrinter();
   const { prefs, togglePref } = usePrinterPrefs();
 
   return (
@@ -37,25 +49,37 @@ export const PrinterSettingsCard = () => {
                 "flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors",
                 isConnected
                   ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30"
-                  : "bg-muted text-muted-foreground",
+                  : isReconnecting
+                    ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30"
+                    : "bg-muted text-muted-foreground",
               )}
             >
               {isConnected ? (
                 <BluetoothConnected
                   className={cn("h-5 w-5", isPrinting && "animate-pulse")}
                 />
+              ) : isReconnecting ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <Bluetooth className="h-5 w-5" />
               )}
             </div>
             <div>
               <p className="text-sm font-medium">
-                {isConnected ? "Printer Terhubung" : "Printer Terputus"}
+                {isConnected
+                  ? "Printer Terhubung"
+                  : isReconnecting
+                    ? "Menghubungkan ulang..."
+                    : "Printer Terputus"}
               </p>
               <p className="text-muted-foreground text-xs">
                 {isConnected && savedPrinterName
                   ? `Device: ${savedPrinterName}`
-                  : "Belum ada printer yang terhubung"}
+                  : isReconnecting
+                    ? "Mencoba terhubung ke printer terakhir"
+                    : savedPrinterName
+                      ? `Terakhir: ${savedPrinterName}`
+                      : "Belum ada printer yang terhubung"}
               </p>
             </div>
           </div>
@@ -77,8 +101,9 @@ export const PrinterSettingsCard = () => {
                 size="sm"
                 className="w-full border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 sm:w-auto dark:border-emerald-900/30 dark:bg-emerald-900/20"
                 onClick={connect}
+                disabled={isReconnecting}
               >
-                Hubungkan Printer
+                {isReconnecting ? "Menghubungkan..." : "Hubungkan Printer"}
               </Button>
             )}
           </div>
@@ -110,8 +135,8 @@ export const PrinterSettingsCard = () => {
         <div className="flex items-start gap-2 text-xs text-muted-foreground">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
           <p>
-            Membutuhkan browser Chrome/Edge dengan Bluetooth aktif. Pengaturan
-            printer tersimpan di perangkat ini.
+            Membutuhkan browser Chrome/Edge dengan Bluetooth aktif. Printer akan
+            terhubung otomatis saat halaman dibuka kembali.
           </p>
         </div>
       </CardContent>

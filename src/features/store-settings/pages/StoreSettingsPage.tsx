@@ -46,7 +46,7 @@ export const StoreSettingsPage = () => {
         </div>
 
         {/* Unified layout: card on desktop, plain on mobile. Content rendered ONCE. */}
-        <div className="border-border bg-card md:flex md:overflow-hidden md:rounded-xl md:border md:shadow-sm">
+        <div className="md:flex md:overflow-hidden md:rounded-xl md:border md:shadow-sm">
           {/* Desktop sidebar nav — hidden on mobile */}
           <nav className="bg-muted/40 hidden w-44 shrink-0 border-r p-3 md:block">
             <p className="text-muted-foreground mb-2 px-2 text-[10px] font-semibold uppercase tracking-widest">
@@ -73,7 +73,7 @@ export const StoreSettingsPage = () => {
           </nav>
 
           {/* Content panel — rendered once for both mobile and desktop */}
-          <div className="md:min-w-0 md:flex-1 md:p-6">
+          <div className="min-w-0 flex-1 md:p-6">
             {SECTION_CONTENT[activeSection]}
           </div>
         </div>

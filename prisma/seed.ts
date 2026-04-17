@@ -1,6 +1,12 @@
 import "dotenv/config";
-import { PaymentMethod } from "../generated/prisma";
-import { db as prisma } from "../src/server/db";
+import { PaymentMethod, PrismaClient } from "../generated/prisma";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
+
+// Direct client — avoids `server-only` guard in src/server/db.ts
+const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log("Menghapus data lama...");
@@ -264,9 +270,11 @@ async function main() {
 main()
   .then(async () => {
     await prisma.$disconnect();
+    await pool.end();
   })
   .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
+    await pool.end();
     process.exit(1);
   });

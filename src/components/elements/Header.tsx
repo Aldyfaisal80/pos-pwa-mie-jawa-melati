@@ -7,7 +7,7 @@ import { ThemeSelector } from "./ThemeSelector";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { StatusPopover } from "../fragments/StatusPopover";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
-import { navItems } from "../config/navigation";
+import { navItems } from "@/lib/config/navigation";
 import { cn } from "@/lib/utils";
 
 export const Header = () => {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Prisma, type PaymentMethod } from "../../../../generated/prisma";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   syncTransactionSchema,
   reportFilterSchema,
@@ -68,41 +68,73 @@ const buildReportOrderBy = (
 };
 
 export const transactionRouter = createTRPCRouter({
-  syncOfflineData: publicProcedure
+  syncOfflineData: protectedProcedure
     .input(syncTransactionSchema)
     .mutation(async ({ ctx, input }) => {
-      try {
-        return await ctx.db.$transaction(
-          input.map((trx) =>
-            ctx.db.transaction.create({
-              data: {
-                invoiceNumber: trx.invoiceNumber,
-                date: trx.date, // store raw UTC — browser applies WIB timezone on display
-                totalAmount: trx.totalAmount,
-                paymentMethod: trx.paymentMethod,
-                paidAmount: trx.paidAmount,
-                change: trx.change,
-                isSynced: true,
-                items: {
-                  create: trx.items.map((item) => ({
-                    productId: item.productId,
-                    productName: item.productName,
-                    quantity: item.quantity,
-                    unitPrice: item.unitPrice,
-                    subTotal: item.subTotal,
-                    note: item.note,
-                  })),
-                },
+      // Process each transaction individually so one failure doesn't block the rest.
+      // Returns per-item result so the client can purge unrecoverable items gracefully.
+      const results: {
+        invoiceNumber: string;
+        success: boolean;
+        errorCode?: string;
+      }[] = [];
+
+      for (const trx of input) {
+        try {
+          await ctx.db.transaction.create({
+            data: {
+              invoiceNumber: trx.invoiceNumber,
+              date: trx.date,
+              totalAmount: trx.totalAmount,
+              paymentMethod: trx.paymentMethod,
+              paidAmount: trx.paidAmount,
+              change: trx.change,
+              isSynced: true,
+              items: {
+                create: trx.items.map((item) => ({
+                  productId: item.productId,
+                  productName: item.productName,
+                  quantity: item.quantity,
+                  unitPrice: item.unitPrice,
+                  subTotal: item.subTotal,
+                  note: item.note,
+                })),
               },
-            }),
-          ),
-        );
-      } catch (error) {
-        errorFilter(error);
+            },
+          });
+          results.push({ invoiceNumber: trx.invoiceNumber, success: true });
+        } catch (error) {
+          // Classify the Prisma error so client can decide purge vs retry
+          const msg =
+            error instanceof Error ? error.message.toLowerCase() : "";
+          let errorCode = "UNKNOWN";
+
+          if (
+            msg.includes("unique constraint") ||
+            msg.includes("p2002") ||
+            msg.includes("invoicenumber")
+          ) {
+            errorCode = "DUPLICATE";
+          } else if (
+            msg.includes("foreign key") ||
+            msg.includes("p2003") ||
+            msg.includes("p2025")
+          ) {
+            errorCode = "FK_VIOLATION";
+          }
+
+          results.push({
+            invoiceNumber: trx.invoiceNumber,
+            success: false,
+            errorCode,
+          });
+        }
       }
+
+      return results;
     }),
 
-  deleteTransaction: publicProcedure
+  deleteTransaction: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       try {
@@ -123,7 +155,7 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  getTransactionReport: publicProcedure
+  getTransactionReport: protectedProcedure
     .input(reportFilterSchema)
     .query(async ({ ctx, input }) => {
       try {
@@ -155,7 +187,7 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  exportTransactionReport: publicProcedure
+  exportTransactionReport: protectedProcedure
     .input(exportReportSchema)
     .query(async ({ ctx, input }) => {
       try {
@@ -177,7 +209,7 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  getDashboardStats: publicProcedure.query(async ({ ctx }) => {
+  getDashboardStats: protectedProcedure.query(async ({ ctx }) => {
     try {
       // Use WIB start-of-day so "today" is correct for Indonesian users
       const today = todayWIBStart();
@@ -221,7 +253,7 @@ export const transactionRouter = createTRPCRouter({
     }
   }),
 
-  getRevenueChart: publicProcedure
+  getRevenueChart: protectedProcedure
     .input(
       z.object({
         days: z.number().min(1).max(90).default(7),
@@ -283,7 +315,7 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  getReportStats: publicProcedure
+  getReportStats: protectedProcedure
     .input(reportStatsSchema)
     .query(async ({ ctx, input }) => {
       try {
@@ -306,7 +338,7 @@ export const transactionRouter = createTRPCRouter({
       }
     }),
 
-  getReportChart: publicProcedure
+  getReportChart: protectedProcedure
     .input(reportStatsSchema)
     .query(async ({ ctx, input }) => {
       try {

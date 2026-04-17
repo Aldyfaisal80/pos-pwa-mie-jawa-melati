@@ -57,3 +57,6 @@ yarn-error.log*
 
 # prisma generated files
 /generated
+
+# generated PWA files
+/public/sw.js

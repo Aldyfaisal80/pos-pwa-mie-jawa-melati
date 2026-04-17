@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   MessageSquare,
@@ -16,6 +16,7 @@ interface CartPanelProps {
   cart: CartItem[];
   cartTotal: number;
   onUpdateQty: (cartId: string, delta: number) => void;
+  onSetAbsoluteQty: (cartId: string, qty: number) => void;
   onOpenNote: (cartId: string) => void;
   onClearNote: (cartId: string) => void;
   onClear: () => void;
@@ -26,14 +27,37 @@ const CartItemRow = memo(
   ({
     item,
     onUpdateQty,
+    onSetAbsoluteQty,
     onOpenNote,
     onClearNote,
   }: {
     item: CartItem;
     onUpdateQty: (cartId: string, delta: number) => void;
+    onSetAbsoluteQty: (cartId: string, qty: number) => void;
     onOpenNote: (cartId: string) => void;
     onClearNote: (cartId: string) => void;
-  }) => (
+  }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editValue, setEditValue] = useState("");
+
+    const handleStartEdit = useCallback(() => {
+      setEditValue(String(item.qty));
+      setIsEditing(true);
+    }, [item.qty]);
+
+    const handleCommit = useCallback(() => {
+      setIsEditing(false);
+      const parsed = parseInt(editValue, 10);
+      if (!isNaN(parsed) && parsed !== item.qty) {
+        if (parsed <= 0) {
+          onUpdateQty(item.cartId, -item.qty);
+        } else {
+          onSetAbsoluteQty(item.cartId, parsed);
+        }
+      }
+    }, [editValue, item.qty, item.cartId, onUpdateQty, onSetAbsoluteQty]);
+
+    return (
     <div className="border-border/80 hover:bg-muted/10 relative flex flex-col gap-2 border-b border-dashed py-4 transition-colors last:border-0">
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-col">
@@ -76,7 +100,31 @@ const CartItemRow = memo(
           >
             <Minus className="h-4 w-4" />
           </button>
-          <span className="w-8 text-center text-sm font-bold">{item.qty}</span>
+          {isEditing ? (
+            <input
+              type="number"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              onBlur={handleCommit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleCommit();
+                if (e.key === "Escape") setIsEditing(false);
+              }}
+              className="w-10 bg-transparent text-center text-sm font-bold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              autoFocus
+              onFocus={(e) => e.target.select()}
+              min={0}
+              inputMode="numeric"
+            />
+          ) : (
+            <button
+              onClick={handleStartEdit}
+              className="w-10 text-center text-sm font-bold hover:text-primary transition-colors cursor-text"
+              title="Klik untuk ubah qty"
+            >
+              {item.qty}
+            </button>
+          )}
           <button
             onClick={() => onUpdateQty(item.cartId, 1)}
             className="text-muted-foreground hover:bg-muted/50 flex h-full items-center justify-center rounded-r-xl px-3 transition-colors hover:text-green-600"
@@ -86,7 +134,8 @@ const CartItemRow = memo(
         </div>
       </div>
     </div>
-  ),
+    );
+  },
 );
 
 export const CartPanel = memo(
@@ -94,6 +143,7 @@ export const CartPanel = memo(
     cart,
     cartTotal,
     onUpdateQty,
+    onSetAbsoluteQty,
     onOpenNote,
     onClearNote,
     onClear,
@@ -136,6 +186,7 @@ export const CartPanel = memo(
                 key={item.cartId}
                 item={item}
                 onUpdateQty={onUpdateQty}
+                onSetAbsoluteQty={onSetAbsoluteQty}
                 onOpenNote={onOpenNote}
                 onClearNote={onClearNote}
               />

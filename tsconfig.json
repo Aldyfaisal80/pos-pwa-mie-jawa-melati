@@ -52,6 +52,13 @@
     "scripts",
     "src/app/sw.ts",
     "public/sw.js",
-    "public/sw.js.map"
+    "public/sw.js.map",
+    "*.cjs",
+    "kbbi-*.cjs",
+    "scan-*.cjs",
+    "regen-*.cjs",
+    "dump-*.cjs",
+    "quick-scan.cjs",
+    "final-check.cjs"
   ]
 }

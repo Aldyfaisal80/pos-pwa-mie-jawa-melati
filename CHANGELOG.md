@@ -9,6 +9,86 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.6.0] - 2026-04-17
+
+### Added
+- **Editable Cart Quantity (TC005)** — Inline quantity input field in `CartPanel`; supports keyboard interaction (Enter to confirm, Escape to cancel); replaces static quantity display for faster cashier workflow
+- **Bluetooth Printer Auto-Reconnect** — `useBluetoothPrinter` hook now uses `navigator.bluetooth.getDevices()` to silently reconnect to previously paired printer on page load without user intervention
+- **Category Inline Edit (F-05 TC015 expanded)** — `CategoryManagerModal` rebuilt with inline rename, per-row edit/delete actions, optimistic updates, and duplicate name validation
+- **`src/server/api/routers/category.ts`** — Extended with create, update, and delete endpoints; FK constraint protection remains intact
+
+### Changed
+- **Cart Quantity Input** — `useCart` hook now exposes `updateQuantityById` action; quantity can be set to any valid integer via keyboard without using ± buttons
+- **Settings Page — AccountProfileForm** — Redesigned with two-column grid layout on desktop; eliminates excessive whitespace on wider viewports while remaining mobile-friendly
+- **Settings Page — PrinterSettingsCard** — Redesigned with connection status indicator (connected/disconnected badge) and loading spinner during auto-reconnect attempt
+- **Settings Page — Tab Navigation** — `StoreSettingsPage` tab structure refined; redundant "Akun" sidebar tab removed from desktop layout (profile accessible via `AppSidebar` dropdown only)
+- **ReceiptModal** — Improved print flow with better error handling and loading state feedback after checkout
+- **ReceiptPrintTemplate** — Layout improvements and `imageToDataUrl` utility updated for more reliable Base64 logo generation
+- **TransactionDetailModal** — Improved responsive modal layout; missing product image and category fields now displayed
+- **BottomTabBar** — Fully rebuilt with improved mobile logout flow, tab state management, and smoother animation
+
+### Fixed
+- **Sidebar Clipping Bug** — `AppSidebar` collapsed state no longer clips navigation items; proper overflow handling and CSS containment applied
+- **Bluetooth Connection Survives Refresh** — Printer connection state persists across page reloads via `getDevices()` silent reconnect
+- **Category Mutations** — `useCategoryMutations` hook optimistic update now correctly rolls back on error with actionable toast message
+
+---
+
+## [0.5.0] - 2026-04-15
+
+### Added
+- **Comprehensive Blackbox Testing** — 104 manual test cases across 7 functional modules (F-01 through F-07), achieving 100% pass rate using Equivalence Partitioning and Boundary Value Analysis
+- **Edit Kategori (F-05-TC015)** — Inline rename for product categories in `CategoryManagerModal`. Click the Pencil icon to enter edit mode; press Enter or click Check to save, Escape or click X to cancel. Duplicate name validation handled server-side
+- **`docs/PENGUJIAN-BLACKBOX.md`** — Complete blackbox test plan and result document for thesis submission (v0.5.0)
+- **`docs/RINGKASAN-BLACKBOX-FINAL.md`** — Execution summary with pass/fail breakdown per testing session
+- **`docs/HASIL-BLACKBOX-SESI-*.md`** (8 files) — Detailed session-by-session execution logs with screenshots
+- **`docs/screenshots/`** — 104 evidence screenshots organized by module (F01–F07)
+
+### Changed
+- **Mobile Logout Flow** — Fixed redirect loop when logging out via Drawer on mobile (`signOut()` now uses `{ redirect: false }` + manual `router.replace("/login")`)
+- **Settings Page** — Removed "Akun" tab from desktop sidebar; account profile now accessed exclusively via `AppSidebar` dropdown (desktop) and `AccountDrawer` tab (mobile)
+- **`AccountDrawer`** — Mobile account management via bottom sheet with in-place navigation: Edit Profile form renders inside Drawer without page navigation
+- **`AppSidebar`** — Dropdown menu now shows "Edit Profil" and "Keluar" options tied to Supabase `signOut`
+
+### Fixed
+- **Redirect loop on mobile logout** — `useRouter` replace used instead of full page reload to prevent middleware re-evaluation cycle
+- **`AccountProfileForm` in Drawer** — Form state correctly isolated; back navigation returns to Drawer main menu without full unmount
+
+---
+
+## [0.4.0] - 2026-04-14
+
+### Added
+- **Supabase Authentication** — Email/password login via `@supabase/ssr`; server-side session validated in `middleware.ts` (first layer) + client-side auth guard in `(app)/layout.tsx` (second layer)
+- **`src/features/auth/`** — Self-contained auth module: `context/`, `hooks/useAuth`, `providers/AuthProvider`, `schemas/`, `index.ts` re-export barrel
+- **`src/app/(app)/` route group** — Protected layout wrapping all authenticated pages (`pos/`, `products/`, `reports/`, `settings/`)
+- **`src/app/(auth)/` route group** — Public layout for unauthenticated routes (`login/`)
+- **`src/trpc/vanilla-client.ts`** — Lifecycle-independent tRPC client for use outside React component trees (offline sync, background workers)
+- **`AccountProfileForm`** — New Settings tab showing Supabase Auth user display name and email, editable via `useAccountProfile` hook
+- **`src/features/store-settings/schemas/account.ts`** — Zod schema for account profile form
+- **`src/components/ui/avatar-initials.tsx`** — Avatar component rendering user initials as fallback when no photo is set
+- **`src/server/api/types.ts`** — Shared tRPC context and procedure type exports
+
+### Changed
+- **`middleware.ts`** — Rewritten to use `@supabase/ssr` `createServerClient`; validates session cookie, redirects unauthenticated users to `/login?redirect=<path>`, and prevents authenticated users from accessing `/login`
+- **Route structure** — All app pages moved from `src/app/<page>/` into `src/app/(app)/<page>/` route group; login moved to `src/app/(auth)/login/`
+- **`useOfflineSync` / `useSyncTransaction`** — Refactored to use `vanilla-client.ts` instead of `trpc.useUtils()` — sync no longer depends on React component lifecycle; more resilient to page refreshes mid-sync
+- **`src/features/cashier/components/`** — Split into `checkout/` and `receipt/` sub-folders
+- **`src/features/product/components/`** — Split into `product/` and `category/` sub-folders
+- **`src/features/report/components/`** — Split into `analytics/` and `transaction/` sub-folders
+- **`StoreSettingsForm`** — Refactored to multi-tab layout (Info Toko, Printer, Akun); Account tab delegates to `AccountProfileForm`
+- **`AppSidebar`** — Updated to use auth user data (display name, email) from `useAuth` hook; avatar shows user initials
+- **`AppProvider`** — Cleaned up; no longer contains legacy auth logic
+- **`src/server/api/trpc.ts`** — Context updated to pass Supabase session; procedures can now access `ctx.session`
+- **`transaction` router** — Improved error classification: FK violations → `BAD_REQUEST`; unknown errors → `INTERNAL_SERVER_ERROR`; cleaner response types
+
+### Removed
+- `src/components/layouts/providers/AuthProvider.tsx` — Replaced by `src/features/auth/providers/`
+- `src/components/config/navigation.ts` — Navigation config inlined/relocated
+- Legacy flat component files: `CheckoutCartSummary`, `CheckoutCashInput`, `CheckoutPaymentMethods`, `ReceiptPrintTemplate`, `CategoryFormModal`, `CategoryManagerModal`, `CategorySelectField`, `ProductFormModal`, `ProductImageField`, `ProductManager`, `ProductTable`, `ReportChart`, `ReportFilterBar`, `ReportPagination`, `ReportStatsCards`, `TransactionDetailModal`, `TransactionTable` — all replaced by sub-folder structure
+
+---
+
 ## [0.3.0] - 2026-04-09
 
 ### Added

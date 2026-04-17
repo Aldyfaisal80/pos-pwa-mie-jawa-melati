@@ -14,7 +14,8 @@ interface SyncOptions {
   cartTotal: number;
   paymentMethod: PaymentMethod;
   paymentAmount: string;
-  onSuccess: (invoiceNumber: string) => void;
+  /** wasOffline: true = tersimpan lokal (offline/error), false = tersimpan ke server */
+  onSuccess: (invoiceNumber: string, wasOffline: boolean) => void;
 }
 
 export const useSyncTransaction = () => {
@@ -71,27 +72,19 @@ export const useSyncTransaction = () => {
             void removePendingTransaction(invoiceNumber);
             void utils.transaction.invalidate();
             postMessage({ type: "TRANSACTION_CREATED" });
-            onSuccess(invoiceNumber);
+            onSuccess(invoiceNumber, false); // online = wasOffline: false
           },
           onError: () => {
             // Tetap tampilkan struk; data tersimpan di IndexedDB untuk di-sync nanti
-            toast.warning("Tersimpan Lokal", {
-              description:
-                "Transaksi disimpan di perangkat dan akan di-sync otomatis saat koneksi stabil.",
-            });
             postMessage({ type: "TRANSACTION_CREATED" });
-            onSuccess(invoiceNumber);
+            onSuccess(invoiceNumber, true); // server error = wasOffline: true
           },
         },
       );
     } else {
       void addPendingTransaction(payload).then(() => {
-        toast.info("Mode Offline", {
-          description:
-            "Transaksi tersimpan di perangkat. Akan otomatis dikirim saat online kembali.",
-        });
         postMessage({ type: "TRANSACTION_CREATED" });
-        onSuccess(invoiceNumber);
+        onSuccess(invoiceNumber, true); // offline = wasOffline: true
       });
     }
   };

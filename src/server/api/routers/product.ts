@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { type Prisma } from "../../../../generated/prisma";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { errorFilter } from "@/server/filters/error.filter";
 import {
   createProductSchema,
@@ -10,7 +10,7 @@ import {
 
 export const productRouter = createTRPCRouter({
   // 1. GET ALL
-  getAll: publicProcedure
+  getAll: protectedProcedure
     .input(filterProductSchema.optional())
     .query(async ({ ctx, input }) => {
       try {
@@ -32,7 +32,7 @@ export const productRouter = createTRPCRouter({
     }),
 
   // 2. CREATE
-  create: publicProcedure
+  create: protectedProcedure
     .input(createProductSchema)
     .mutation(async ({ ctx, input }) => {
       try {
@@ -43,7 +43,7 @@ export const productRouter = createTRPCRouter({
     }),
 
   // 3. UPDATE
-  update: publicProcedure
+  update: protectedProcedure
     .input(z.object({ id: z.string(), data: updateProductSchema }))
     .mutation(async ({ ctx, input }) => {
       try {
@@ -58,7 +58,7 @@ export const productRouter = createTRPCRouter({
     }),
 
   // 4. DELETE (Soft Delete)
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       try {
