@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import {
   Form,
   FormField,
@@ -81,34 +81,25 @@ export const AccountProfileForm = () => {
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="space-y-5">
-          <div className="space-y-3">
-            <Skeleton className="h-4 w-32" />
-            <Skeleton className="h-9 w-full" />
-          </div>
-          <div className="space-y-3">
-            <Skeleton className="h-4 w-40" />
-            <Skeleton className="h-9 w-full" />
-            <Skeleton className="h-9 w-full" />
-            <Skeleton className="h-9 w-full" />
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-5 p-1">
+        <div className="space-y-3">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-9 w-full" />
+        </div>
+        <div className="space-y-3">
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base font-semibold">
-          <UserCog className="text-primary h-4 w-4" />
-          Profil Akun
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* Desktop: 2-column grid | Mobile: single column */}
-        <div className="grid gap-0 md:grid-cols-2 md:gap-8">
+    <div className="p-1">
+      {/* Desktop: 2-column grid | Mobile: single column */}
+      <div className="grid gap-0 md:grid-cols-2 md:gap-8">
 
           {/* LEFT COLUMN: Email + Display Name */}
           <div className="space-y-5 border-b pb-6 md:border-b-0 md:border-r md:pb-0 md:pr-8">
@@ -300,7 +291,6 @@ export const AccountProfileForm = () => {
           </div>
 
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 };

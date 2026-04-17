@@ -3,24 +3,21 @@
 import { useState } from "react";
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { SectionContainer } from "@/components/layouts/SectionContainer";
-import { Store, Printer, UserCog } from "lucide-react";
+import { Store, Printer } from "lucide-react";
 import { StoreSettingsForm } from "../components/StoreSettingsForm";
 import { PrinterSettingsCard } from "../components/PrinterSettingsCard";
-import { AccountProfileForm } from "../components/AccountProfileForm";
 import { cn } from "@/lib/utils";
 
-type Section = "store" | "printer" | "account";
+type Section = "store" | "printer";
 
 const NAV_ITEMS = [
   { id: "store" as Section, label: "Info Toko", icon: Store },
   { id: "printer" as Section, label: "Printer", icon: Printer },
-  { id: "account" as Section, label: "Akun", icon: UserCog },
 ];
 
 const SECTION_CONTENT: Record<Section, React.ReactNode> = {
   store: <StoreSettingsForm />,
   printer: <PrinterSettingsCard />,
-  account: <AccountProfileForm />,
 };
 
 export const StoreSettingsPage = () => {

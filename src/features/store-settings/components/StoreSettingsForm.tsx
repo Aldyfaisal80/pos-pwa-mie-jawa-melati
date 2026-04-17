@@ -25,7 +25,7 @@ export const StoreSettingsForm = () => {
 
   const form = useForm<StoreSettingsFormValues>({
     resolver: zodResolver(storeSettingsSchema),
-    mode: "onBlur",
+    mode: "all",
     defaultValues: { name: "", address: "", phone: "", logoUrl: "" },
   });
 
