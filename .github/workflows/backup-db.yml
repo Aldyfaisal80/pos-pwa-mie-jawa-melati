@@ -1,0 +1,90 @@
+name: 🗄️ Nightly DB Backup
+
+on:
+  schedule:
+    # Jam 1:00 AM WIB = 18:00 UTC (hari sebelumnya)
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Alasan manual backup"
+        required: false
+        default: "Manual trigger"
+
+jobs:
+  backup:
+    name: Dump & Commit Backup
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔧 Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: 📁 Create backup directory
+        run: mkdir -p backup
+
+      - name: 🗃️ Dump Schema (DDL)
+        run: |
+          supabase db dump \
+            --db-url "${{ secrets.SUPABASE_DB_URL }}" \
+            -f backup/schema.sql
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: 📊 Dump Data (DML — rows only)
+        run: |
+          supabase db dump \
+            --db-url "${{ secrets.SUPABASE_DB_URL }}" \
+            -f backup/data.sql \
+            --use-copy \
+            --data-only
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: 📝 Create backup manifest
+        run: |
+          TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          WIB=$(TZ='Asia/Jakarta' date +'%Y-%m-%d %H:%M WIB')
+          cat > backup/MANIFEST.md << EOF
+          # Backup Manifest
+
+          | Field | Value |
+          |-------|-------|
+          | **Timestamp UTC** | $TIMESTAMP |
+          | **Timestamp WIB** | $WIB |
+          | **Trigger** | ${{ github.event_name }} |
+          | **Files** | schema.sql, data.sql |
+
+          ## Cara Restore
+
+          \`\`\`bash
+          # 1. Restore schema dulu
+          psql [SUPABASE_DB_URL] -f backup/schema.sql
+
+          # 2. Restore data
+          psql [SUPABASE_DB_URL] -f backup/data.sql
+          \`\`\`
+          EOF
+
+      - name: 💾 Commit backup files
+        run: |
+          git config user.name "backup-bot[bot]"
+          git config user.email "backup-bot@mie-jawa-pos.local"
+          git add backup/
+          if git diff --staged --quiet; then
+            echo "No changes to backup, skipping commit."
+          else
+            WIB=$(TZ='Asia/Jakarta' date +'%Y-%m-%d %H:%M')
+            git commit -m "🗄️ backup: $WIB WIB"
+            git push
+          fi

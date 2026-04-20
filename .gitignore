@@ -60,3 +60,6 @@ yarn-error.log*
 
 # generated PWA files
 /public/sw.js
+
+# backup/ directory is intentionally tracked — managed by GitHub Actions
+# Do NOT add /backup to this file
