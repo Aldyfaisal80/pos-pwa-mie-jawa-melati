@@ -228,6 +228,19 @@ Pengujian menggunakan metode **Black-Box Testing** dengan pendekatan:
 | 23 | *User* ingin mengubah nama tampilan dari form profil di *Drawer* | - Form profil terbuka di dalam *Drawer* <br> - *User* mengubah *field* "Nama Tampilan" <br> - *User* klik "Simpan Nama" | - Muncul notifikasi sukses <br> - Nama tampilan berhasil diperbarui | - Muncul notifikasi sukses <br> - Nama tampilan berhasil diperbarui | Berhasil |
 | 24 | *User* ingin menggunakan fitur tampilkan/sembunyikan *password* di form profil (Mobile) | - Form profil terbuka di dalam *Drawer* <br> - *User* klik ikon mata (👁) pada *field* *password* | - Tipe *input* berubah dari `password` (tersamar) menjadi `text` (terbaca) <br> - Klik kembali menyembunyikan isi *field* | - Tipe *input* berubah sesuai ekspektasi <br> - Klik kembali menyembunyikan isi *field* | Berhasil |
 
+
+#### d. Sub-Modul: Backup & Ekspor Data
+
+> *Precondition Umum: Pengguna sudah login, berada di halaman Pengaturan (`/settings`), tab "Backup" telah dipilih.*
+
+| No | Skenario Pengujian | Langkah-langkah | Hasil Diharapkan | Hasil Diperoleh | Hasil Pengujian |
+|----|--------------------|-----------------|------------------|-----------------|-----------------|
+| 25 | *User* ingin melihat tab "Backup" tersedia di navigasi Pengaturan | - *User* sudah login, viewport ≥1024px <br> - *User* membuka halaman `/settings` dan melihat navigasi *sidebar* Pengaturan | - Item "Backup" tampil di bawah item "Printer" pada navigasi *sidebar* <br> - Ikon *database* atau sejenis terlihat di samping teks "Backup" | - Item "Backup" tampil di navigasi *sidebar* Pengaturan <br> - Ikon terlihat sesuai ekspektasi | Berhasil |
+| 26 | *User* ingin mengekspor backup data JSON secara manual | - *User* membuka tab "Backup" di halaman Pengaturan <br> - *User* klik tombol "Ekspor Backup Sekarang" | - File `.json` terunduh secara otomatis <br> - File berisi data lengkap: *categories*, *products*, *transactions*, dan *transaction_items* <br> - Nama file mengandung *timestamp* | - File `.json` terunduh <br> - Isi file sesuai struktur data yang diharapkan | Berhasil |
+| 27 | *User* melihat peringatan "Belum Pernah Backup" saat pertama kali membuka tab Backup | - *User* belum pernah melakukan ekspor (*localStorage* tidak memiliki *key* backup) <br> - *User* membuka tab "Backup" | - Muncul *badge* atau teks peringatan berwarna kuning/oranye bertuliskan "Belum pernah backup" atau serupa <br> - Tidak ada tampilan tanggal backup terakhir | - *Badge* peringatan muncul <br> - Tidak ada data tanggal yang ditampilkan | Berhasil |
+| 28 | *User* melihat waktu backup terakhir tersimpan setelah melakukan ekspor | - *User* sudah berhasil melakukan ekspor setidaknya satu kali <br> - *User* membuka kembali tab "Backup" (atau me-*refresh* halaman) | - Tampil teks informatif yang menyebutkan tanggal dan waktu backup terakhir dilakukan <br> - Tidak ada lagi teks peringatan "Belum pernah backup" | - Teks tanggal/waktu backup terakhir tampil <br> - Peringatan hilang | Berhasil |
+| 29 | *User* melihat tombol backup dalam status *loading* saat proses ekspor berlangsung | - *User* berada di tab "Backup" <br> - *User* klik tombol "Ekspor Backup Sekarang" | - Tombol berubah menjadi *disabled* <br> - Muncul indikator *spinner* atau teks *loading* selama proses berlangsung <br> - Tombol kembali aktif setelah proses selesai | - Tombol *disabled* dan *spinner* tampil saat *loading* <br> - Tombol aktif kembali setelah selesai | Berhasil |
+
 ---
 
 ## 3. Rekapitulasi Hasil Pengujian
@@ -240,16 +253,16 @@ Pengujian menggunakan metode **Black-Box Testing** dengan pendekatan:
 | F-04 | Kasir (*Point of Sale*) | 26 | 26 | 0 | 100% |
 | F-05 | Manajemen Produk | 16 | 16 | 0 | 100% |
 | F-06 | Laporan | 11 | 11 | 0 | 100% |
-| F-07 | Pengaturan | 24 | 24 | 0 | 100% |
-| | **TOTAL** | **103** | **103** | **0** | **100%** |
+| F-07 | Pengaturan | 29 | 29 | 0 | 100% |
+| | **TOTAL** | **108** | **108** | **0** | **100%** |
 
 ### Kesimpulan
 
-Berdasarkan hasil pengujian *black-box* yang telah dilakukan terhadap **103 kasus uji** yang mencakup 7 modul fungsional utama aplikasi POS PWA (versi 0.5.0), seluruh kasus uji menghasilkan hasil yang sesuai dengan *Hasil Diharapkan* yang telah ditetapkan. Tingkat keberhasilan pengujian mencapai **100%**, yang menandakan bahwa sistem telah memenuhi seluruh spesifikasi kebutuhan fungsional yang dirancang.
+Berdasarkan hasil pengujian *black-box* yang telah dilakukan terhadap **108 kasus uji** yang mencakup 7 modul fungsional utama aplikasi POS PWA (versi 0.5.0), seluruh kasus uji menghasilkan hasil yang sesuai dengan *Hasil Diharapkan* yang telah ditetapkan. Tingkat keberhasilan pengujian mencapai **100%**, yang menandakan bahwa sistem telah memenuhi seluruh spesifikasi kebutuhan fungsional yang dirancang.
 
 Pengujian mencakup skenario positif (input valid dan alur normal) maupun skenario negatif (validasi input tidak valid, kondisi *offline*, pembayaran kurang, dan nilai batas), serta diuji pada dua *viewport* berbeda yaitu Desktop (≥1024px) dan Mobile (≤768px). Dengan demikian, dapat disimpulkan bahwa sistem POS PWA berfungsi dengan baik sesuai harapan dan layak untuk digunakan.
 
-$$Akurasi = \frac{Pengujian\ Berhasil}{Total\ Pengujian} \times 100\% = \frac{103}{103} \times 100\% = 100\%$$
+$$Akurasi = \frac{Pengujian\ Berhasil}{Total\ Pengujian} \times 100\% = \frac{108}{108} \times 100\% = 100\%$$
 
 ---
 

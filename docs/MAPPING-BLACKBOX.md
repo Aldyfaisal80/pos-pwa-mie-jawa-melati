@@ -135,6 +135,11 @@
 | F-81 | Toggle "Cetak otomatis" | TC055 | Aktifkan toggle → struk tercetak langsung setelah transaksi |
 | F-82 | Toggle "Tampilkan logo di struk" | TC055 | Toggle → struk dicetak dengan/tanpa logo |
 | F-83 | Toggle "Tampilkan footer struk" | TC055 | Toggle → struk dicetak dengan/tanpa teks footer |
+| F-84 | Tab "Backup" tampil di navigasi *sidebar* Pengaturan | TC056 | Buka `/settings` → *sidebar* menampilkan item "Info Toko", "Printer", dan "Backup" |
+| F-85 | Ekspor backup data semua tabel ke format JSON | TC057 | Klik tombol ekspor → file `.json` terunduh berisi data *categories*, *products*, *transactions*, *transaction_items* |
+| F-86 | Peringatan "Belum pernah backup" ditampilkan | TC058 | Saat *localStorage* tidak ada *key* backup → *badge* peringatan muncul di panel Backup |
+| F-87 | Waktu backup terakhir tersimpan dan ditampilkan | TC059 | Setelah ekspor berhasil → *localStorage* menyimpan *timestamp*; tampil di UI saat halaman dibuka kembali |
+| F-88 | *Loading state* tombol ekspor aktif selama proses | TC060 | Klik ekspor → tombol *disabled* + *spinner* tampil; kembali aktif setelah selesai |
 
 ---
 
@@ -148,8 +153,8 @@
 | Kasir (POS) | 22 | TC013–TC026 | ✅ 100% |
 | Produk | 11 | TC027–TC035 | ✅ 100% |
 | Laporan | 12 | TC036–TC045 | ✅ 100% |
-| Pengaturan | 14 | TC046–TC055 | ✅ 100% |
-| **TOTAL** | **83** | **TC001–TC055** | **✅ 100%** |
+| Pengaturan | 19 | TC046–TC060 | ✅ 100% |
+| **TOTAL** | **88** | **TC001–TC060** | **✅ 100%** |
 
 ---
 

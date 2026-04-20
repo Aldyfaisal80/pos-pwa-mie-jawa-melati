@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WF-01 Beranda & Dashboard — Wireframe POS PWA</title>
+<link rel="stylesheet" href="wireframe-shared.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="wireframe-shared.js"></script>
+<style>
+/* Screen body */
+.screen-body { flex:1; padding:10px; background:#fff; display:flex; flex-direction:column; gap:6px; overflow:visible; }
+/* Stats grid */
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+.stat-card { background:#fff; border:1px solid #ddd; border-radius:3px; padding:8px; position:relative; }
+.stat-card-label { font-size:8px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:.4px; margin-bottom:4px; }
+.stat-card-val { font-size:16px; font-weight:800; color:#111; margin-bottom:2px; }
+.stat-card-sub { font-size:8px; color:#aaa; }
+.stat-card-icon { position:absolute; top:8px; right:8px; width:18px; height:18px; background:#e8e8e8; border-radius:3px; }
+/* Chart */
+.chart-card { background:#fff; border:1px solid #ddd; border-radius:3px; padding:8px; }
+.chart-title { font-size:8px; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+.chart-bars { display:flex; align-items:flex-end; gap:3px; height:55px; }
+.bar { flex:1; border-radius:1px 1px 0 0; }
+.bar-high { background:#555; }
+.bar-mid  { background:#999; }
+.bar-low  { background:#ccc; }
+/* Table */
+.tbl-card { background:#fff; border:1px solid #ddd; border-radius:3px; padding:8px; }
+.tbl-title { font-size:8px; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+.tbl-row { display:flex; gap:6px; padding:4px 0; border-bottom:1px solid #f0f0f0; align-items:center; font-size:9px; color:#555; }
+.tbl-row:last-child { border:none; }
+.tbl-num { width:14px; height:14px; background:#ddd; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:7px; font-weight:700; color:#888; }
+/* Desktop 4-col stats */
+.ds .stats-grid { grid-template-columns:repeat(4,1fr); gap:8px; }
+.ds .stat-card-val { font-size:18px; }
+.ds .chart-bars { height:70px; }
+/* Mobile stat cards — diperkecil agar tidak overflow di frame 375px */
+.mob-stat-card { background:#fff; border:1px solid #ddd; border-radius:3px; padding:5px 6px; position:relative; overflow:hidden; }
+.mob-stat-label { font-size:6.5px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:.3px; margin-bottom:2px; line-height:1.3; }
+.mob-stat-val { font-size:12px; font-weight:800; color:#111; margin-bottom:1px; }
+.mob-stat-sub { font-size:6px; color:#aaa; line-height:1.2; }
+.mob-stat-icon { position:absolute; top:5px; right:5px; width:12px; height:12px; background:#e8e8e8; border-radius:2px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">POS PWA</span>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">WF-01 — Beranda &amp; Dashboard</span>
+  <span class="topbar-badge">1 / 5</span>
+  <div class="topbar-spacer"></div>
+  <nav class="topbar-nav">
+    <a href="wireframe-index.html">← Indeks</a>
+    <a href="wireframe-01-dashboard.html" class="active">Dashboard</a>
+    <a href="wireframe-02-cashier.html">Kasir →</a>
+  </nav>
+</div>
+
+<div class="subtabs">
+  <div class="stab active" onclick="show('home-desktop',this)">🏠 Beranda — Desktop</div>
+  <div class="stab" onclick="show('home-mobile',this)">🏠 Beranda — Mobile</div>
+  <div class="stab" onclick="show('desktop',this)">📊 Dashboard — Desktop</div>
+  <div class="stab" onclick="show('mobile',this)">📊 Dashboard — Mobile</div>
+</div>
+
+<div class="canvas">
+
+<!-- ═══ BERANDA DESKTOP ═══ -->
+<div id="view-home-desktop">
+  <div class="canvas-section">
+    <div class="canvas-section-label">Tampilan Desktop — WF-01-H-D (Beranda / Home Hub)</div>
+    <div class="export-bar">
+      <span class="export-label">BERANDA DESKTOP FRAME</span>
+      <button class="btn-export" onclick="exportSection('wf01hd','WF-01-Beranda-Desktop')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG
+      </button>
+    </div>
+    <div class="annotated-row">
+      <div id="wf01hd" class="frame-unit">
+        <div class="frame-id">WF-01-H-D</div>
+        <div class="desktop-frame">
+          <div class="desktop-chrome">
+            <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+            <div class="chrome-urlbar"></div>
+          </div>
+          <div style="display:flex;height:var(--wf-desktop-h);" class="ds">
+            <!-- Sidebar -->
+            <div class="screen-sidebar">
+              <div class="sb-header">
+                <div class="sb-logo"></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
+                  <div class="ph-d" style="height:8px;border-radius:1px;"></div>
+                  <div class="ph-l" style="height:6px;width:60%;border-radius:1px;"></div>
+                </div>
+              </div>
+              <div class="sb-nav">
+                <!-- Beranda = active -->
+                <div class="sb-item active">
+                  <div class="sb-icon" style="background:#555;"></div>
+                  <span style="font-size:9px;font-weight:700;color:#333;">Beranda</span>
+                </div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Kasir</span></div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Produk</span></div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Laporan</span></div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Pengaturan</span></div>
+              </div>
+              <div class="sb-footer">
+                <div class="sb-avatar"></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
+                  <div class="ph-m" style="height:7px;border-radius:1px;"></div>
+                  <div class="ph-l" style="height:6px;width:60%;border-radius:1px;"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Main content: Home Hub -->
+            <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+              <div class="screen-header">
+                <span style="font-size:12px;font-weight:700;color:#111;">Beranda</span>
+                <!-- Online badge -->
+                <div style="display:flex;align-items:center;gap:4px;margin-left:auto;background:#e8e8e8;border-radius:999px;padding:3px 8px;font-size:8px;font-weight:600;color:#555;">
+                  <div style="width:6px;height:6px;border-radius:50%;background:#555;"></div> Online
+                </div>
+              </div>
+              <div class="screen-body ds" style="gap:8px;padding:12px;">
+                <!-- GreetingBanner: gradient card -->
+                <div style="background:linear-gradient(135deg,#555,#888);border-radius:10px;padding:14px;color:#fff;position:relative;overflow:hidden;">
+                  <div style="position:absolute;top:-16px;right:-16px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.1);"></div>
+                  <div style="font-size:8px;color:rgba(255,255,255,.75);margin-bottom:3px;">Selamat Pagi,</div>
+                  <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:3px;">Mie Jawa Melati</div>
+                  <div style="font-size:7px;color:rgba(255,255,255,.65);">Senin, 14 April 2026 · 09:00 WIB</div>
+                </div>
+                <!-- MiniStats: 2 cards -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                  <div class="stat-card" style="padding:8px;">
+                    <div class="stat-card-icon"></div>
+                    <div class="stat-card-label">Omzet Hari Ini</div>
+                    <div class="stat-card-val" style="font-size:14px;">Rp 0</div>
+                    <div class="stat-card-sub">Data hari ini</div>
+                  </div>
+                  <div class="stat-card" style="padding:8px;">
+                    <div class="stat-card-icon"></div>
+                    <div class="stat-card-label">Total Transaksi</div>
+                    <div class="stat-card-val" style="font-size:14px;">0</div>
+                    <div class="stat-card-sub">Transaksi hari ini</div>
+                  </div>
+                </div>
+                <!-- QuickActionGrid: 4 action cards -->
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                  <!-- Primary CTA: Mulai Kasir -->
+                  <div style="display:flex;align-items:center;gap:10px;background:#555;border-radius:8px;padding:10px 12px;">
+                    <div style="width:30px;height:30px;border-radius:6px;background:rgba(255,255,255,.2);flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                      <div style="font-size:9px;font-weight:700;color:#fff;">Mulai Kasir</div>
+                      <div style="font-size:7px;color:rgba(255,255,255,.7);">Kelola transaksi &amp; pembayaran</div>
+                    </div>
+                    <div style="width:8px;height:8px;border-right:1.5px solid rgba(255,255,255,.5);border-top:1.5px solid rgba(255,255,255,.5);transform:rotate(45deg);"></div>
+                  </div>
+                  <!-- Secondary: Kelola Produk -->
+                  <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 12px;">
+                    <div style="width:30px;height:30px;border-radius:6px;background:#eee;flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                      <div style="font-size:9px;font-weight:700;color:#222;">Kelola Produk</div>
+                      <div style="font-size:7px;color:#888;">Tambah atau ubah menu</div>
+                    </div>
+                    <div style="width:8px;height:8px;border-right:1.5px solid #bbb;border-top:1.5px solid #bbb;transform:rotate(45deg);"></div>
+                  </div>
+                  <!-- Secondary: Lihat Laporan -->
+                  <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 12px;">
+                    <div style="width:30px;height:30px;border-radius:6px;background:#eee;flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                      <div style="font-size:9px;font-weight:700;color:#222;">Lihat Laporan</div>
+                      <div style="font-size:7px;color:#888;">Riwayat &amp; analitik penjualan</div>
+                    </div>
+                    <div style="width:8px;height:8px;border-right:1.5px solid #bbb;border-top:1.5px solid #bbb;transform:rotate(45deg);"></div>
+                  </div>
+                  <!-- Secondary: Dashboard -->
+                  <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 12px;">
+                    <div style="width:30px;height:30px;border-radius:6px;background:#eee;flex-shrink:0;"></div>
+                    <div style="flex:1;">
+                      <div style="font-size:9px;font-weight:700;color:#222;">Dashboard</div>
+                      <div style="font-size:7px;color:#888;">Statistik lengkap &amp; grafik</div>
+                    </div>
+                    <div style="width:8px;height:8px;border-right:1.5px solid #bbb;border-top:1.5px solid #bbb;transform:rotate(45deg);"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annot-table-wrap">
+      <div class="annot-table-title">Keterangan Komponen — WF-01-H-D (Beranda Desktop)</div>
+      <p class="academic-desc">Antarmuka <em>Beranda</em> (Home Hub) dirancang sebagai pusat akses cepat (<em>Quick-Access Hub</em>) yang menggantikan tampilan analitik di halaman root (<code>/</code>). Pendekatan ini mengutamakan kecepatan operasional kasir dengan menempatkan tautan transaksi di posisi paling terjangkau. Komponen <em>GreetingBanner</em> mengimplementasikan konteks temporal dan status konektivitas, sementara <em>QuickActionGrid</em> menerapkan prinsip Hick's Law untuk meminimalkan waktu pengambilan keputusan melalui pembatasan pilihan aksi yang terstruktur.</p>
+      <table class="annot-table">
+        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
+        <tr><td><span class="cid">A1</span></td><td>GreetingBanner</td><td>Gradient card dengan sapaan dinamis (Pagi/Siang/Sore/Malam), nama toko dari API, tanggal/waktu real-time, badge status Online/Offline dari navigator.onLine.</td><td>Pasif — update otomatis setiap menit</td></tr>
+        <tr><td><span class="cid">B1</span></td><td>MiniStats (2 kartu)</td><td>Omzet Hari Ini (Rp) dan Total Transaksi hari ini. Data dari tRPC query <code>transaction.getDashboardStats</code>.</td><td>Pasif, data live dari server</td></tr>
+        <tr><td><span class="cid">C1</span></td><td>QuickActionGrid</td><td>4 action card vertikal. Card pertama (Mulai Kasir) adalah primary CTA dengan warna brand. 3 card lainnya secondary. Masing-masing navigasi ke: /pos, /products, /reports, /dashboard.</td><td>Klik/Tap → navigasi ke halaman tujuan</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BERANDA MOBILE ═══ -->
+<div id="view-home-mobile" style="display:none;">
+  <div class="canvas-section">
+    <div class="canvas-section-label">Tampilan Mobile — WF-01-H-M (Beranda / Home Hub)</div>
+    <div class="export-bar">
+      <span class="export-label">BERANDA MOBILE FRAME</span>
+      <button class="btn-export" onclick="exportSection('wf01hm','WF-01-Beranda-Mobile')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG
+      </button>
+    </div>
+    <div class="annotated-row" style="align-items:center;">
+      <div id="wf01hm" class="frame-unit">
+        <div class="frame-id">WF-01-H-M</div>
+        <div class="mobile-frame">
+          <div class="mobile-notch"></div>
+          <div class="mobile-screen screen" style="background:#f5f5f5;">
+            <!-- Header -->
+            <div class="screen-header" style="margin-top:10px;background:#fff;border-bottom:1px solid #ddd;">
+              <div class="sb-logo" style="width:22px;height:22px;"></div>
+              <span style="flex:1;font-size:11px;font-weight:700;color:#111;margin-left:6px;">Beranda</span>
+              <!-- Online badge -->
+              <div style="display:flex;align-items:center;gap:3px;background:#eee;border-radius:999px;padding:2px 7px;font-size:7px;font-weight:600;color:#555;">
+                <div style="width:5px;height:5px;border-radius:50%;background:#555;"></div> Online
+              </div>
+            </div>
+            <!-- Content -->
+            <div style="flex:1;padding:8px;display:flex;flex-direction:column;gap:6px;">
+              <!-- GreetingBanner -->
+              <div style="background:linear-gradient(135deg,#555,#888);border-radius:10px;padding:12px;color:#fff;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:-12px;right:-12px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.1);"></div>
+                <div style="font-size:7px;color:rgba(255,255,255,.75);margin-bottom:2px;">Selamat Pagi,</div>
+                <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:2px;">Mie Jawa Melati</div>
+                <div style="font-size:6.5px;color:rgba(255,255,255,.65);">Sen, 14 April 2026 · 09:00 WIB</div>
+              </div>
+              <!-- MiniStats 2-col -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+                <div class="stat-card" style="padding:7px;">
+                  <div class="stat-card-icon"></div>
+                  <div class="stat-card-label">Omzet</div>
+                  <div class="stat-card-val" style="font-size:12px;">Rp 0</div>
+                </div>
+                <div class="stat-card" style="padding:7px;">
+                  <div class="stat-card-icon"></div>
+                  <div class="stat-card-label">Transaksi</div>
+                  <div class="stat-card-val" style="font-size:12px;">0</div>
+                </div>
+              </div>
+              <!-- QuickActionGrid -->
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <div style="display:flex;align-items:center;gap:8px;background:#555;border-radius:7px;padding:9px 10px;">
+                  <div style="width:26px;height:26px;border-radius:5px;background:rgba(255,255,255,.2);flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:8px;font-weight:700;color:#fff;">Mulai Kasir</div><div style="font-size:6.5px;color:rgba(255,255,255,.7);">Kelola transaksi</div></div>
+                  <div style="width:7px;height:7px;border-right:1.5px solid rgba(255,255,255,.5);border-top:1.5px solid rgba(255,255,255,.5);transform:rotate(45deg);"></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ddd;border-radius:7px;padding:9px 10px;">
+                  <div style="width:26px;height:26px;border-radius:5px;background:#eee;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:8px;font-weight:700;color:#222;">Kelola Produk</div><div style="font-size:6.5px;color:#888;">Tambah atau ubah menu</div></div>
+                  <div style="width:7px;height:7px;border-right:1.5px solid #bbb;border-top:1.5px solid #bbb;transform:rotate(45deg);"></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ddd;border-radius:7px;padding:9px 10px;">
+                  <div style="width:26px;height:26px;border-radius:5px;background:#eee;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:8px;font-weight:700;color:#222;">Lihat Laporan</div><div style="font-size:6.5px;color:#888;">Riwayat penjualan</div></div>
+                  <div style="width:7px;height:7px;border-right:1.5px solid #bbb;border-top:1.5px solid #bbb;transform:rotate(45deg);"></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ddd;border-radius:7px;padding:9px 10px;">
+                  <div style="width:26px;height:26px;border-radius:5px;background:#eee;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:8px;font-weight:700;color:#222;">Dashboard</div><div style="font-size:6.5px;color:#888;">Statistik lengkap</div></div>
+                  <div style="width:7px;height:7px;border-right:1.5px solid #bbb;border-top:1.5px solid #bbb;transform:rotate(45deg);"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Bottom Tab Bar: Beranda aktif (tab pertama) -->
+            <div class="bottom-tab" style="grid-template-columns:repeat(5,1fr);">
+              <div class="btab-item"><div class="btab-icon on"></div><div class="btab-label on"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot-table-wrap">
+      <div class="annot-table-title">Keterangan Komponen — WF-01-H-M (Beranda Mobile)</div>
+      <p class="academic-desc">Versi mobile <em>Beranda</em> mempertahankan semua komponen Home Hub dalam layout satu kolom yang dioptimalkan untuk layar sempit. <em>GreetingBanner</em> dikompresi namun tetap mempertahankan hierarki informasi. <em>QuickActionGrid</em> menjadi daftar vertikal penuh yang memudahkan interaksi jempol (<em>thumb-reach</em>). Navigasi berpindah ke <em>Bottom Tab Bar</em> 5 tab dengan tab Beranda aktif di posisi pertama, menggantikan Dashboard yang sebelumnya menempati posisi aktif tersebut.</p>
+      <table class="annot-table">
+        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
+        <tr><td><span class="cid">A1</span></td><td>GreetingBanner Mobile</td><td>Versi kompak dengan sapaan, nama toko, dan timestamp. Badge Online/Offline di kanan header.</td><td>Pasif, update tiap menit</td></tr>
+        <tr><td><span class="cid">B1</span></td><td>MiniStats (2×1)</td><td>Grid 2 kolom: Omzet dan Transaksi hari ini. Label diperpendek untuk hemat ruang.</td><td>Pasif, data live</td></tr>
+        <tr><td><span class="cid">C1</span></td><td>QuickActionGrid Mobile</td><td>4 action card dalam 1 kolom vertikal. Card "Mulai Kasir" berwarna brand (primary). Chevron di kanan tiap card.</td><td>Tap → navigasi halaman</td></tr>
+        <tr><td><span class="cid">D1</span></td><td>Bottom Tab Bar</td><td>Navigasi 5 tab. Tab Beranda aktif di posisi pertama. Urutan: Beranda, Kasir, Produk, Laporan, Akun. Tab "Akun" membuka Account Bottom Sheet (bukan halaman).</td><td>Tap tab → pindah halaman; Tap Akun → buka bottom sheet</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DESKTOP ═══ -->
+<div id="view-desktop">
+  <div class="canvas-section">
+    <div class="canvas-section-label">Tampilan Desktop — WF-01-D</div>
+    <div class="export-bar">
+      <span class="export-label">DESKTOP FRAME</span>
+      <button class="btn-export" onclick="exportSection('wf01d','WF-01-Dashboard-Desktop')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG
+      </button>
+    </div>
+
+    <div class="annotated-row">
+      <div id="wf01d" class="frame-unit">
+        <div class="frame-id">WF-01-D</div>
+        <div class="desktop-frame">
+          <div class="desktop-chrome">
+            <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+            <div class="chrome-urlbar"></div>
+          </div>
+          <div style="display:flex;height:var(--wf-desktop-h);" class="ds">
+            <!-- Sidebar -->
+            <div class="screen-sidebar">
+              <div class="sb-header">
+                <div class="sb-logo"></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
+                  <div class="ph-d" style="height:8px;border-radius:1px;"></div>
+                  <div class="ph-l" style="height:6px;width:60%;border-radius:1px;"></div>
+                </div>
+              </div>
+              <div class="sb-nav">
+                <div class="sb-item active">
+                  <div class="sb-icon" style="background:#555;"></div>
+                  <span style="font-size:9px;font-weight:700;color:#333;">Dashboard</span>
+                </div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Kasir</span></div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Produk</span></div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Laporan</span></div>
+                <div class="sb-item"><div class="sb-icon"></div><span style="font-size:9px;color:#888;">Pengaturan</span></div>
+              </div>
+              <div class="sb-footer">
+                <div class="sb-avatar"></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
+                  <div class="ph-m" style="height:7px;border-radius:1px;"></div>
+                  <div class="ph-l" style="height:6px;width:60%;border-radius:1px;"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Main content -->
+            <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+              <div class="screen-header">
+                <span style="font-size:12px;font-weight:700;color:#111;">Dashboard</span>
+                <div style="flex:1"></div>
+                <div class="ph-l" style="width:90px;height:22px;border-radius:3px;"></div>
+              </div>
+              <div class="screen-body ds">
+                <!-- 4 stat cards -->
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <div class="stat-card-icon"></div>
+                    <div class="stat-card-label">Omzet Hari Ini</div>
+                    <div class="stat-card-val">Rp 0</div>
+                    <div class="stat-card-sub">Data real dari server</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-card-icon"></div>
+                    <div class="stat-card-label">Total Transaksi</div>
+                    <div class="stat-card-val">0</div>
+                    <div class="stat-card-sub">Transaksi hari ini</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-card-icon"></div>
+                    <div class="stat-card-label">Rata-rata/Transaksi</div>
+                    <div class="stat-card-val">Rp 0</div>
+                    <div class="stat-card-sub">Per transaksi</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-card-icon"></div>
+                    <div class="stat-card-label">Menu Terlaris</div>
+                    <div class="stat-card-val">—</div>
+                    <div class="stat-card-sub">Belum ada transaksi</div>
+                  </div>
+                </div>
+                <!-- Chart -->
+                <div class="chart-card">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <div class="chart-title">Pendapatan 7 Hari Terakhir</div>
+                    <div class="ph-btn-out" style="width:70px;height:20px;border-radius:3px;"></div>
+                  </div>
+                  <div class="chart-bars">
+                    <div class="bar bar-low" style="height:40%;"></div>
+                    <div class="bar bar-mid" style="height:60%;"></div>
+                    <div class="bar bar-low" style="height:35%;"></div>
+                    <div class="bar bar-high" style="height:85%;"></div>
+                    <div class="bar bar-mid" style="height:55%;"></div>
+                    <div class="bar bar-mid" style="height:70%;"></div>
+                    <div class="bar bar-low" style="height:45%;"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                    <span style="font-size:7px;color:#bbb;">Sen</span>
+                    <span style="font-size:7px;color:#bbb;">Sel</span>
+                    <span style="font-size:7px;color:#bbb;">Rab</span>
+                    <span style="font-size:7px;color:#bbb;">Kam</span>
+                    <span style="font-size:7px;color:#bbb;">Jum</span>
+                    <span style="font-size:7px;color:#bbb;">Sab</span>
+                    <span style="font-size:7px;color:#bbb;">Min</span>
+                  </div>
+                </div>
+                <!-- Top products -->
+                <div class="tbl-card">
+                  <div class="tbl-title">Penjualan Menu Teratas</div>
+                  <div style="padding:5px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="ph-d" style="width:80px;height:7px;border-radius:1px;"></div><div class="ph-m" style="width:35px;height:7px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:5px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:100%;border-radius:10px;"></div></div></div>
+                  <div style="padding:5px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="ph-d" style="width:70px;height:7px;border-radius:1px;"></div><div class="ph-m" style="width:35px;height:7px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:5px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:75%;border-radius:10px;"></div></div></div>
+                  <div style="padding:5px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="ph-d" style="width:90px;height:7px;border-radius:1px;"></div><div class="ph-m" style="width:35px;height:7px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:5px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:52%;border-radius:10px;"></div></div></div>
+                  <div style="padding:5px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="ph-d" style="width:60px;height:7px;border-radius:1px;"></div><div class="ph-m" style="width:35px;height:7px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:5px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:33%;border-radius:10px;"></div></div></div>
+                  <div style="padding:5px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><div class="ph-d" style="width:75px;height:7px;border-radius:1px;"></div><div class="ph-m" style="width:35px;height:7px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:5px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:20%;border-radius:10px;"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="annot-table-wrap">
+      <div class="annot-table-title">Keterangan Komponen — WF-01-D (Desktop)</div>
+      <p class="academic-desc">Antarmuka <em>Dashboard</em> utama dirancang menggunakan pendekatan tata letak berbasis <em>grid</em> untuk mengoptimalkan ruang visual pada layar resolusi tinggi (desktop). Modul ini mengedepankan prinsip keterlihatan status sistem (<em>visibility of system status</em>) di mana informasi esensial berupa ringkasan pendapatan harian dan visualisasi tren penjualan disajikan secara seketika (<em>real-time</em>). Struktur navigasi diletakkan secara vertikal di sebelah kiri (<em>sidebar</em>) untuk mempertahankan konteks posisi pengguna secara konsisten dalam struktur arsitektur informasi aplikasi POS PWA.</p>
+      <table class="annot-table">
+        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
+        <tr><td><span class="cid">A1</span></td><td>Sidebar Navigasi</td><td>Menu utama aplikasi. Logo &amp; nama toko di header, profil di footer. Sidebar selalu expanded.</td><td>Klik item → navigasi halaman</td></tr>
+        <tr><td><span class="cid">B1–B4</span></td><td>Kartu Statistik (StatsCard)</td><td>Omzet Hari Ini, Total Transaksi, Rata-rata/Transaksi, Menu Terlaris. Data real dari server, khusus hari ini.</td><td>Tampilan pasif, data live dari TRPC query</td></tr>
+        <tr><td><span class="cid">C1</span></td><td>Grafik Pendapatan (RevenueChart)</td><td>Grafik batang tren pendapatan harian dalam periode tertentu</td><td>Dropdown filter → ganti periode</td></tr>
+        <tr><td><span class="cid">D1</span></td><td>Penjualan Menu Teratas (TopProducts)</td><td>Nama produk + qty porsi di kanan. Progress bar horizontal: 100% = produk terlaris. Maks 5 produk.</td><td>Pasif</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MOBILE ═══ -->
+<div id="view-mobile" style="display:none;">
+  <div class="canvas-section">
+    <div class="canvas-section-label">Tampilan Mobile — WF-01-M</div>
+    <div class="export-bar">
+      <span class="export-label">MOBILE FRAME</span>
+      <button class="btn-export" onclick="exportSection('wf01m','WF-01-Dashboard-Mobile')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG
+      </button>
+    </div>
+    <div class="annotated-row" style="align-items:center;">
+      <div id="wf01m" class="frame-unit">
+        <div class="frame-id">WF-01-M</div>
+        <div class="mobile-frame">
+          <div class="mobile-notch"></div>
+          <div class="mobile-screen screen" style="background:#fff;overflow:hidden;">
+            <!-- Header -->
+            <div class="screen-header" style="margin-top:10px;border-bottom:1px solid #ddd;">
+              <div class="sb-logo" style="width:24px;height:24px;"></div>
+              <span style="flex:1;font-size:11px;font-weight:700;color:#111;margin-left:6px;">Dashboard</span>
+              <div class="ph-l" style="width:22px;height:22px;border-radius:50%;"></div>
+            </div>
+            <!-- Content: overflow:hidden agar tidak keluar frame -->
+            <div style="flex:1;padding:6px;display:flex;flex-direction:column;gap:5px;background:#fff;overflow:hidden;">
+              <!-- 2x2 Stats — diperkecil -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+                <div class="mob-stat-card">
+                  <div class="mob-stat-icon"></div>
+                  <div class="mob-stat-label">Omzet Hari Ini</div>
+                  <div class="mob-stat-val">Rp 0</div>
+                  <div class="mob-stat-sub">Data real server</div>
+                </div>
+                <div class="mob-stat-card">
+                  <div class="mob-stat-icon"></div>
+                  <div class="mob-stat-label">Total Transaksi</div>
+                  <div class="mob-stat-val">0</div>
+                  <div class="mob-stat-sub">Transaksi hari ini</div>
+                </div>
+                <div class="mob-stat-card">
+                  <div class="mob-stat-icon"></div>
+                  <div class="mob-stat-label">Rata-rata /Transaksi</div>
+                  <div class="mob-stat-val">Rp 0</div>
+                  <div class="mob-stat-sub">Per transaksi</div>
+                </div>
+                <div class="mob-stat-card">
+                  <div class="mob-stat-icon"></div>
+                  <div class="mob-stat-label">Menu Terlaris</div>
+                  <div class="mob-stat-val">—</div>
+                  <div class="mob-stat-sub">Belum ada data</div>
+                </div>
+              </div>
+              <!-- Chart -->
+              <div class="chart-card" style="padding:6px;">
+                <div class="chart-title">Pendapatan 7 Hari</div>
+                <div class="chart-bars" style="height:44px;">
+                  <div class="bar bar-low" style="height:40%;"></div>
+                  <div class="bar bar-mid" style="height:65%;"></div>
+                  <div class="bar bar-low" style="height:35%;"></div>
+                  <div class="bar bar-high" style="height:90%;"></div>
+                  <div class="bar bar-mid" style="height:55%;"></div>
+                  <div class="bar bar-mid" style="height:70%;"></div>
+                  <div class="bar bar-low" style="height:45%;"></div>
+                </div>
+              </div>
+              <!-- Top products list -->
+              <div class="tbl-card" style="padding:6px;">
+                <div class="tbl-title">Penjualan Menu Teratas</div>
+                <div style="padding:3px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;"><div class="ph-d" style="width:60px;height:6px;border-radius:1px;"></div><div class="ph-m" style="width:28px;height:6px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:4px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:100%;border-radius:10px;"></div></div></div>
+                <div style="padding:3px 0;border-bottom:1px solid #f0f0f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;"><div class="ph-d" style="width:50px;height:6px;border-radius:1px;"></div><div class="ph-m" style="width:28px;height:6px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:4px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:70%;border-radius:10px;"></div></div></div>
+                <div style="padding:3px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;"><div class="ph-d" style="width:68px;height:6px;border-radius:1px;"></div><div class="ph-m" style="width:28px;height:6px;border-radius:1px;"></div></div><div style="background:#e8e8e8;height:4px;border-radius:10px;overflow:hidden;"><div style="background:#555;height:100%;width:45%;border-radius:10px;"></div></div></div>
+              </div>
+            </div>
+            <!-- Bottom tab -->
+            <div class="bottom-tab" style="grid-template-columns:repeat(5,1fr);">
+              <div class="btab-item"><div class="btab-icon on"></div><div class="btab-label on"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+              <div class="btab-item"><div class="btab-icon"></div><div class="btab-label"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="annot-table-wrap">
+      <div class="annot-table-title">Keterangan Komponen — WF-01-M (Mobile)</div>
+      <p class="academic-desc">Adaptasi antarmuka <em>Dashboard</em> pada layar perangkat seluler (mobile) difokuskan pada paradigma <em>mobile-first</em> dan pola desain ramah sentuhan (<em>touch-friendly design</em>). Pemadatan informasi numerik ke dalam bentuk matriks 2×2 menghindari kompleksitas visual berlebih pada area dengan keterbatasan spasial, sementara metode gulir lewati batas (<em>horizontal scrolling</em>) difasilitasi pada grafik batang agar integritas data tetap terjaga. Navigasi struktural ditransisikan ke pola <em>Bottom Tab Bar</em> agar memenuhi Hukum Fitts (<em>Fitts's Law</em>) untuk ketercapaian ibu jari secara ergonomis.</p>
+      <table class="annot-table">
+        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
+        <tr><td><span class="cid">A1</span></td><td>Header Mobile</td><td>Logo toko, nama halaman, ikon status koneksi PWA (online/offline)</td><td>—</td></tr>
+        <tr><td><span class="cid">B1–B4</span></td><td>StatsCard (2×2)</td><td>Omzet Hari Ini, Total Transaksi, Rata-rata/Transaksi, Menu Terlaris. Grid 2 kolom untuk layar 375px.</td><td>Pasif, data live TRPC</td></tr>
+        <tr><td><span class="cid">C1</span></td><td>Grafik Pendapatan</td><td>Grafik batang dalam kontainer scrollable secara horizontal</td><td>Swipe horizontal</td></tr>
+        <tr><td><span class="cid">D1</span></td><td>Penjualan Menu Teratas</td><td>Nama produk + qty porsi. Progress bar horizontal relatif produk teratas. Maks 3 baris di mobile.</td><td>Pasif</td></tr>
+        <tr><td><span class="cid">E1</span></td><td>Bottom Tab Bar</td><td>Navigasi 5 tab. Dashboard aktif. Tab lain: Kasir, Produk, Laporan, Akun. Tab ke-5 membuka Account Bottom Sheet (logon/logout/profil).</td><td>Tap tab → pindah halaman; Tap Akun → buka sheet</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /canvas -->
+
+<div class="nav-footer">
+  <a class="nav-btn" href="wireframe-index.html">← Indeks</a>
+  <div style="flex:1"></div>
+  <a class="nav-btn primary" href="wireframe-02-cashier.html">WF-02: Kasir →</a>
+</div>
+
+<script>
+function show(view,tab){
+  ['home-desktop','home-mobile','desktop','mobile'].forEach(id=>document.getElementById('view-'+id).style.display=id===view?'':'none');
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+}
+// exportSection — defined in wireframe-shared.js
+</script>
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Logout — Design Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #ea580c;
+      --primary-15:    rgba(234, 88, 12, 0.15);
+      --primary-8:     rgba(234, 88, 12, 0.08);
+      --muted-fg:      #78716c;
+      --destructive:   #dc2626;
+      --dest-8:        rgba(220, 38, 38, 0.08);
+      --dest-12:       rgba(220, 38, 38, 0.12);
+      --border:        #e7e5e4;
+      --bg:            #fafaf9;
+      --bg-nav:        #ffffff;
+      --fg:            #1c1917;
+      --fg-2:          #44403c;
+      --card:          #ffffff;
+      --muted-bg:      #f5f5f4;
+      --shadow-nav:    0 -2px 16px rgba(0,0,0,0.07);
+      --shadow-card:   0 2px 16px rgba(0,0,0,0.06);
+      --shadow-deep:   0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f0f0ef;
+      min-height: 100vh;
+      padding: 48px 32px 80px;
+      color: var(--fg);
+    }
+
+    /* ── HEADER ── */
+    .page-header { text-align: center; margin-bottom: 56px; }
+    .page-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: #0c0a09; }
+    .page-header p  { font-size: 14px; color: #a8a29e; margin-top: 6px; }
+    .badge-problem {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 14px; padding: 6px 16px;
+      background: #fef2f2; border: 1px solid #fecaca; border-radius: 99px;
+      font-size: 12px; font-weight: 600; color: #b91c1c;
+    }
+
+    /* ── OPTIONS GRID ── */
+    .options { display: flex; flex-direction: column; gap: 56px; }
+
+    /* ── OPTION CARD ── */
+    .option-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .option-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 32px; gap: 16px;
+    }
+    .option-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 99px;
+    }
+    .badge-rec  { background: #dcfce7; color: #15803d; }
+    .badge-alt  { background: #dbeafe; color: #1d4ed8; }
+    .badge-fun  { background: #fef9c3; color: #a16207; }
+
+    .option-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 4px; }
+    .option-desc  { font-size: 13px; color: #78716c; line-height: 1.5; max-width: 480px; }
+
+    .pros-cons {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .pros, .cons {
+      flex: 1; min-width: 200px;
+      background: var(--muted-bg); border-radius: 14px; padding: 16px;
+    }
+    .pros h4 { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #15803d; margin-bottom: 8px; }
+    .cons h4 { font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #b91c1c; margin-bottom: 8px; }
+    .pros li, .cons li {
+      font-size: 12px; color: #57534e; line-height: 1.6;
+      list-style: none; padding-left: 14px; position: relative;
+    }
+    .pros li::before { content: '✓'; position: absolute; left: 0; color: #16a34a; }
+    .cons li::before { content: '✕'; position: absolute; left: 0; color: #dc2626; }
+
+    /* ── PHONE PREVIEWS ── */
+    .previews { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; }
+    .preview-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .preview-label {
+      font-size: 11px; font-weight: 600; color: #94a3b8;
+      text-transform: uppercase; letter-spacing: 0.07em;
+    }
+
+    .phone {
+      width: 260px;
+      border-radius: 36px;
+      overflow: hidden;
+      border: 6px solid #1c1917;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06) inset,
+        0 20px 50px rgba(0,0,0,0.22);
+      background: var(--bg);
+      position: relative;
+    }
+    .phone-notch {
+      width: 80px; height: 22px;
+      background: #1c1917;
+      border-radius: 0 0 14px 14px;
+      margin: 0 auto;
+    }
+    .phone-screen {
+      min-height: 380px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP BAR (header in phone) ── */
+    .app-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: var(--card);
+      border-bottom: 1px solid var(--border);
+    }
+    .app-topbar-title { font-size: 14px; font-weight: 700; color: var(--fg); }
+    .avatar-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--primary); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border: none;
+      font-size: 12px; font-weight: 700; color: white;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .avatar-btn:hover { transform: scale(1.08); box-shadow: 0 0 0 3px var(--primary-15); }
+
+    .app-content-area {
+      flex: 1; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .content-block {
+      border-radius: 10px; background: var(--muted-bg);
+      border: 1px solid var(--border);
+    }
+    .content-block.tall  { height: 100px; }
+    .content-block.short { height: 44px; }
+    .content-block.mid   { height: 68px; }
+
+    /* ── BOTTOM NAV (shared) ── */
+    .bottom-nav {
+      background: var(--bg-nav);
+      border-top: 1px solid var(--border);
+      box-shadow: var(--shadow-nav);
+      display: flex; align-items: stretch;
+    }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2px; min-height: 56px; padding: 8px 2px;
+      cursor: pointer; color: var(--muted-fg);
+      transition: color 0.2s ease; text-decoration: none;
+      border: none; background: transparent; font-family: inherit;
+    }
+    .nav-item.active { color: var(--primary); }
+    .nav-item:hover:not(.active) { color: var(--fg-2); }
+    .nav-pill {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 28px; border-radius: 99px;
+      transition: background 0.2s ease;
+    }
+    .nav-item.active .nav-pill { background: var(--primary-15); }
+    .nav-icon { width: 18px; height: 18px; }
+    .nav-label {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.03em;
+      opacity: 0.65; line-height: 1;
+    }
+    .nav-item.active .nav-label { opacity: 1; }
+
+    /* Option A specific */
+    .nav-item.logout-tab {
+      flex: none; width: 48px;
+      border-left: 1px solid rgba(231,229,228,0.7);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .nav-item.logout-tab:hover { color: var(--destructive); }
+    .nav-item.logout-tab:hover .nav-pill { background: var(--dest-8); }
+
+    /* ── DROPDOWN OVERLAY (Option B) ── */
+    .dropdown-menu {
+      position: absolute; top: 52px; right: 10px;
+      background: white; border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+      border: 1px solid rgba(0,0,0,0.06);
+      width: 190px; overflow: hidden; z-index: 10;
+    }
+    .dropdown-header {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dropdown-header .dh-name { font-size: 13px; font-weight: 700; color: var(--fg); }
+    .dropdown-header .dh-role { font-size: 11px; color: var(--muted-fg); margin-top: 1px; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px; font-size: 12px; font-weight: 500;
+      cursor: pointer; transition: background 0.15s;
+      color: var(--fg-2);
+    }
+    .dropdown-item:hover { background: var(--muted-bg); }
+    .dropdown-item.danger { color: var(--destructive); }
+    .dropdown-item.danger:hover { background: var(--dest-8); }
+
+    /* ── BOTTOM SHEET (Option C) ── */
+    .bottom-sheet {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: white; border-radius: 20px 20px 0 0;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.18); z-index: 10;
+      padding: 10px 0 20px;
+    }
+    .sheet-handle {
+      width: 36px; height: 4px; background: #e2e0df;
+      border-radius: 99px; margin: 0 auto 16px;
+    }
+    .sheet-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 20px 16px; border-bottom: 1px solid var(--border);
+    }
+    .sheet-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--primary); display: flex; align-items: center;
+      justify-content: center; font-size: 14px; font-weight: 700; color: white;
+      flex-shrink: 0;
+    }
+    .sheet-name { font-size: 13px; font-weight: 700; }
+    .sheet-role { font-size: 11px; color: var(--muted-fg); }
+    .sheet-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; font-size: 13px; font-weight: 500;
+      color: var(--fg-2); cursor: pointer; transition: background 0.15s;
+    }
+    .sheet-item:hover { background: var(--muted-bg); }
+    .sheet-item.danger { color: var(--destructive); }
+    .sheet-item.danger:hover { background: var(--dest-8); }
+    .sheet-item-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--muted-bg); flex-shrink: 0;
+    }
+    .sheet-item.danger .sheet-item-icon { background: var(--dest-8); }
+    .sheet-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.35); z-index: 5;
+    }
+
+    /* ── EFFORT TAG ── */
+    .effort-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 99px;
+      font-size: 12px; font-weight: 600;
+      border: 1.5px solid;
+    }
+    .effort-low    { border-color: #bbf7d0; color: #15803d; background: #f0fdf4; }
+    .effort-medium { border-color: #fde68a; color: #b45309; background: #fffbeb; }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-section { margin-top: 56px; }
+    .compare-section h2 {
+      font-size: 18px; font-weight: 700; margin-bottom: 20px;
+      color: #0c0a09; letter-spacing: -0.3px;
+    }
+    .compare-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+      background: white; border-radius: 16px; overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .compare-table th {
+      background: #fafaf9; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: #a8a29e; padding: 12px 16px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-table td {
+      padding: 13px 16px; border-bottom: 1px solid #f5f5f4;
+      vertical-align: middle; color: #57534e;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table td:first-child { font-weight: 600; color: var(--fg); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .dot-green { background: #22c55e; }
+    .dot-yellow { background: #eab308; }
+    .dot-red { background: #ef4444; }
+    .stars { color: var(--primary); letter-spacing: -2px; }
+
+    @media (max-width: 700px) {
+      body { padding: 24px 16px 60px; }
+      .option-card { padding: 24px; }
+      .previews { gap: 16px; }
+      .phone { width: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="canvas"></div>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <h1>Mobile Logout — 3 Design Options</h1>
+  <p>Pilih pendekatan terbaik untuk UX aplikasi POS kamu</p>
+  <span class="badge-problem">
+    <svg data-lucide="alert-circle" width="13" height="13"></svg>
+    Masalah: User mobile tidak bisa logout dari aplikasi
+  </span>
+</div>
+
+<div class="options">
+
+  <!-- ════════════════════════════════════════════
+       OPTION A — 6th tab + separator
+       ════════════════════════════════════════════ -->
+  <div class="option-card">
+    <div class="option-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span class="option-badge badge-rec">★ Recommended</span>
+          <span class="effort-tag effort-low">Low Effort · 1 file</span>
+        </div>
+        <div class="option-title">Option A — Logout Tab (Compact)</div>
+        <div class="option-desc">Tambah tombol logout kecil di paling kanan bottom tab bar, dipisahkan dengan garis vertikal. Tab navigasi tetap <code>flex-1</code>, logout <code>flex-none 48px</code> sehingga tidak memenuhi ruang.</div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <h4>Pros</h4>
+        <ul>
+          <li>1 file saja diubah</li>
+          <li>Selalu terlihat, mudah ditemukan</li>
+          <li>Pola konsisten dengan sidebar desktop</li>
+          <li>Zero extra components</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <h4>Cons</h4>
+        <ul>
+          <li>Tab bar lebih sempit (~48px/tab)</li>
+          <li>Logout berdampingan dengan navigasi</li>
+          <li>Masih &gt; 44px touch target (a11y OK)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="previews">
+      <div class="preview-wrap">
+        <span class="preview-label">Tampilan Penuh</span>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="app-topbar">
+              <span class="app-topbar-title">Beranda</span>
+            </div>
+            <div class="app-content-area">
+              <div class="content-block tall"></div>
+              <div class="content-block short"></div>
+              <div class="content-block mid"></div>
+            </div>
+          </div>
+          <nav class="bottom-nav">
+            <button class="nav-item active">
+              <span class="nav-pill"><svg data-lucide="home" class="nav-icon"></svg></span>
+              <span class="nav-label">Beranda</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="shopping-cart" class="nav-icon"></svg></span>
+              <span class="nav-label">Kasir</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="package" class="nav-icon"></svg></span>
+              <span class="nav-label">Produk</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="bar-chart-3" class="nav-icon"></svg></span>
+              <span class="nav-label">Laporan</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="settings-2" class="nav-icon"></svg></span>
+              <span class="nav-label">Setting</span>
+            </button>
+            <!-- THE NEW LOGOUT -->
+            <button class="nav-item logout-tab" title="Keluar">
+              <span class="nav-pill"><svg data-lucide="log-out" class="nav-icon"></svg></span>
+              <span class="nav-label">Keluar</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <div class="preview-wrap">
+        <span class="preview-label">Zoom — Tab Bar Detail</span>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;width:320px;box-shadow:var(--shadow-deep)">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.07em">Bottom Tab Bar</div>
+          <nav class="bottom-nav" style="box-shadow:none;border-top:none;border-bottom:1px solid var(--border)">
+            <button class="nav-item active">
+              <span class="nav-pill"><svg data-lucide="home" class="nav-icon"></svg></span>
+              <span class="nav-label">Beranda</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="shopping-cart" class="nav-icon"></svg></span>
+              <span class="nav-label">Kasir</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="package" class="nav-icon"></svg></span>
+              <span class="nav-label">Produk</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="bar-chart-3" class="nav-icon"></svg></span>
+              <span class="nav-label">Laporan</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="settings-2" class="nav-icon"></svg></span>
+              <span class="nav-label">Setting</span>
+            </button>
+            <button class="nav-item logout-tab" title="Keluar" style="color:#78716c">
+              <span class="nav-pill"><svg data-lucide="log-out" class="nav-icon"></svg></span>
+              <span class="nav-label">Keluar</span>
+            </button>
+          </nav>
+          <div style="padding:12px 16px;display:flex;flex-direction:column;gap:6px;font-size:11px;color:#78716c">
+            <div style="display:flex;align-items:center;gap:6px"><span style="font-weight:600;color:#ea580c">←</span> flex-1 × 5 tabs &nbsp;&nbsp;<span style="font-weight:600;color:#ea580c">| →</span> flex-none 48px</div>
+            <div>Hover effect: <span style="color:#dc2626;font-weight:600">text-destructive + bg-destructive/8</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       OPTION B — Avatar dropdown in header
+       ════════════════════════════════════════════ -->
+  <div class="option-card">
+    <div class="option-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span class="option-badge badge-alt">Alternative</span>
+          <span class="effort-tag effort-medium">Medium Effort · 2–3 files</span>
+        </div>
+        <div class="option-title">Option B — Avatar Dropdown (Top Header)</div>
+        <div class="option-desc">Tambahkan global mobile header dengan tombol avatar di kanan atas. Klik avatar membuka dropdown kecil berisi info user + tombol logout. Polished, seperti aplikasi Gmail / Google Drive mobile.</div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <h4>Pros</h4>
+        <ul>
+          <li>Tab bar tidak bertambah item</li>
+          <li>Pola sangat familiar (Google apps)</li>
+          <li>Bisa tambah fitur lain (profil, tema)</li>
+          <li>Visual lebih kaya / informative</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <h4>Cons</h4>
+        <ul>
+          <li>Perlu modifikasi PageContainer / layout</li>
+          <li>Mengurangi ruang konten (~48px)</li>
+          <li>Multi-file change</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="previews">
+      <div class="preview-wrap">
+        <span class="preview-label">Sebelum klik avatar</span>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" style="position:relative">
+            <div class="app-topbar">
+              <span class="app-topbar-title">Beranda</span>
+              <button class="avatar-btn" id="avatarBtn">A</button>
+            </div>
+            <div class="app-content-area">
+              <div class="content-block tall"></div>
+              <div class="content-block short"></div>
+              <div class="content-block mid"></div>
+            </div>
+          </div>
+          <nav class="bottom-nav">
+            <button class="nav-item active">
+              <span class="nav-pill"><svg data-lucide="home" class="nav-icon"></svg></span>
+              <span class="nav-label">Beranda</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="shopping-cart" class="nav-icon"></svg></span>
+              <span class="nav-label">Kasir</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="package" class="nav-icon"></svg></span>
+              <span class="nav-label">Produk</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="bar-chart-3" class="nav-icon"></svg></span>
+              <span class="nav-label">Laporan</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="settings-2" class="nav-icon"></svg></span>
+              <span class="nav-label">Setting</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <div class="preview-wrap">
+        <span class="preview-label">Setelah klik avatar</span>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" style="position:relative">
+            <div class="app-topbar">
+              <span class="app-topbar-title">Beranda</span>
+              <button class="avatar-btn" style="box-shadow:0 0 0 3px var(--primary-15)">A</button>
+            </div>
+            <!-- DROPDOWN OPEN -->
+            <div class="dropdown-menu">
+              <div class="dropdown-header">
+                <div class="dh-name">admin@toko.com</div>
+                <div class="dh-role">Administrator</div>
+              </div>
+              <div class="dropdown-item">
+                <svg data-lucide="user" width="14" height="14"></svg>
+                Profil Saya
+              </div>
+              <div class="dropdown-item">
+                <svg data-lucide="settings" width="14" height="14"></svg>
+                Pengaturan
+              </div>
+              <div class="dropdown-item danger">
+                <svg data-lucide="log-out" width="14" height="14"></svg>
+                Keluar
+              </div>
+            </div>
+            <!-- dimmed overlay -->
+            <div style="position:absolute;inset:0;top:48px;background:rgba(0,0,0,0.2);z-index:5"></div>
+            <div class="app-content-area">
+              <div class="content-block tall"></div>
+              <div class="content-block short"></div>
+            </div>
+          </div>
+          <nav class="bottom-nav">
+            <button class="nav-item active">
+              <span class="nav-pill"><svg data-lucide="home" class="nav-icon"></svg></span>
+              <span class="nav-label">Beranda</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="shopping-cart" class="nav-icon"></svg></span>
+              <span class="nav-label">Kasir</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="package" class="nav-icon"></svg></span>
+              <span class="nav-label">Produk</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="bar-chart-3" class="nav-icon"></svg></span>
+              <span class="nav-label">Laporan</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="settings-2" class="nav-icon"></svg></span>
+              <span class="nav-label">Setting</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       OPTION C — Bottom Sheet from Pengaturan
+       ════════════════════════════════════════════ -->
+  <div class="option-card">
+    <div class="option-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span class="option-badge badge-fun">Creative</span>
+          <span class="effort-tag effort-medium">Medium Effort · 2 files</span>
+        </div>
+        <div class="option-title">Option C — User Sheet dari Tab Pengaturan</div>
+        <div class="option-desc">Tab "Pengaturan" berubah menjadi "Akun". Tap membuka bottom sheet dengan info user, shortcut ke pengaturan, dan tombol logout. Tab bar tidak bertambah dan tidak ada header baru. Pattern: seperti Spotify, Tokopedia.</div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <h4>Pros</h4>
+        <ul>
+          <li>Tab bar tetap 5 item, bersih</li>
+          <li>Efek "wow" — UX premium</li>
+          <li>Grouping logis: akun + pengaturan + logout</li>
+          <li>Tidak mengurangi ruang konten</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <h4>Cons</h4>
+        <ul>
+          <li>Logout tidak langsung terlihat</li>
+          <li>Perlu komponen Sheet baru</li>
+          <li>User harus tap 2x untuk logout</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="previews">
+      <div class="preview-wrap">
+        <span class="preview-label">Tab bar (tetap 5 item)</span>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" style="position:relative">
+            <div class="app-topbar">
+              <span class="app-topbar-title">Beranda</span>
+            </div>
+            <div class="app-content-area">
+              <div class="content-block tall"></div>
+              <div class="content-block short"></div>
+              <div class="content-block mid"></div>
+            </div>
+          </div>
+          <nav class="bottom-nav">
+            <button class="nav-item active">
+              <span class="nav-pill"><svg data-lucide="home" class="nav-icon"></svg></span>
+              <span class="nav-label">Beranda</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="shopping-cart" class="nav-icon"></svg></span>
+              <span class="nav-label">Kasir</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="package" class="nav-icon"></svg></span>
+              <span class="nav-label">Produk</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="bar-chart-3" class="nav-icon"></svg></span>
+              <span class="nav-label">Laporan</span>
+            </button>
+            <!-- CHANGED: Pengaturan → Akun -->
+            <button class="nav-item" style="position:relative">
+              <span class="nav-pill">
+                <svg data-lucide="circle-user-round" class="nav-icon"></svg>
+              </span>
+              <span class="nav-label">Akun</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <div class="preview-wrap">
+        <span class="preview-label">Setelah tap "Akun"</span>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" style="position:relative;overflow:hidden">
+            <div class="app-topbar">
+              <span class="app-topbar-title">Beranda</span>
+            </div>
+            <div class="app-content-area" style="filter:blur(1px);opacity:0.6">
+              <div class="content-block tall"></div>
+              <div class="content-block short"></div>
+            </div>
+            <!-- OVERLAY -->
+            <div class="sheet-overlay"></div>
+            <!-- BOTTOM SHEET -->
+            <div class="bottom-sheet">
+              <div class="sheet-handle"></div>
+              <div class="sheet-header">
+                <div class="sheet-avatar">A</div>
+                <div>
+                  <div class="sheet-name">admin@toko.com</div>
+                  <div class="sheet-role">Administrator</div>
+                </div>
+              </div>
+              <div class="sheet-item">
+                <span class="sheet-item-icon"><svg data-lucide="user-cog" width="16" height="16" color="#78716c"></svg></span>
+                Edit Profil
+              </div>
+              <div class="sheet-item">
+                <span class="sheet-item-icon"><svg data-lucide="settings-2" width="16" height="16" color="#78716c"></svg></span>
+                Pengaturan Toko
+              </div>
+              <div class="sheet-item danger">
+                <span class="sheet-item-icon"><svg data-lucide="log-out" width="16" height="16" color="#dc2626"></svg></span>
+                Keluar dari Aplikasi
+              </div>
+            </div>
+          </div>
+          <nav class="bottom-nav">
+            <button class="nav-item active">
+              <span class="nav-pill"><svg data-lucide="home" class="nav-icon"></svg></span>
+              <span class="nav-label">Beranda</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="shopping-cart" class="nav-icon"></svg></span>
+              <span class="nav-label">Kasir</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="package" class="nav-icon"></svg></span>
+              <span class="nav-label">Produk</span>
+            </button>
+            <button class="nav-item">
+              <span class="nav-pill"><svg data-lucide="bar-chart-3" class="nav-icon"></svg></span>
+              <span class="nav-label">Laporan</span>
+            </button>
+            <button class="nav-item" style="color:var(--primary)">
+              <span class="nav-pill" style="background:var(--primary-15)"><svg data-lucide="circle-user-round" class="nav-icon"></svg></span>
+              <span class="nav-label" style="opacity:1">Akun</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /options -->
+
+<!-- ── COMPARISON TABLE ── -->
+<div class="compare-section">
+  <h2>Perbandingan Cepat</h2>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Kriteria</th>
+        <th>A — Logout Tab</th>
+        <th>B — Avatar Dropdown</th>
+        <th>C — Account Sheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Effort</td>
+        <td><span class="dot dot-green"></span>Low (1 file)</td>
+        <td><span class="dot dot-yellow"></span>Medium (2–3 file)</td>
+        <td><span class="dot dot-yellow"></span>Medium (2 file)</td>
+      </tr>
+      <tr>
+        <td>Discoverability</td>
+        <td><span class="stars">★★★★★</span></td>
+        <td><span class="stars">★★★★</span>☆</td>
+        <td><span class="stars">★★★</span>☆☆</td>
+      </tr>
+      <tr>
+        <td>Ruang Tab Bar</td>
+        <td><span class="dot dot-yellow"></span>Sedikit berkurang</td>
+        <td><span class="dot dot-green"></span>Tidak berubah</td>
+        <td><span class="dot dot-green"></span>Tidak berubah</td>
+      </tr>
+      <tr>
+        <td>UX Premium Feel</td>
+        <td><span class="stars">★★★</span>☆☆</td>
+        <td><span class="stars">★★★★</span>☆</td>
+        <td><span class="stars">★★★★★</span></td>
+      </tr>
+      <tr>
+        <td>Tap untuk logout</td>
+        <td>1 tap</td>
+        <td>2 tap (avatar → Keluar)</td>
+        <td>2 tap (Akun → Keluar)</td>
+      </tr>
+      <tr>
+        <td>Risiko salah tap</td>
+        <td><span class="dot dot-yellow"></span>Sedang</td>
+        <td><span class="dot dot-green"></span>Rendah</td>
+        <td><span class="dot dot-green"></span>Rendah</td>
+      </tr>
+      <tr>
+        <td>Cocok untuk thesis</td>
+        <td><span class="dot dot-green"></span>Sangat cocok</td>
+        <td><span class="dot dot-green"></span>Cocok</td>
+        <td><span class="dot dot-green"></span>Cocok (lebih kompleks)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p style="text-align:center;margin-top:40px;font-size:13px;color:#a8a29e">
+  Pilih opsi yang kamu suka → ketik "implement A", "implement B", atau "implement C"
+</p>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
