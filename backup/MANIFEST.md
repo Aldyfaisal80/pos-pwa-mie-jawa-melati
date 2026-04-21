@@ -2,9 +2,9 @@
 
 | Field | Value |
 |-------|-------|
-| **Timestamp UTC** | 2026-04-21T01:28:23Z |
-| **Timestamp WIB** | 2026-04-21 08:28 WIB |
-| **Trigger** | workflow_dispatch |
+| **Timestamp UTC** | 2026-04-21T19:18:16Z |
+| **Timestamp WIB** | 2026-04-22 02:18 WIB |
+| **Trigger** | schedule |
 | **Files** | schema.sql, data.sql |
 
 ## Cara Restore
