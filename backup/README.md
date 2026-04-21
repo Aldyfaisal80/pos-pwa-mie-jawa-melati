@@ -13,6 +13,92 @@ Direktori ini berisi backup otomatis database **Supabase PostgreSQL** yang di-ge
 
 ---
 
+## 🚀 Cara Run Backup
+
+Ada **3 metode** untuk menjalankan backup. Pilih sesuai kondisi:
+
+| Metode | Kapan Dipakai | Prasyarat |
+|--------|--------------|-----------|
+| **A — GitHub UI** | Trigger manual 1 klik, paling mudah | Akses ke repo GitHub |
+| **B — GitHub CLI** | Trigger dari terminal, cocok untuk DevOps | `gh` CLI terinstall |
+| **C — Local Script** | Backup offline/emergency, simpan ke laptop | `pg_dump` v17+ terinstall |
+
+---
+
+### Metode A: GitHub UI (Rekomendasi — Termudah) ⭐
+
+1. Buka halaman repository: [Aldyfaisal80/POS-PWA](https://github.com/Aldyfaisal80/POS-PWA)
+2. Klik tab **Actions** di navbar atas
+3. Di sidebar kiri, pilih workflow **"🗄️ Nightly DB Backup"**
+4. Klik tombol **"Run workflow"** (tombol abu-abu di kanan)
+5. Isi field **"Alasan manual backup"** (opsional, contoh: `"Sebelum deploy v2.1"`)
+6. Klik **"Run workflow"** (tombol hijau)
+
+```
+✅ Expected result: Workflow berjalan ~2-3 menit
+✅ File backup/schema.sql dan backup/data.sql ter-commit otomatis
+✅ Commit message: "🗄️ backup: 2026-04-21 08:00 WIB"
+```
+
+---
+
+### Metode B: GitHub CLI (Terminal)
+
+```powershell
+# Install gh CLI jika belum ada
+winget install GitHub.cli
+
+# Login GitHub
+gh auth login
+
+# Trigger workflow dari terminal
+gh workflow run backup-db.yml --repo Aldyfaisal80/POS-PWA
+
+# Dengan alasan custom
+gh workflow run backup-db.yml --repo Aldyfaisal80/POS-PWA -f reason="Pre-deploy backup"
+
+# Pantau status
+gh run watch --repo Aldyfaisal80/POS-PWA
+```
+
+---
+
+### Metode C: Local Script (PowerShell — Offline)
+
+> [!NOTE]
+> Gunakan metode ini jika GitHub Actions tidak tersedia atau butuh backup cepat ke laptop lokal.
+
+**Prasyarat: Install pg_dump v17**
+
+```powershell
+# Option 1: Via winget
+winget install PostgreSQL.PostgreSQL.17
+
+# Option 2: Download installer
+# https://www.postgresql.org/download/windows/
+# (install "Command Line Tools" saja, tidak perlu full server)
+
+# Verifikasi
+pg_dump --version  # Harus menampilkan "17.x"
+```
+
+**Jalankan script backup:**
+
+```powershell
+# Dari root project
+.\scripts\backup-local.ps1
+```
+
+Script akan:
+1. ✅ Cek `pg_dump` ada & versi cukup
+2. 🔐 Minta password database secara aman (tidak disimpan ke file)
+3. 📥 Dump `schema.sql` (struktur DDL)
+4. 📊 Dump `data.sql` (semua data)
+5. 📝 Buat `MANIFEST.md` dengan timestamp
+6. 🎉 Tampilkan ringkasan file yang dibuat
+
+---
+
 ## 📁 Isi Direktori
 
 ```
