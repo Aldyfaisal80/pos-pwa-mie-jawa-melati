@@ -38,9 +38,9 @@ jobs:
           PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
           pg_dump \
-            --host=db.hrzvdledrengvxuzmsbk.supabase.co \
+            --host=aws-1-ap-southeast-1.pooler.supabase.com \
             --port=5432 \
-            --username=postgres \
+            --username=postgres.hrzvdledrengvxuzmsbk \
             --dbname=postgres \
             --schema-only \
             --no-owner \
@@ -54,9 +54,9 @@ jobs:
           PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
           pg_dump \
-            --host=db.hrzvdledrengvxuzmsbk.supabase.co \
+            --host=aws-1-ap-southeast-1.pooler.supabase.com \
             --port=5432 \
-            --username=postgres \
+            --username=postgres.hrzvdledrengvxuzmsbk \
             --dbname=postgres \
             --data-only \
             --no-owner \
