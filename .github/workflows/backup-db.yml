@@ -25,31 +25,45 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🔧 Setup Supabase CLI
-        uses: supabase/setup-cli@v1
-        with:
-          version: latest
+      - name: 🔧 Install PostgreSQL client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y postgresql-client
 
       - name: 📁 Create backup directory
         run: mkdir -p backup
 
       - name: 🗃️ Dump Schema (DDL)
-        run: |
-          supabase db dump \
-            --db-url "${{ secrets.SUPABASE_DB_URL }}" \
-            -f backup/schema.sql
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          pg_dump \
+            --host=db.hrzvdledrengvxuzmsbk.supabase.co \
+            --port=5432 \
+            --username=postgres \
+            --dbname=postgres \
+            --schema-only \
+            --no-owner \
+            --no-privileges \
+            --quote-all-identifiers \
+            --schema=public \
+            -f backup/schema.sql
 
       - name: 📊 Dump Data (DML — rows only)
-        run: |
-          supabase db dump \
-            --db-url "${{ secrets.SUPABASE_DB_URL }}" \
-            -f backup/data.sql \
-            --use-copy \
-            --data-only
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          pg_dump \
+            --host=db.hrzvdledrengvxuzmsbk.supabase.co \
+            --port=5432 \
+            --username=postgres \
+            --dbname=postgres \
+            --data-only \
+            --no-owner \
+            --no-privileges \
+            --quote-all-identifiers \
+            --schema=public \
+            -f backup/data.sql
 
       - name: 📝 Create backup manifest
         run: |
