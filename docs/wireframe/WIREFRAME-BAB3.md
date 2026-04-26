@@ -189,42 +189,42 @@ Pada tampilan ponsel, kartu indikator disusun secara vertikal dengan kartu total
 
 Halaman Pengaturan Toko merupakan pusat pengelolaan konfigurasi sistem yang terpisah dari proses transaksi. Antarmuka ini dirancang secara modular agar fungsi manajemen konfigurasi usaha dapat dikelola tanpa merusak alur kerja utama aplikasi.
 
-**Tampilan Komputer** mengadopsi pola *master-detail* dengan navigasi lateral di sebelah kiri, memisahkan domain konfigurasi (seperti profil bisnis dan preferensi periferal) ke dalam ruang kerja yang fokus. Pendekatan tata letak ini mematuhi prinsip kohesi operasional (*operational cohesion*), memastikan kurasi administratif terpusat yang terisolasi dari proses transaksional yang rentan terhadap interupsi.
+**Tampilan Komputer** menggunakan pola tata letak *master-detail* dengan menu navigasi di sisi kiri layar. Desain ini memisahkan bagian pengaturan, seperti profil toko dan pengaturan *printer*, ke dalam area kerja tersendiri. Tujuannya adalah agar proses administrasi dapat dilakukan secara terpusat tanpa mengganggu alur utama transaksi kasir.
 
 <!-- SISIPKAN: Gambar 3.20 — WF-05-D.png (lebar 15 cm, center) -->
 ![Gambar 3.20 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Komputer](export/WF-05-D.png)
 
 *Gambar 3.20 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Komputer*
 
-**Tampilan Ponsel** mentransformasi navigasi lateral menjadi komponen *Pill-Tab* horizontal dinamis guna mengkompensasi konstrain spasial perangkat genggam portabel. Perubahan pemformatan relasional ini memastikan fungsi manajemen profil tetap mudah dijangkau sekalipun diutilisasi dalam skenario operasional bermobilitas tinggi dan penggunaan peranti dengan resolusi terbatas.
+**Tampilan Ponsel** mengadaptasi menu navigasi menjadi bentuk *tab* melintang (*Pill-Tab horizontal*) untuk menyesuaikan ukuran layar perangkat yang lebih kecil. Penyesuaian tata letak ini memastikan fitur pengaturan toko tetap mudah diakses oleh pengguna saat menggunakan aplikasi melalui perangkat seluler.
 
 <!-- SISIPKAN: Gambar 3.21 — WF-05-M.png (lebar 6 cm, center) -->
 ![Gambar 3.21 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Ponsel](export/WF-05-M.png)
 
 *Gambar 3.21 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Ponsel*
 
-**Tampilan Panel Informasi Toko** berfungsi sebagai area sentral untuk mengelola identitas dan visibilitas toko. Panel ini memuat fasilitas pengunggahan logo, yang akan dicetak secara otomatis pada struk fisik apabila diaktifkan, serta formulir untuk memutakhirkan nama toko, alamat lengkap, dan nomor kontak. Penyusunan informasi ini dikemas dalam sebuah antarmuka yang mengutamakan kejelasan, sehingga modifikasi data profil usaha dapat dilakukan secara efisien tanpa komplikasi navigasi.
+**Tampilan Panel Informasi Toko** berfungsi sebagai antarmuka utama untuk mengelola data profil usaha. Panel ini menyediakan fitur pengunggahan logo toko—yang nantinya dapat dicetak pada struk fisik—serta formulir isian untuk mengubah nama toko, alamat lengkap, dan nomor telepon. Struktur antarmuka dirancang agar pengguna dapat memperbarui informasi toko dengan mudah dan cepat.
 
 <!-- SISIPKAN: Gambar 3.22 — WF-05-PI.png (lebar 9 cm, center) -->
 ![Gambar 3.22 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Informasi Toko](export/WF-05-PI.png)
 
 *Gambar 3.22 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Informasi Toko*
 
-**Tampilan Panel Pengaturan Printer** menyajikan antarmuka diagnostik dan konfigurasi khusus untuk perangkat pencetak tanda terima nirkabel (*wireless thermal printer*). Melalui panel ini, sistem memvisualisasikan status koneksi *Bluetooth* secara aktual. Pemilik usaha disediakan tombol kendali cepat (*toggle*) guna menetapkan preferensi sistem pencetakan, meliputi automasi cetak pascatransaksi, penyertaan logo visual, serta pengaturan format pencetakan struktur penutup (*footer*) pada nota.
+**Tampilan Panel Pengaturan Printer** menyediakan antarmuka khusus untuk menghubungkan dan mengonfigurasi perangkat pencetak struk nirkabel (*wireless thermal printer*). Melalui panel ini, sistem menampilkan status koneksi *Bluetooth* secara *real-time*. Selain itu, tersedia sakelar (*toggle*) yang memungkinkan pengguna untuk mengatur preferensi cetak, seperti fitur cetak otomatis setelah transaksi, opsi menampilkan logo, serta pengaturan teks penutup (*footer*) pada struk.
 
 <!-- SISIPKAN: Gambar 3.23 — WF-05-PP.png (lebar 9 cm, center) -->
 ![Gambar 3.23 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Pengaturan Printer](export/WF-05-PP.png)
 
 *Gambar 3.23 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Pengaturan Printer*
 
-**Tampilan Panel Profil Akun** pada perangkat komputer bertindak sebagai ruang administratif untuk pengelolaan kredensial keamanan pengguna. Struktur panel ini dirancang secara dikotomis, memisahkan wilayah informasi dasar (alamat surel dan nama tampilan) dari kompartemen otentikasi (pembaruan kata sandi). Pemisahan spasial ini merupakan implementasi tata letak keamanan proaktif guna meminimalkan risiko modifikasi kata sandi secara tidak sengaja oleh operator sistem.
+**Tampilan Panel Profil Akun** digunakan untuk mengelola data pengguna dan pengaturan keamanan akun pada perangkat komputer. Antarmuka ini dirancang dengan memisahkan bagian informasi dasar, seperti alamat *email* dan nama tampilan, dari bagian pengaturan kata sandi. Pemisahan tersebut bertujuan untuk mencegah kesalahan saat pengguna ingin memperbarui data, sekaligus menjaga keamanan kredensial akun.
 
 <!-- SISIPKAN: Gambar 3.24 — WF-05-AC.png (lebar 10 cm, center) -->
 ![Gambar 3.24 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Profil Akun](export/WF-05-AC.png)
 
 *Gambar 3.24 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Profil Akun*
 
-**Tampilan Menu Akun Ponsel** mengimplementasikan mekanisme *bottom sheet overlay* pada antarmuka perangkat bergerak. Komponen navigasi ini dirancang untuk menyembunyikan opsi manajemen profil dari area kerja utama agar tidak mendistorsi konsentrasi pengguna pada antarmuka operasional. Tindakan berisiko tinggi seperti terminasi sesi (keluar aplikasi) diberi penekanan visual warna merah (*destructive red*) untuk meningkatkan kewaspadaan pengguna sebelum mengonfirmasi tindakan tersebut.
+**Tampilan Menu Akun Ponsel** menggunakan komponen menu yang muncul dari bagian bawah layar (*bottom sheet overlay*) pada antarmuka perangkat bergerak. Menu ini berfungsi untuk mengelompokkan opsi pengaturan profil pengguna agar tidak memenuhi area kerja utama aplikasi. Selain itu, tombol keluar dari aplikasi (*logout*) diberikan warna merah sebagai peringatan visual agar pengguna lebih berhati-hati sebelum menekannya.
 
 <!-- SISIPKAN: Gambar 3.25 — WF-05-AS.png (lebar 6 cm, center) -->
 ![Gambar 3.25 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Menu Akun Ponsel](export/WF-05-AS.png)
