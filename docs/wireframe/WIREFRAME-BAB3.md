@@ -187,21 +187,49 @@ Pada tampilan ponsel, kartu indikator disusun secara vertikal dengan kartu total
 
 ## 3.5.7 Halaman Pengaturan Toko
 
-Halaman Pengaturan Toko merupakan pusat pengelolaan konfigurasi sistem yang terpisah dari proses transaksi. Halaman ini dibagi menjadi beberapa panel konfigurasi yang dapat dipilih melalui menu navigasi, yaitu Informasi Toko, Pengaturan Printer, dan Profil Akun. Pemisahan ini bertujuan agar setiap pengaturan dapat diakses dan dikelola secara terpisah tanpa mengganggu pengaturan lainnya.
+Halaman Pengaturan Toko merupakan pusat pengelolaan konfigurasi sistem yang terpisah dari proses transaksi. Antarmuka ini dirancang secara modular agar fungsi manajemen konfigurasi usaha dapat dikelola tanpa merusak alur kerja utama aplikasi.
 
-Pada tampilan komputer, bilah sisi vertikal menampilkan item Pengaturan dalam kondisi aktif. Di sebelah kanan bilah sisi tersebut, menu pilihan panel konfigurasi ditampilkan dalam daftar vertikal, sementara isi dari panel yang dipilih ditampilkan di area konten utama. Panel Informasi Toko memungkinkan pemilik usaha mengisi data identitas toko yang terdiri dari logo, nama toko, alamat lengkap, dan nomor telepon. Data ini digunakan secara otomatis oleh sistem sebagai informasi yang tercetak di bagian atas setiap nota pembayaran. Panel Pengaturan Printer menampilkan status koneksi printer yang terhubung melalui Bluetooth beserta pilihan pengaturan cetak yang dapat diaktifkan atau dinonaktifkan.
+**Tampilan Komputer** mengadopsi pola *master-detail* dengan navigasi lateral di sebelah kiri, memisahkan domain konfigurasi (seperti profil bisnis dan preferensi periferal) ke dalam ruang kerja yang fokus. Pendekatan tata letak ini mematuhi prinsip kohesi operasional (*operational cohesion*), memastikan kurasi administratif terpusat yang terisolasi dari proses transaksional yang rentan terhadap interupsi.
 
 <!-- SISIPKAN: Gambar 3.20 — WF-05-D.png (lebar 15 cm, center) -->
 ![Gambar 3.20 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Komputer](export/WF-05-D.png)
 
 *Gambar 3.20 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Komputer*
 
-Pada tampilan ponsel, pilihan panel ditampilkan dalam bentuk tab berjajar secara mendatar di bagian atas halaman. Pengguna dapat menekan setiap tab untuk berpindah ke panel yang diinginkan. Pengelolaan akun pengguna pada tampilan ponsel diakses melalui panel yang muncul dari bawah layar, yang menampilkan nama pengguna, pilihan untuk memperbarui profil, mengganti kata sandi, dan keluar dari sistem dalam susunan daftar yang mudah dijangkau.
+**Tampilan Ponsel** mentransformasi navigasi lateral menjadi komponen *Pill-Tab* horizontal dinamis guna mengkompensasi konstrain spasial perangkat genggam portabel. Perubahan pemformatan relasional ini memastikan fungsi manajemen profil tetap mudah dijangkau sekalipun diutilisasi dalam skenario operasional bermobilitas tinggi dan penggunaan peranti dengan resolusi terbatas.
 
 <!-- SISIPKAN: Gambar 3.21 — WF-05-M.png (lebar 6 cm, center) -->
 ![Gambar 3.21 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Ponsel](export/WF-05-M.png)
 
 *Gambar 3.21 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Ponsel*
+
+**Tampilan Panel Informasi Toko** berfungsi sebagai area sentral untuk mengelola identitas dan visibilitas toko. Panel ini memuat fasilitas pengunggahan logo, yang akan dicetak secara otomatis pada struk fisik apabila diaktifkan, serta formulir untuk memutakhirkan nama toko, alamat lengkap, dan nomor kontak. Penyusunan informasi ini dikemas dalam sebuah antarmuka yang mengutamakan kejelasan, sehingga modifikasi data profil usaha dapat dilakukan secara efisien tanpa komplikasi navigasi.
+
+<!-- SISIPKAN: Gambar 3.22 — WF-05-PI.png (lebar 9 cm, center) -->
+![Gambar 3.22 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Informasi Toko](export/WF-05-PI.png)
+
+*Gambar 3.22 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Informasi Toko*
+
+**Tampilan Panel Pengaturan Printer** menyajikan antarmuka diagnostik dan konfigurasi khusus untuk perangkat pencetak tanda terima nirkabel (*wireless thermal printer*). Melalui panel ini, sistem memvisualisasikan status koneksi *Bluetooth* secara aktual. Pemilik usaha disediakan tombol kendali cepat (*toggle*) guna menetapkan preferensi sistem pencetakan, meliputi automasi cetak pascatransaksi, penyertaan logo visual, serta pengaturan format pencetakan struktur penutup (*footer*) pada nota.
+
+<!-- SISIPKAN: Gambar 3.23 — WF-05-PP.png (lebar 9 cm, center) -->
+![Gambar 3.23 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Pengaturan Printer](export/WF-05-PP.png)
+
+*Gambar 3.23 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Pengaturan Printer*
+
+**Tampilan Panel Profil Akun** pada perangkat komputer bertindak sebagai ruang administratif untuk pengelolaan kredensial keamanan pengguna. Struktur panel ini dirancang secara dikotomis, memisahkan wilayah informasi dasar (alamat surel dan nama tampilan) dari kompartemen otentikasi (pembaruan kata sandi). Pemisahan spasial ini merupakan implementasi tata letak keamanan proaktif guna meminimalkan risiko modifikasi kata sandi secara tidak sengaja oleh operator sistem.
+
+<!-- SISIPKAN: Gambar 3.24 — WF-05-AC.png (lebar 10 cm, center) -->
+![Gambar 3.24 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Profil Akun](export/WF-05-AC.png)
+
+*Gambar 3.24 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Profil Akun*
+
+**Tampilan Menu Akun Ponsel** mengimplementasikan mekanisme *bottom sheet overlay* pada antarmuka perangkat bergerak. Komponen navigasi ini dirancang untuk menyembunyikan opsi manajemen profil dari area kerja utama agar tidak mendistorsi konsentrasi pengguna pada antarmuka operasional. Tindakan berisiko tinggi seperti terminasi sesi (keluar aplikasi) diberi penekanan visual warna merah (*destructive red*) untuk meningkatkan kewaspadaan pengguna sebelum mengonfirmasi tindakan tersebut.
+
+<!-- SISIPKAN: Gambar 3.25 — WF-05-AS.png (lebar 6 cm, center) -->
+![Gambar 3.25 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Menu Akun Ponsel](export/WF-05-AS.png)
+
+*Gambar 3.25 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Menu Akun Ponsel*
 
 ---
 
@@ -214,10 +242,10 @@ Gunakan tabel ini untuk menyusun **Daftar Gambar** pada dokumen skripsi.
 | Gambar 3.1 | `WF-00-D.png` | Rancangan Antarmuka Halaman Login — Tampilan Komputer |
 | Gambar 3.2 | `WF-00-M.png` | Rancangan Antarmuka Halaman Login — Tampilan Ponsel |
 | Gambar 3.3 | `WF-00-E.png` | Rancangan Antarmuka Halaman Login — Kondisi Kesalahan Masuk |
-| Gambar 3.4 | `WF-01-D.png` | Rancangan Antarmuka Halaman Beranda — Tampilan Komputer |
-| Gambar 3.5 | `WF-01-M.png` | Rancangan Antarmuka Halaman Beranda — Tampilan Ponsel |
-| Gambar 3.6 | `WF-01H-D.png` | Rancangan Antarmuka Halaman Dashboard — Tampilan Komputer |
-| Gambar 3.7 | `WF-01H-M.png` | Rancangan Antarmuka Halaman Dashboard — Tampilan Ponsel |
+| Gambar 3.4 | `WF-01H-D.png` | Rancangan Antarmuka Halaman Beranda — Tampilan Komputer |
+| Gambar 3.5 | `WF-01H-M.png` | Rancangan Antarmuka Halaman Beranda — Tampilan Ponsel |
+| Gambar 3.6 | `WF-01-D.png` | Rancangan Antarmuka Halaman Dashboard — Tampilan Komputer |
+| Gambar 3.7 | `WF-01-M.png` | Rancangan Antarmuka Halaman Dashboard — Tampilan Ponsel |
 | Gambar 3.8 | `WF-02-D.png` | Rancangan Antarmuka Halaman Kasir — Tampilan Komputer |
 | Gambar 3.9 | `WF-02-M.png` | Rancangan Antarmuka Halaman Kasir — Tampilan Ponsel |
 | Gambar 3.10 | `WF-02-MC.png` | Rancangan Antarmuka Halaman Kasir — Tampilan Konfirmasi Pembayaran |
@@ -232,6 +260,10 @@ Gunakan tabel ini untuk menyusun **Daftar Gambar** pada dokumen skripsi.
 | Gambar 3.19 | `WF-04-MD.png` | Rancangan Antarmuka Halaman Laporan Penjualan — Tampilan Detail Transaksi |
 | Gambar 3.20 | `WF-05-D.png` | Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Komputer |
 | Gambar 3.21 | `WF-05-M.png` | Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Ponsel |
+| Gambar 3.22 | `WF-05-PI.png` | Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Informasi Toko |
+| Gambar 3.23 | `WF-05-PP.png` | Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Pengaturan Printer |
+| Gambar 3.24 | `WF-05-AC.png` | Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Profil Akun |
+| Gambar 3.25 | `WF-05-AS.png` | Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Menu Akun Ponsel |
 
 ---
 
@@ -242,9 +274,9 @@ Gunakan tabel ini untuk menyusun **Daftar Gambar** pada dokumen skripsi.
 | Jenis | Contoh File | Lebar di Word | Catatan |
 |-------|-------------|:-------------:|---------|
 | Desktop / Landscape | `WF-0X-D.png` | **14–15 cm** | Hampir penuh halaman |
-| Ponsel / Portrait | `WF-0X-M.png` | **5.5–6.5 cm** | Tampilkan di tengah |
-| Modal Kotak Besar | `WF-02-MC`, `WF-02-MR`, `WF-02-MN`, `WF-04-MD` | **8–10 cm** | Center |
-| Modal Kotak Kecil | `WF-03-MF`, `WF-03-MK` | **7–9 cm** | Center |
+| Ponsel / Portrait | `WF-0X-M.png`, `WF-05-AS.png` | **5.5–6.5 cm** | Tampilkan di tengah |
+| Modal Kotak Besar | `WF-02-MC`, `WF-02-MR`, `WF-02-MN`, `WF-04-MD`, `WF-05-AC.png` | **8–10 cm** | Center |
+| Modal Kotak Kecil | `WF-03-MF`, `WF-03-MK`, `WF-05-PI.png`, `WF-05-PP.png` | **7–9 cm** | Center |
 
 ### Langkah Penyisipan di Word
 
@@ -269,4 +301,4 @@ Contoh:
 ---
 
 *File ini dibuat otomatis sebagai referensi integrasi wireframe skripsi.*
-*Sumber gambar: `docs/wireframe/export/` — 19 file PNG dengan latar belakang putih.*
+*Sumber gambar: `docs/wireframe/export/` — 25 file PNG dengan latar belakang putih.*

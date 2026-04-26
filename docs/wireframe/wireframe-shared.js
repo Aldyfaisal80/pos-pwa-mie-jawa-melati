@@ -18,10 +18,16 @@ async function exportSection(id, fn) {
   if (!frameUnit) return;
 
   // Capture the button reference BEFORE modifying DOM (event may become stale)
-  const btn = event.target.closest('button');
-  const orig = btn.innerHTML;
-  btn.innerHTML = '⏳...';
-  btn.disabled = true;
+  let btn = null;
+  let orig = '';
+  if (typeof event !== 'undefined' && event && event.target) {
+    btn = event.target.closest('button');
+    if (btn) {
+      orig = btn.innerHTML;
+      btn.innerHTML = '⏳...';
+      btn.disabled = true;
+    }
+  }
 
   // Temporarily show all hidden ancestors so html2canvas can render them
   const hiddenAncestors = [];
@@ -73,6 +79,8 @@ async function exportSection(id, fn) {
     hiddenEl.style.display = prevDisplay;
   });
 
-  btn.innerHTML = orig;
-  btn.disabled = false;
+  if (btn) {
+    btn.innerHTML = orig;
+    btn.disabled = false;
+  }
 }
