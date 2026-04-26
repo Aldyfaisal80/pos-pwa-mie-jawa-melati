@@ -73,7 +73,6 @@
   <div class="stab" onclick="show('mobile',this)">📱 Mobile</div>
   <div class="stab" onclick="show('panel-store',this)">🏪 Panel Info Toko</div>
   <div class="stab" onclick="show('panel-printer',this)">🖨️ Panel Printer</div>
-  <div class="stab" onclick="show('panel-backup',this)">🗄️ Panel Backup</div>
   <div class="stab" onclick="show('panel-account',this)">👤 Panel Akun</div>
   <div class="stab" onclick="show('account-sheet',this)">📲 AccountSheet Mobile</div>
 </div>
@@ -122,12 +121,7 @@
                     <div class="ph-m" style="width:14px;height:14px;border-radius:3px;"></div>
                     <span style="font-size:9px;color:#888;">Printer</span>
                   </div>
-                  <!-- Inactive -->
-                  <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;margin-bottom:2px;">
-                    <div class="ph-m" style="width:14px;height:14px;border-radius:3px;"></div>
-                    <span style="font-size:9px;color:#888;">Backup</span>
-                  </div>
-                </nav>
+                  </nav>
                 <!-- Content Panel: Info Toko -->
                 <div style="flex:1;overflow:hidden;background:#fff;padding:16px;">
                   <!-- Logo section: left label + right upload -->
@@ -372,88 +366,6 @@
 
 </div>
 
-<!-- PANEL BACKUP -->
-<div id="view-panel-backup" style="display:none;">
-  <div class="canvas-section">
-    <div class="canvas-section-label">Panel Backup & Ekspor Data — WF-05-BK</div>
-    <div class="export-bar"><span class="export-label">PANEL FRAME</span>
-      <button class="btn-export" onclick="exportSection('wf05bk','WF-05-Panel-Backup')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export PNG</button>
-    </div>
-    <div class="annotated-row" style="align-items:flex-start;">
-      <div id="wf05bk" class="frame-unit">
-        <div class="frame-id">WF-05-BK</div>
-        <div class="modal-stage">
-          <div class="modal-bg" style="width:340px;">
-            <div class="modal-hdr">
-              <div style="display:flex;align-items:center;gap:6px;">
-                <div style="width:16px;height:16px;background:#e8e8e8;border-radius:4px;"></div>
-                <span class="modal-title">Backup & Ekspor Data</span>
-              </div>
-            </div>
-
-            <!-- Status Card: Last Backup -->
-            <div style="background:#fef9c3;border:1px solid #fde047;border-radius:4px;padding:8px 10px;margin-bottom:10px;display:flex;align-items:flex-start;gap:6px;">
-              <div style="font-size:11px;margin-top:1px;">⚠</div>
-              <div>
-                <div style="font-size:9px;font-weight:700;color:#713f12;margin-bottom:2px;">Belum Pernah Backup</div>
-                <div style="font-size:7px;color:#92400e;line-height:1.4;">Anda belum pernah membuat cadangan data. Sangat disarankan untuk melakukan backup secara rutin.</div>
-              </div>
-            </div>
-
-            <!-- Export Button -->
-            <div class="ph-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;height:34px;font-size:9px;font-weight:700;color:#fff;border-radius:5px;margin-bottom:12px;">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              Ekspor Backup Sekarang
-            </div>
-
-            <!-- Divider -->
-            <div style="font-size:7px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Informasi Backup</div>
-
-            <!-- Info Rows -->
-            <div class="toggle-row">
-              <div>
-                <div style="font-size:9px;font-weight:600;color:#333;">Format File</div>
-                <div style="font-size:7px;color:#888;margin-top:1px;">JSON (.json) — dapat diimpor ulang</div>
-              </div>
-              <div style="font-size:8px;font-weight:600;color:#555;background:#f3f4f6;padding:2px 6px;border-radius:3px;">JSON</div>
-            </div>
-            <div class="toggle-row">
-              <div>
-                <div style="font-size:9px;font-weight:600;color:#333;">Data yang Dicadangkan</div>
-                <div style="font-size:7px;color:#888;margin-top:1px;">Kategori, Produk, Transaksi</div>
-              </div>
-              <div style="font-size:8px;font-weight:600;color:#555;background:#f3f4f6;padding:2px 6px;border-radius:3px;">4 Tabel</div>
-            </div>
-            <div class="toggle-row" style="border:none;">
-              <div>
-                <div style="font-size:9px;font-weight:600;color:#333;">Backup Otomatis</div>
-                <div style="font-size:7px;color:#888;margin-top:1px;">Via GitHub Actions (jam 01.00 WIB)</div>
-              </div>
-              <div style="font-size:8px;font-weight:600;color:#16a34a;background:#f0fdf4;padding:2px 6px;border-radius:3px;">Aktif</div>
-            </div>
-
-            <!-- Info Box -->
-            <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:3px;padding:6px 8px;font-size:8px;color:#0369a1;margin-top:10px;">&#x24D8; File backup tersimpan di repositori GitHub secara otomatis setiap malam. Ekspor manual menghasilkan salinan JSON di perangkat Anda.</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="annot-table-wrap">
-      <div class="annot-table-title">Keterangan — WF-05-BK</div>
-      <p class="academic-desc"><em>Panel Backup & Ekspor Data</em> mengimplementasikan strategi pencadangan data hibrid (<em>hybrid backup strategy</em>) untuk mengatasi keterbatasan penyimpanan pada tingkatan layanan (<em>service tier</em>) basis data yang digunakan. Pendekatan dua lapis terdiri atas ekspor manual berbasis JSON melalui antarmuka aplikasi dan pencadangan terjadwal otomatis via integrasi <em>continuous integration</em> (GitHub Actions). Komponen peringatan adaptif pada panel ini menginformasikan pengguna secara proaktif mengenai urgensi pencadangan data, mematuhi prinsip transparansi sistem dalam desain antarmuka yang berpusat pada pengguna.</p>
-      <table class="annot-table">
-        <tr><th>ID</th><th>Komponen</th><th>Fungsi</th><th>Interaksi</th></tr>
-        <tr><td><span class="cid">A1</span></td><td>Status Badge Backup</td><td>Menampilkan peringatan kuning jika belum pernah backup (dari <em>localStorage</em>), atau teks hijau dengan tanggal terakhir backup jika sudah ada.</td><td>Otomatis ditampilkan saat panel dimuat</td></tr>
-        <tr><td><span class="cid">B1</span></td><td>Tombol Ekspor Backup</td><td>Memanggil API <code>/api/backup/export</code> → mengunduh file <code>backup-[timestamp].json</code> berisi 4 tabel database. Tombol <em>disabled</em> + <em>spinner</em> saat proses berlangsung.</td><td>Klik → <em>loading</em> → unduh file JSON</td></tr>
-        <tr><td><span class="cid">C1</span></td><td>Tabel Info Backup</td><td>Informasi statis: format file, cakupan data (4 tabel), dan status backup otomatis GitHub Actions.</td><td>Read-only — tidak ada interaksi</td></tr>
-        <tr><td><span class="cid">C2</span></td><td>Info Box</td><td>Penjelasan singkat tentang perbedaan backup otomatis (GitHub Actions nightly) dan backup manual (ekspor JSON on-demand).</td><td>Read-only — tidak ada interaksi</td></tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-
 <div id="view-account-sheet" style="display:none;">
   <div class="canvas-section">
     <div class="canvas-section-label">AccountSheet Mobile — WF-05-AS</div>
@@ -635,7 +547,7 @@
 </div>
 <script>
 function show(v,tab){
-  ['desktop','mobile','panel-store','panel-printer','panel-backup','panel-account','account-sheet'].forEach(id=>document.getElementById('view-'+id).style.display=id===v?'':'none');
+  ['desktop','mobile','panel-store','panel-printer','panel-account','account-sheet'].forEach(id=>document.getElementById('view-'+id).style.display=id===v?'':'none');
   document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
   tab.classList.add('active');
 }
