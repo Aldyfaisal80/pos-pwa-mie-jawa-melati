@@ -12,8 +12,7 @@ export const useReportChart = ({
   endDate,
   paymentMethod,
 }: UseReportChartParams) => {
-  const resolvedMethod =
-    paymentMethod === "ALL" ? undefined : paymentMethod!;
+  const resolvedMethod = paymentMethod === "ALL" ? undefined : paymentMethod!;
 
   return api.transaction.getReportChart.useQuery(
     { startDate, endDate, paymentMethod: resolvedMethod },

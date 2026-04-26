@@ -1,0 +1,1479 @@
+i 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+1  PEDOMAN PENULISAN SKRIPSI  
+FAKULTAS TEKNIK DAN INFORMATIKA  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+UNIVERSITAS ISLAM BALITAR  
+2025 
+
+2  KATA  PENGANTAR  
+ 
+Puji syukur kami haturkan ke hadirat Allah SWT, atas tersusunnya Pedoman Penulisan Skripsi 
+ini. Buku pedoman ini dirancang untuk menjadi rujukan bagi mahasiswa dalam proses penulisan 
+skripsi di Fakultas Teknik dan Informatika, Universitas Islam Balitar. Pe nyusunan pedoman ini 
+merupakan hasil revisi dan pembaruan dari Pedoman Penulisan Skripsi Tahun 2024, yang dilakukan 
+guna menyesuaikan dengan arah kebijakan kampus berdampak, dinamika perkembangan kurikulum, 
+ketentuan akademik, serta kemajuan ilmu pengetahu an dan teknologi.  
+Buku Pedoman  Penulisan  Skripsi ini disusun sebagai acuan yang memuat tata cara, pedoman 
+penulisan, serta ketentuan dan batasan dalam penyusunan skripsi di lingkungan Fakultas Teknik dan 
+Informatika, Universitas Islam Balitar. Pedoman ini wajib diikuti agar sistematika dan kaida h ilmiah 
+yang digunakan sesuai dengan tujuan penulisan skripsi. Selain itu, pedoman ini juga menetapkan 
+standar prosedur, format, dan proses penulisan, serta mencakup ketentuan teknis yang berlandaskan 
+pada kode etik penulisan karya i lmiah yang berlaku di dunia akademik.  
+Semoga Pedoman Penulisan Skripsi ini memberikan manfaat optimal bagi seluruh pihak yang 
+terlibat. Masukan dan kritik konstruktif sangat diharapkan untuk penyempurnaan pedoman ini pada 
+edisi berikutnya.  
+ 
+ 
+Blitar,   31 Oktober  2025 
+Dekan F akultas Teknik dan Informatika  
+ 
+ 
+ 
+ 
+Dr. Ir. Kustanto, S.T., M.T., IPM  
+NUPTK. 7362756658200013  
+ 
+ 
+ 
+ 
+ 
+ 
+  
+3  TIM PENYUSUN  
+ 
+Dosen Fakultas Teknik dan Informatika  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4  DAFTAR  ISI 
+KATA  PENGANTAR  ................................ ................................ ................................ ............................. iii 
+TIM PENYUSUN  ................................ ................................ ................................ ................................ ...iv 
+DAFTAR  ISI ................................ ................................ ................................ ................................ ........... vii 
+BAB  I PENDAHULUAN  ................................ ................................ ................................ ....................... 1 
+1.1 Rasional  ................................ ................................ ................................ ................................ ... 1 
+1.2 Batasan  dan Bentuk  ................................ ................................ ................................ .................  1 
+1.3 Fungsi  dan Tujuan Pedoman Penulisan Skripsi  ................................ ................................ ...... 2 
+BAB  II PERSYARATAN ADMINISTRASI DAN AKADEMIK  ................................ ......................... 3 
+2.1 Persyaratan  Administrasi  ................................ ................................ ................................ ........ 3 
+2.2 Persyaratan Akademik  ................................ ................................ ................................ ............ 3 
+2.3 Ketua Program Studi (Kaprodi)  ................................ ................................ .............................. 3 
+2.4 Dosen Pembimbing dan Penguji  ................................ ................................ ............................. 3 
+2.5 Penggantian Dosen Pembimbing  ................................ ................................ ............................ 4 
+BAB  III PROSEDUR PENYUSUNAN SKRIPSI  ................................ ................................ .................. 6 
+3.1 Seminar  Proposal Skripsi  ................................ ................................ ................................ ........ 6 
+3.2 Ujian  Skripsi  ................................ ................................ ................................ ...........................  7 
+BAB  IV SISTEMATIKA PENULISAN PROPOSAL DAN SKRIPSI  ................................ .................. 8 
+4.1 Sistematika  Penulisan Proposal  ................................ ................................ ...............................  8 
+4.2 Sistematika  Penulisan Skripsi  ................................ ................................ ................................ . 9 
+BAB  V TEKNIK PENGETIKAN SKRIPSI  ................................ ................................ ...........................  8 
+5.1      Ukuran  Pengetikan ................................ ................................ ................................ ...................  8 
+5.2      Pengetikan Naskah ................................ ................................ ................................ ................... 13 
+BAB  VI BENTUK SKRIPSI  ................................ ................................ ................................ ..................  25 
+6.1      Bagian Sampul Muka Skripsi  ................................ ................................ ................................ .. 25 
+6.2      Bagian Awal Skripsi  ................................ ................................ ................................ ................ 25 
+6.3      Bagian Isi Skripsi  ................................ ................................ ................................ ..................... 27 
+LAMPIRAN  ................................ ................................ ................................ ................................ ..................  32 
+Lampiran  1 : Contoh  Halaman  Sampul  Proposal  ................................ ................................ ............... 33 
+Lampiran  2 : Contoh  Halaman  Sampul  Skripsi  ................................ ................................ .................. 34 
+Lampiran  3 : Contoh  Halaman  Judul  Skripsi  Lembar  Kedua  ................................ ............................. 35 
+Lampiran  4 : Contoh  Lembar  Persetujuan  Pembimbing  Skripsi  ................................ ......................... 36 
+Lampiran  5 : Contoh  Lembar  Persetujuan  dan Pengesahan  Skripsi  ................................ ................... 37 
+Lampiran  6 : Contoh  Penyusunan  dan Penulisan  Abstrak  (Bahasa  Indonesia)  ................................ ...38 
+Lampiran  7 : Contoh  Penyusunan  dan Penulisan  Abstrak  (Bahasa  Inggris)  ................................ ........  39 
+Lampiran  8 : Contoh  Riwayat  Hidup  ................................ ................................ ................................ ..40 
+Lampiran 9 :  Daftar Nama Dosen, Gelar Dosen, dan NUPTK Dosen  ................................ ............... 41 
+5  BAB I  
+PENDAHULUAN  
+ 
+A. Rasional  
+Skripsi merupakan salah satu persyaratan akademik untuk menyelesaikan studi pada program 
+Sarjana (S -1) di seluruh program studi Fakultas Teknik dan Informatika, Universitas Islam Balitar 
+(UNISBA). Skripsi berupa karya ilmiah hasil penelitian atau kajian il miah yang disusun secara 
+mandiri oleh mahasiswa di bawah bimbingan dosen pembimbing yang ditetapkan melalui Surat 
+Keputusan (SK) Dekan atau Rektor.  
+Pedoman Penulisan Skripsi  disusun untuk membantu mahasiswa dalam menyusun skripsi 
+secara efektif dan terarah. Melalui pedoman ini, mahasiswa memperoleh panduan yang jelas dalam 
+proses penulisan. Selain itu, pedoman ini juga berfungsi untuk mempermudah dan memperlancar 
+pelaksanaan tugas pihak -pihak terkait, seperti dosen pembimbing, penguji, dan ketua program studi, 
+sesuai dengan peran dan tanggung jawab masing -masing.  
+ 
+B. Batasan dan Bentuk  
+1.1 Skripsi adalah karya ilmiah yang disusun oleh mahasiswa sebagai salah satu persyaratan 
+akademik untuk menyelesaikan program Sarjana (S -1). Kajian dalam skripsi berfokus pada 
+penerapan teori dalam konteks permasalahan yang bersifat praktis atau terapan.  Skripsi yang 
+memenuhi persyaratan di Fakultas Teknik dan Informatika adalah:  
+a. karya hasil penelitian, analisis, perencanaan, dan perancangan yang bersifat ilmiah dan 
+berkualitas;  
+b. menunjukan kemampuan dan kemandirian mahasiswa dalam penemuan, aplikasi dan/atau 
+pengembangan dalam bidang Teknik dan Informatika;  
+c. mempunyai nilai manfaat yang tinggi bagi pengembangan teori ataupun praktek dalam 
+bidang Teknik dan Informatika;  
+d. ditulis sesuai dengan sistematika dan teknik penulisan yang terdapat dalam pedoman 
+penulisan skripsi.  
+1.2 Artikel ilmiah yang ditulis oleh mahasiswa dan dipublikasikan di jurnal nasional terakreditasi 
+atau di jurnal internasional bereputasi dapat disetarakan dengan Skripsi  Skripsi . 
+Artikel mahasiswa yang dimaksud ialah karya ilmiah yang relevan dengan bidang kajian 
+6  mahasiswa, di mana mahasiswa berperan sebagai penulis pertama dan artikel tersebut 
+dipublikasikan pada jurnal nasional terakreditasi minimal SINTA 1  dan SINTA 2  atau 
+jurnal internasional bereputasi yang terindeks Scopus atau WoS. Penyetaraan artikel 
+dengan Skripsi  Skripsi dilakukan melalui penyusunan laporan berformat Skripsi . 
+Laporan tersebut kemudian dinilai oleh dosen pembimbing, kaprodi, dan dosen penilai yang 
+ditetapkan oleh Prodi. Adapun dosen pembimbing laporan Skripsi  adalah dosen yang juga 
+membimbing penulisan artikel tersebut.  
+ 
+C. Fungsi dan Tujuan Pedoman Penulisan Skripsi  
+Pedoman Penulisan Skripsi merupakan acuan bagi mahasiswa, dosen, Kaprodi di lingkungan  
+Fakultas Teknik dan Informatika  Universitas Islam Balitar dalam pelaksanaan skripsi  mulai tahap 
+proposal, penelitian, penyusunan laporan, ujian, dan penilaian  sehingga proses pelaksanaan skripsi  
+skripsi dapat berjalan dengan efektif.  
+  
+7  BAB I I 
+PERSYARATAN  ADMINISTRASI DAN AKADEMIK  
+ 
+2.1 Persyaratan  Administrasi  
+Mahasiswa dapat memprogram skripsi  dengan persyaratan administrasi sebagai berikut.  
+1. Terdaftar  resmi  sebagai  mahasiswa  aktif Program  Studi  S1 Teknik  Informatika , S1 Sistem 
+Komputer , S1 Teknik Sipil, atau S1 Teknik Elektro  Unisba Blitar.  
+2. Tidak  dalam  status  cuti kuliah.  
+3. Telah  memenuhi  seluruh  kewajiban  keuangan  dan administrasi  akademik.  
+4. Mengisi  Kartu  Rencana  Studi  (KRS)  untuk  matakuliah  Skripsi.  
+5. Mengisi  lembar  bimbingan  Skripsi  yang  telah  disediakan.  
+ 
+2.2 Persyaratan  Akademi k 
+Persyaratan  akademik bagi mahasiswa  yang  akan  memprogram  skripsi  sebagai berikut.  
+1. Telah menempuh beban studi minimal 121 SKS dari total beban studi Program Studi S1 
+Teknik Informatika , 120 SKS dari total beban studi Program Studi S1 Sistem Komputer, 
+120 SKS dari total beban studi Program Studi S1 Teknik Sipil, dan 120 SKS dari total 
+beban studi Program Studi S1 Teknik Elektro dengan melampirkan bukti Kartu Hasil Studi 
+(KHS) mahasiswa . 
+2. Memiliki  Indeks  Prestasi  Kumulatif  minimal  2,5 pada  saat pengajuan  matakuliah  Skripsi . 
+3. Tidak memiliki  nilai D pada  setiap  matakuliah  yang  telah  ditempuh  sebelum  memprogram 
+matakuliah Skripsi.  
+ 
+2.3 Ketua  Program Studi (K aprodi)  
+Tugas Kaprodi dalam penyelesaian skripsi , antara lain:  
+1. mengidentifikasi daftar mahasiswa yang layak memprogram  skripsi;  
+2. menyelenggarakan pembekalan sebelum pelaksanaan skripsi;  
+3. menentukan kelayakan judul skripsi  yang diajukan mahasiswa ; 
+4. menentukan dosen pembimbing skripsi ; 
+5. memantau poses penyusunan dan pembimbingan skripsi.  
+ 
+2.4 Dosen  Pembimbing  dan Penguj i 
+Persyaratan  dosen  pembimbing  dan penguji  sebagai berikut.  
+8  1. Penyusunan skripsi dibimbing oleh 2 Dosen Pembimbing yang terdiri dari 1 Dosen 
+Pembimbing Materi (Dosbing I) dan 1 Dosen Pembimbing Teknis (Dosbing II).  
+2. Penentuan  pembimbing  materi  dan teknis,  diupayakan  untuk  disesuaikan  dengan  disiplin 
+ilmu bidang konsentrasi/peminatan dan kompetensi keilmuan yang dikuasai di Fakultas 
+Tekn ik dan Informatika Unisba Blitar.  
+3. Dosbing I bertanggung jawab terhadap kualitas isi materi dan metode perancangan sistem 
+yang digunakan dalam penyusunan skripsi.  
+4. Dosbing II bertanggung jawab terhadap keruntutan dan kesesuaian metode penelitian yang 
+digunakan serta teknis penulisan skripsi.  
+5. Dosbing I dan Dosbing II memiliki kepangkatan minimal Asisten Ahli  sesuai dengan 
+Permendikbud dan Kepala BKN Nomor: 4/VIII/PB/2014, Nomor: 24 Tahun 2014  
+6. Status  Dosbing  I dan Dosbing  II adalah  Dosen  Tetap  Fakultas  Tekn ik dan Informatika 
+Unisba Blitar.  
+7. Dosen pembimbing dari luar yang diikutsertakan sebagai Pembimbing Skripsi Mahasiswa, 
+minimal telah lulus pendidikan magister (S2) dan telah melalui persetujuan Dekan Tekn ik 
+dan Informatika Unisba Blitar . 
+8. Masa bimbingan terhadap skripsi mahasiswa maksimal 2 (dua) semester, dan dapat 
+diperpanjang apabila diperlukan.  
+9. Mahasiswa  yang  tidak  dapat  menyelesaikan  skripsi  dalam  waktu  2 (dua)  semester,  wajib 
+membuat skripsi dengan judul baru dan menempuh prosedur dari awal.  
+10. Dosbing I dan Dosbing II wajib membantu mahasiswa sesuai dengan segala keperluannya  
+dan dapat  bersikap  sebagai  pendidik  yang  baik serta  mematuhi  prinsip  dan etika penyusunan 
+karya ilmiah.  
+11. Bila salah satu pembimbing atau keduanya berhalangan sehingga tidak dapat 
+menyelesaikan bimbingan sesuai waktu yang telah ditetapkan , maka Kaprodi dapat 
+mengangkat pembimbing baru melalui persetujuan Dekan.  
+ 
+2.5 Penggantian Dosen Pembimbing  
+a) Kaprodi memiliki wewenang mengganti dosen pembimbing, apabila terjadi:  
+1. Meninggal dunia.  
+2. Sakit, sehingga yang bersangkutan harus istirahat panjang.  
+3. Cuti di luar tanggungan negara.  
+4. Pindah tugas.  
+9  5. Tidak melaksanakan tugas pembimbingan sebagaimana mestinya.  
+ 
+b) Dosen pembimbing dapat mengajukan permohonan pengunduran diri secara tertulis 
+sebagai dosen pembimbing apabila terjadi salah satu dari hal berikut:  
+1. Sakit sehingga yang bersangkutan harus istirahat panjang.  
+2. Cuti di luar tanggungan negara.  
+3. Pindah tugas.  
+4. Topik skripsi tidak sesuai dengan bidang keilmuannya  
+5. Mahasiswa tidak melakukan proses pembimbingan skripsi sebagaimana mestinya  
+ 
+c) Penggantian dosen pembimbing berdasarkan kebijakan Kaprodi dengan pertimbangan 
+masa studi mahasiswa.  
+d) Kaprodi mengeluarkan surat tugas dosen pembimbing pengganti.  
+e) Mahasiswa dapat melanjutkan kembali proposal skripsi di bawah bimbingan dosen 
+pembimbing pengganti.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+10  BAB III  
+PROSEDUR PENYUSUNAN SKRIPSI  
+ 
+Proses penyusunan  skripsi  dimulai dengan pengajuan proposal hingga ujian dan revisi.  
+Proses ini akan berakhir jika mahasiswa telah memperoleh nilai skripsi yang tertuang dalam 
+Kartu Hasil Studi (KHS). Uraian setiap tahapan penyusunan skripsi  dipaparkan sebagai berikut.  
+ 
+3.1 Seminar  Proposal  Skripsi  
+1. Mahasiswa  yang  berhak  mengikuti  seminar  proposal  skripsi  adalah  mahasiswa  yang  
+sudah  memprogram mata kuliah Skripsi  di semester  berjalan  dan jumlah  minimal  sks yang  
+sudah lulus adalah 121 sks untuk Prodi Teknik Informatika , 120 sks untuk Prodi Sistem 
+Komputer , 120 SKS untuk  Prodi S1 Teknik Sipil, dan 120 SKS untuk Prodi  S1 Teknik 
+Elektro  
+2. Judul dan isi proposal skripsi yang diajukan mahasiswa harus disesuaikan dengan bidang 
+konsentrasi/peminatan dan selanjutnya diajukan pada Ketua  Program Studi.  
+3. Jumlah kata dalam judul proposal skripsi maksimal 15  kata dan proposal diketik dalam 
+kertas ukuran A4 70 GSM dengan jumlah spasi, 1,5 spasi, dan jumlah halaman minimal  
+20 halaman.  
+4. Proposal skripsi yang akan diseminarkan dan telah disetujui digandakan sebanyak masing  
+masing  5 eksemplar  dan diserahkan  ke Kaprodi atau ke Admin Fakultas  Tekn ik dan 
+Informatika Unisba Blitar , selambat -lambatnya  seminggu  sebelum  tanggal  pelaksanaan  
+seminar proposal  dalam bentuk jilitan . 
+5. Pelaksanaan seminar proposal  sifatnya terbuka dan dapat diikuti oleh para  dosen  serta 
+mahasiswa di lingkungan  Fakultas  Tekn ik dan Informatika Unisba Blitar . 
+6. Bila dalam kegiatan seminar proposal yang menyangkut judul  dan isi  tidak terjadi 
+perubahan, maka selanjutnya mahasiswa dapat melanjutkan untuk menyelesaikan 
+penulisan skripsi dengan bimbingan Dosen Pembimbing.  
+7. Bila dalam kegiatan  seminar  proposal yang  menyangkut  judul dan/atau  isi terjadi  
+perubahan, maka mahasiswa wajib mengajukan revisi dan dimungkingkan di lakukan 
+seminar ulang sesuai dengan ketentuan Seminar Proposal Skripsi Prodi yang telah 
+ditetapkan.  
+ 
+ 
+11  3.2 Ujian  Skripsi  
+1. Untuk  dapat  diujikan  dalam  sidang,  skripsi  mahasiswa  harus  sudah diasistensi oleh 
+dosen pembimbing minimal 8 (Delapan ) kali pertemuan , baik pada Dosen Pembimbing 1 
+maupun Dosen Pembimbing 2. 
+2. Skripsi mahasiswa yang telah dinyatakan selesai bimbingan harus ditandatangani  oleh 
+Dosen Pembimbing 1  dan Dosen Pembimbing  2 serta  diketahui  oleh Ketua  Program  Studi  
+melalui  lembar persetujuan skripsi.  
+3. Skripsi  yang  akan  diujikan  digandakan  sebanyak  5 (lima)  eksemplar  dan diserahkan 
+ke Admin  Fakultas  Tekn ik dan Informatika  Unisba Blitar selambat -lambatnya satu 
+minggu sebelum tanggal ujian.  
+4. Mahasiswa yang berhak mengikuti ujian skripsi adalah mahasiswa yang telah 
+menyelesaikan  total beban  studi  prodi  yang  telah  ditentukan  dan dinyatakan  lulus  secara 
+keseluruhan dengan melampirkan bukti kartu hasil studi yang ditanda tangani oleh 
+Kaprodi serta ketentuan lainnya yang telah ditetapkan oleh Fakultas maupun Unisba Blitar.  
+5. Ujian skripsi dilaksanakan oleh tim penguji skripsi yang ditetapkan dengan Surat 
+Keputusan.  
+6. Ketua  tim penguji  skripsi  memiliki  kepangkatan  akademik  Asisten Ahli  sedangkan 
+anggota penguji sekurang -kurangnya Asisten Ahli.  
+7. Pelaksanaan  ujian  skripsi  dilaksanakan  secara  tertutup.  
+8. Ketua  tim penguji  adalah  anggota  yang  memiliki  jabatan  akademik  tertinggi.  
+9. Skripsi yang telah diujikan dan dinyatakan lulus ujian skripsi harus ditandatangani oleh 
+Tim Penguji dan diketahui oleh K aprodi serta disahkan  oleh Dekan.  
+10. Menyerahkan laporan skripsi dalam format PDF  di link GDrive prodi masing -masing.
+12  BAB  IV 
+SISTEMATIKA  PENULISAN  PROPOSAL  DAN  SKRIPSI  
+ 
+4.1 Sistematika  Penulisan  Proposal  
+Laporan  proposal ditujukan sebagai syarat untuk melakukan pegambilan data dalam 
+penelitian yang dijadikan tema dalam skripsi. Jika laporan proposal telah disetujui dan diuji 
+maka  mahasiswa  dapat  melanjutkan  tahap  penelitian  selanjutnya,  yaitu  proses  pengambilan data.  
+Laporan  proposal yang  tertulis  isinya  bersifat  rencana  penelitian  yang  akan  dilakukan, yang 
+berisikan tentang hal yang diteliti, cara melaksanakan penelitian, cara memperoleh data.  
+Penulisan  proposal dibagi dalam tiga bagian utama, yakni bagian  awal,  batang  tubuh,  dan 
+bagian akhir. Masing -masing bagian dirinci sebagai berikut . 
+ 
+4.1.1 Bagian Awal  
+Hal-hal yang  termasuk  bagian  awal  proposal  adalah  : 
+a. Sampul  Depan Proposal Skripsi (Judul  proposal, logo  Unisba Blitar, nama penulis beserta 
+nomor induk mahasiswa,  tulisan Program Studi Teknik Informatika/Sistem 
+Komputer /Teknik Sipil/Teknik Elektro  Fakultas Tekn ik dan  Informa tika Universitas Islam 
+Balitar, Blitar dan tahun pelaksanaan ujian seminar proposal ); 
+b. Daftar  Isi. 
+ 
+4.1.2 Bagian  Tubuh  
+Batang  tubuh  proposal skripsi  terdiri  dari: 
+ 
+BAB  I PENDAHULUAN  
+1.1 Latar  Belakang  Masalah  
+1.2 Rumusan  Masalah  
+1.3 Tujuan  
+1.4 Manfaat  Penelitian  
+1.5 Ruang  Lingkup  atau Batasan  Masalah  atau Definisi  Operasional  
+1.6 Sistematika  Penulisan  
+ 
+BAB  II TINJAUAN  PUSTAKA  
+2.1 Landasan  Teori  
+2.2 Kajian  Penelitian  
+13   
+BAB  III METODE  PENELITIAN  
+3.1 Waktu  dan Lokasi  Penelitian  
+3.2 Jenis  Penelitian  
+3.3 Pengumpulan  Data 
+3.3.1 Teknik  Pengumpulan  Data 
+3.3.2 Jenis  Data 
+3.3.3 Instrumen  Pengumpulan  Data 
+3.4 Tahap -Tahap  Penelitian  (Langkah -Langkah  Penelitian)  
+ 
+4.1.3 Bagian Akhir  
+Bagian  akhir  proposal  terdiri  dari Daftar  Rujukan  dan Lampiran  
+ 
+4.2 Sistematika  Penulisan  Skripsi  
+Laporan  skripsi ditujukan untuk keperluan tenaga akademik/pengajar/dosen, mahasiswa 
+yang memerlukan referensi dan secara khusus untuk pengembangan Fakultas Tekn ik dan  
+Informa tika Unisba  Blitar.  Laporan  skripsi  yang  tertulis  isinya  bersifat  penelitian  yang berisikan  
+lengkap  tentang  hal yang  diteliti,  cara melaksanakan penelitian, cara memperoleh data, hasil 
+analisis data serta kesimpulan dari analisis data dan  hasilnya disajikan dalam bentuk yang 
+objektif.  
+Penulisan  skripsi dibagi dalam tiga bagian utama, yakni bagian awal, batang  tubuh, dan 
+bagian akhir. Masing -masing bagian dirinci sebagai berikut:  
+ 
+4.2.1 Bagian Awal  
+Hal-hal yang  termasuk  bagian  awal  skripsi s sebagai berikut.  
+a. Sampul Depan Skripsi (Judul  skripsi,  tujuan  pembuatan  skripsi,  logo Unisba  Blitar, nama 
+penulis beserta nomor  induk mahasiswa, tulisan Program Studi Teknik Informatika/Sistem 
+Komputer /Teknik Sipil/Teknik Elektro  Fakultas Tekn ik dan  Informa tika, Blitar dan tahun 
+pelaksanaan ujian sidang skripsi ). 
+b. Sampul  Halaman  Judul Skripsi (Judul  skripsi , tujuan  pembuatan  skripsi , nama penulis 
+beserta nomor induk mahasiswa, tulisan Program Studi Teknik Informatika/Sistem 
+Komputer /Teknik Sipil/Teknik Elektro  Fakultas Tekn ik dan  Informa tika, Blitar  dan tahun 
+pelaksanaan ujian sidang skripsi ). 
+14  c. Lembar  Persetujuan  Pembimbing  skripsi . 
+d. Lembar  Pengesahaan  Tim Penguji . 
+e. Pernyataan  Keaslian  Tulisan  
+f. Abstrak . 
+g. Kata  Pengantar .  
+h. Daftar  Isi. 
+ 
+4.2.2 Batang Tubuh   
+Batang  tubuh  skripsi  terdiri  dari:  
+ 
+BAB I  PENDAHULUAN  
+1.1 Latar  Belakang  Masalah  
+1.2 Rumusan  Masalah  
+1.3 Tujuan  
+1.4 Manfaat  Penelitian  
+1.5 Ruang  Lingkup  atau Batasan  Masalah  atau Definisi  Operasional  
+1.6 Sistematika  Penulisan  
+ 
+BAB  II  TINJAUAN  PUSTAKA  
+2.1 Landasan  Teori  
+2.2 Kajian  Penelitian  
+ 
+BAB  III METODE  PENELITIAN  
+3.1 Waktu  dan Lokasi  Penelitian  
+3.2 Jenis  Penelitian  
+3.3 Pengumpulan  Data 
+3.3.1 Teknik  Pengumpulan  Data 
+3.3.2 Jenis  Data 
+3.3.3 Instrument  Pengumpulan  Data 
+3.4 Tahap -Tahap  Penelitian  (Langkah -Langkah  Penelitian)  
+15   
+BAB  IV HASIL  DAN  PEMBAHASAN  
+4.1 Hasil  
+4.2 Pembahasan  
+Catatan:  Isi disesuaikan  dengan  bab III 
+ 
+BAB  V PENUTUP  
+2.1 Kesimpulan  
+2.2 Saran  
+ 
+4.2.3 Bagian Akhir  
+Bagian  akhir  skripsi  terdiri  dari: 
+a. Daftar  Rujukan  
+b. Lampiran  
+c. Daftar  Riwayat  Hidup  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Catatan:  
+Isi dari Bab III dapat  dikembangkan  atau diubah  sesuai  dengan  jenis penelitian  yang 
+bersesuai an dengan penjurusan masing -masing  
+16  BAB  V 
+TEKNIK  PENGETIKAN  SKRIPSI  
+ 
+5.1 Ukuran  Pengetikan  
+5.1.1 Ukuran  Kertas  
+Naskah diketik di atas kertas  putih A4 ukuran 210 mm x  297 mm dengan berat  80 
+GSM.  Jika perlu menggunakan kertas khusus seperti kertas milimeter untuk grafik,  kertas kalkir 
+untuk bagan/gambar (A1), dan yang melebihi ukuran kertas harus dilipat sesuai ukuran naskah  . 
+ 
+5.1.2 Sampul  
+Sampul dibuat dari hard paper berwarna Navy Blue (0384)  dengan tulisan berwarna 
+kuning emas dan tampak/timbul.  
+ 
+5.1.3 Marjin  
+Batas  tepi pengetikan  (marjin)  skripsi  adalah  sebagai  berikut.  
+a. Marjin  kiri : 4𝑐𝑚 
+b. Marjin  atas : 3𝑐𝑚 
+c. Marjin  kanan  : 3𝑐𝑚 
+d. Marjin  bawah  : 3𝑐𝑚 
+ 
+5.1.4 Spasi  
+Jarak  antara  baris  (spasi)  pengetikan  naskah  adalah  1,5 spasi . Pengetikan  judul  tabel  dan 
+judul gambar yang lebih dari satu baris adalah 1 spasi . Daftar kepustakaan diketik 1 spasi , 
+sedangkan jarak pengetikan antara dua sumber kepustakaan adalah 2 spasi . 
+ 
+5.1.5 Paragraf  
+Pengetikan  alinea  baru (paragraf)  dimulai  pada  ketukan  ke-6 dari margin  kiri sedangkan  
+jarak antar paragraf 2 spasi.  
+ 
+5.1.6 Huruf  
+Naskah  diketik  dengan  komputer  menggunakan  font standar  yakni  Times  New Roman  (TNR)  
+ada paket program Ms. Word dengan ukuran font 12 . Keterangan gambar dan tabel ditulis dengan  
+jenis  huruf TNR  dengan ukuran  10 dan spasi 1 . Ukuran  huruf  di dalam tabel  adalah 10 dengan 
+17  spasi 1 . Tabel ditulis tanpa garis vertikal.  
+ 
+5.2 PENGETIKAN  NASKAH  
+5.2.1 Bahasa  
+Bahasa yang dipergunakan dalam penulisan skripsi  adalah bahasa Indonesia  yang telah 
+dibakukan, baik kata -kata maupun ejaannya. Istilah yang dipergunakan sedapat mungkin 
+memakai istilah bahasa Indonesia atau yang sudah di Indonesia -kan. Bila  terpaksa 
+mempergunakan istilah asing harus ditulis miring  (italic) . Kalimat yang dipakai harus jelas 
+maksud dan artinya serta kalimat harus disusun secara singkat dan tepat.  
+ 
+5.2.2 Naskah  Skripsi  
+Naskah skripsi sekurang -kurangnya 70 (enam puluh) halaman , mulai dari  BAB I 
+(Pendahuluan) sampai dengan BAB V ( Penutup ), tidak termasuk  halaman judul, lembaran 
+persetujuan skripsi, kata pengantar, daftar rujukan, lampiran, dan daftar riwayat hidup.  
+ 
+5.2.3 Bab,  Sub-bab, dan Anak  Sub-bab 
+Judul bab ditulis dengan huruf kapital dan dicetak tebal dalam format centering (di tengah) 
+seperti contoh berikut. Penomoran menggunakan angka seperti pada Contoh 3.1 dengan 
+maksimal tiga level. Selanjutnya, dapat menggunakan huruf dan angka secara bergantian.  
+ 
+18   
+Contoh  5.1 Penulisan  Bab,  Sub-bab, dan Anak  Sub-bab 
+ 
+5.2.4 Penomoran  
+Penomoran  halaman  dilakukan  dengan  cara berikut.  
+1. Bagian awal karya ilmiah diberi nomor halaman dengan angka Romawi kecil (i, ii, iii, …) 
+sebagai nomor halaman dan diletakkan di tengah bawah . 
+2. Bagian  utama  dan bagian  akhir  memakai  angka  Arab  (1, 2, 3, …) sebagai  nomor 
+halaman. Dengan aturan pengetikan sebagai berikut.  
+a. Nomor  halaman  ditempatkan  di sebelah  kanan  atas. 
+b. Untuk halaman yang memuat judul bab, nomor halaman ditulis di sebelah tengah  
+bawah.  
+3. Nomor halaman diketik dengan jarak 3 cm dari te pi kanan dan 1,5 cm dari tepi atas atau 
+tepi bawah.  
+ BAB I 
+PENDAHULUAN  
+ 
+Subjudul ditulis dengan menggunakan huruf kapital hanya pada i nisial atau 
+huruf pertama  setiap  kata (kecuali  konjungsi,  preposisi,  dan artikel)  dan dicetak  tebal  
+dalam format  rata kiri sesuai  dengan  batas  margin  kiri. Nomor  subjudul  ditulis  dengan  
+angka  
+1.1 dst seperti  contoh berikut.  
+1.1 Latar  Belakang  
+Anak  dari anak  subjudul  ditulis  dalam  format  yang  sama  dengan  subjudul  dengan 
+psoisi seperti subjudul. Berikut contoh penulisannya.  
+ 
+BAB II 
+TINJAUAN  PUSTAKA  
+ 
+2.1 Landasan  Teori  
+2.1.1 Sistem Cerdas  
+A. Definisi  Sistem  Cerdas  
+1. Sejarah  Sistem  Cerdas  
+2. Definisi  Menurut  Ahli 
+B. Penerapan  Sistem  Cerdas  pada  Kehidupan  Sehari -hari 
+2.1.2 Metode  AHP  
+2.1.3 User  Experience  
+19  5.2.5 Huruf  Miring  
+Huruf  miring  digunakan  untuk  judul  buku,  nama  terbitan  berkala,  atau nama  publikasi  
+lainnya, dalam daftar pustaka. Huruf miring juga digunakan untuk istilah, kosa kata, kalimat, dan 
+transliterasi  bahasa  asing  atau bahasa  daerah.  Huruf  miring  dapat  diganti  dengan  pemberian garis 
+di bawah huruf yang harus dimiringkan, akan tetapi keduanya tidak boleh dikombinasikan.  
+ 
+5.2.6 Penyajian  Tabel  
+Penyajian tabel sedapat mungkin dalam satu halaman atau disambung pada  halaman 
+berikutnya. Namun jika ini terpaksa terjadi, maka pada halaman berikutnya  jangan  lupa diulangi  
+lagi judul tabel  dan keterangan  pada kolom -kolom  (tabel  lanjutan harus  tetap memuat head 
+tabel).  Penyajian tabel tanpa garis vertikal. Tulisan , nomor, dan nama tabel ditempatkan di atas 
+tabel di tengah margin kiri dan kanan, dengan jarak baris 1 spasi. Ukuran  huruf untuk judul, isi 
+dalam tabel, dan penulisan sumber rujukan (jika ada) adalah 10. Nama tabel dan judul pada  head  
+tabel  dicetak  tebal.  Nomor  tabel  dibuat  dengan  angka  Arab,  dalam  urutan  untuk seluruh  bab, dan 
+dalam  satu urutan  tersendiri  untuk  seluruh  lampiran.  Tulisan  dan nama  tabel ditulis dengan huruf 
+kecil, kecuali huruf awal semua kata selain kata sandang. Keterangan mengenai sumber tabel 
+(jika ada ) ditempatkan di bawah tabel. Untuk lebih jelasnya dapat dilihat pada contoh berikut.  
+Untuk  penulisan  tabel  dengan  mengacu  ke setiap  bab 
+ 
+Tabel  2.1 Perbedaan  Sisten  Konvensional  dengan  Sistem  Pakar  
+ 
+Sistem  Konvensional  Sistem  Pakar  
+Informasi  dan pemrosesannya  biasanya  jadi 
+satu dengan program  Basis  pengetahuan  merupakan  bagian 
+terpisah dari mekanisme internal  
+Program  tidak  pernah  salah  (kecuali 
+pemrogramnya yang salah)  Program  bisa saja melakukan  kesalahan  
+Biasanya  tidak  bisa menjelaskan  mengapa 
+suatu input data itu dibutuhkan atau 
+bagaimana output itu diperoleh  Penjelasan  adalah  bagian  terpenting  dari 
+sistem pakar  
+ (Sumber:  Kusumadewi,  2017)  
+ 
+ 
+5.2.7 Penyajian  Gambar  
+Gambar  sebaiknya  disajikan  dalam  satu halaman.  Agar  gambar  dan keterangan  gambar 
+tidak terpisah, maka disarankan gambar dan keterangan gambar dicantumkan dalam text box  Catatan:  
+Penomoran  2.1 artinya  tabel  berada  pada  bab 2 dan merupakan  tabel  yang  pertama  kali 
+muncul di bab tersebut.  
+20  dengan format no line no fill . Pengetikan gambar di sini meliputi foto, grafik, diagram, skema, 
+peta, bagan, dan sejenisnya. Tulisan, nomor, dan nama gambar ditempatkan di bawah  gambar  
+di tengah  margin  kiri dan kanan,  dengan  jarak  baris  1 spasi  dan ukuran  huruf  10. Tulisan dan 
+nama gambar  mempergunakan huruf kecil,  kecuali  huruf pertama setiap kata  selain  kata 
+sandang. Sumber pengambilan gambar (jika ada) ditempatkan di bawahnya. Untuk lebih 
+jelasnya bisa dilihat pada contoh di bawah ini.  
+ 
+Untuk  penulisan  gambar  dengan  mengacu  ke setiap  bab 
+(Sumber:  Kusumadewi,  2017)  
+Gambar  2.17 Tampilan  Chart  Builder  setelah  Memilih  Tipe Diagram  
+ 
+ 
+5.2.8 Penyajian  Rumus  dan Variabel  
+Penulisan rumus harus menggunakan equation  yang merupakan salah satu fitur layanan 
+pada  Ms. Office. Hal ini dimaksudkan  agar penulisan  sesuai  dengan  kaidah  penulisan  rumus yang 
+seharusnya. Selain itu, rumus harus diberi nomor  dan keterangan rumus dituliskan di bawah  
+rumus  dengan  spasi 1  dan ukuran  font 10 dengan  kata “keterangan”  ditulis  tebal . Penulisan 
+variabel juga ditulis dengan equation atau dicetak miring  untuk membedakan dengan alfabet 
+yang lain. Perhatikan contoh berikut.  
+ 
+ 
+ 
+Penulisan  rumus  yang  benar  
+Ini artinya,  rumus  ke-1 pada bab 2  
+Catatan:  
+Penomoran  2.17 artinya  gambar  berada  pada  bab 2 dan merupakan  gambar  ke-17 yang 
+muncul di bab tersebut.  
+21  1𝑛−𝐹 
+𝑀𝑒 = 𝑏 + 𝑝 ∙ (2 ) ................................ . (2.1)  
+𝑓 
+Keterangan:  
+𝑏 = batas  bawah  kelas  median,  yaitu  kelas  di mana  median  terletak  
+𝑝 = panjang  kelas  median  
+𝑛 = banyak  data 
+𝐹 = jumlah  semua  frekuensi  sebelum  kelas  median  
+𝑓 = frekuensi  kelas  median  
+ 
+ 
+ 
+5.2.9 PENULISAN  SUMBER KUTIPAN  
+1. Aturan Penulisan Pustaka atau Sumber Rujukan  
+Aturan penulisan pustaka atau sumber rujukan yang populer untuk penulisan ilmiah yaitu 
+sistem American Psychological Association (APA) edisi 7.  
+2. Penulisan Pustaka dalam Tubuh Tulisan  
+a) Rujukan dan kutipan ditulis menggunakan teknik rujukan berkurung (nama akhir, tahun) 
+atau biasa disebut sistem APA. Pencantuman sumber pada kutipan langsung hendaknya 
+disertai dengan nomor halaman.  
+Contoh:............... (Yusro, 2013: 47).  
+b) Pengacuan pustaka dalam teks karya ilmiah dapat ditulis oleh satu pengarang, dua 
+pengarang, tiga pengarang, atau lebih. Terkadang acuan yang dijadikan rujukan tidak 
+memiliki nama pengarang, maka cara penulisannya adalah: Anonim (2012: 24).............. 
+atau..............................................(Anonim, 2012: 24).  
+c) Artikel yang belum pernah dibaca sendiri oleh penulis dan diacu dari suatu sumber 
+(pustaka sekunder), cara penulisannya adalah: nama pengarang dan tahun penerbitan 
+aslinya ditulis dan dipisahkan dengan tanda koma dan spasi dengan kata “diacu dalam” 
+yang di ikuti nama pengarang dan tahun penerbitan pustaka sekunder.  
+Contoh:  
+Menurut Arikunto (2012: 76), diacu dalam Wibawa (2015: 38)................. atau 
+(Arikunto, 2012: 76, diacu dalam Wibawa, 2015: 38). Cara penulisannya dalam 
+tubuh tulisan dapat dilihat pada tabel berikut ini :  
+ 
+Tabel 6.12. Contoh Daftar Nama Pengarang dan Penulisannya dalam Tubuh Tulisan  
+Nama pengarang dan tahun  Penulisan dalam tubuh tulisan  
+Muhammad Yusro. 2014  Awal kalimat : Menurut Yusro (2014: 
+15).................  Spasi 1 Uk. Font 10 
+Variabel  ditulis  miring atau 
+menggunakan equation  
+22  Akhir kalimat : ............................. (Yusro, 2014: 
+15). 
+Ari Istiany dan Ratu Amilia. 2003  Awal kalimat : Istiany dan Amilia (2003: 24) 
+............  
+Akhir kalimat : ........... (Istiany dan Amilia, 
+2003: 24).  
+Muhammad Yusro, Ari Istiany dan Ratu 
+Amilia. 2008  Awal kalimat : Yusro, dkk. (2008: 33) 
+....................  
+Akhir kalimat : .................... (Yusro, dkk., 2008: 
+33). 
+ 
+3. Penulisan Pustaka dalam Daftar Pustaka  
+Bagian akhir sebuah skripsi terdapat daftar pustaka yang dibuat berdasarkan susunan sistem 
+pengacuan pustaka tertentu.  
+a) Ke bawah menurut abjad nama utama atau nama keluarga penulis pertama.  
+b) Ke kanan:  
+1) Buku: nama penulis, tahun, judul buku teks book (dicetak miring), terbitan (edisi), 
+nama penerbit, kota/Negara.  
+2) Jurnal/majalah: nama penulis, tahun, judul tulisan, nama majalah (dengan singkatan 
+resminya dan dicetak miring/italic), jilid/volume (dicetak tebal), dan halaman.  
+3) Website : nama penulis (jika ada), judul,alamat website, tanggal. akses.  
+c) Untuk setiap judul buku/majalah/jurnal, jarak antara baris adalah satu spasi, sedangkan jarak 
+antara judul tersebut adalah dua spasi.  
+ 
+4. Penulisan Pustaka Pada Jurnal  
+a. Nama pengarang yang ditulis dalam daftar pustaka adalah nama keluarga atau nama akhir 
+yang diikuti inisial nama pertama dan nama tengah diikuti tanda titik. Nama keluarga dan 
+inisial ini dipisahkan dengan satu ketuk. Nama pengarang  berikutnya dipisahkan satu sama 
+lain dengan tanda titik koma. Tanda titik diberikan untuk membedakan keterangan nama 
+pengarang dan tahun terbit.  
+b. Tanda titik diberikan setelah tahun publikasi. Tahun yang dicantumkan dalam daftar pustaka 
+ialah tahun terlaksananya penerbitan.  Judul yang dikutip harus  sama dengan judul pada 
+publikasi asli. Hanya huruf awal, dari judul artikel ditulis dengan huruf kapital.  
+23  c. Volume jurnal ditulis dengan angka arab setelah nama jurnal dan dipisahkan dengan jarak 1 
+ketuk. Nomor volume yang tidak menggunakan angka arab, misalnya volume XXVI diubah 
+menjadi 26. Setelah nomor langsung diikuti tanda titik dua dan nomor halaman lengka p (114 -
+120 untuk menyatakan halaman 114 sampai dengan 120) yang diakhiri dengan tanda titik.  
+d. Nomor terbitan biasanya digunakan pada jurnal dan ditulis dengan angka arab. Angka tersebut 
+diletakkan dalam tanda kurung setelah nomor volume yang semuanya ditulis langsung tanpa 
+jarak, misalnya 27(6):8 -16. Suplemen merupakan terbitan khusus atau sisipan dari suatu 
+volume jurnal. Artikel acuan yang berasal dari nomor tambahan yang terdapat dalam terbitan 
+berkala ditunjukkan oleh suatu keterangan, misal Supl 1 untuk Suplemen nomor 1; Ed Khusus 
+5 untuk Edisi Khusus nomor 5; atau Sisipan 1 untuk Sisipan nomor  1. Contoh penulisan 
+sumber acuan dari jurnal sebagai berikut :  
+ 
+Pengarang Satu Orang (menjorok berapa ketuk)  
+Munawaroh. (2012). Pengaruh model pembelajaran kooperatif tipe STAD, cara belajar, dan 
+motivasi belajar terhadap sikap kewirausahaan: studi kasus di SMKN 1 Jombang. Jurnal 
+Pendidikan dan Pembelajaran, 19:184 -195.  
+Pengarang Dua Orang  
+Bernier, D. & Yosko, S. (2001). Designing and evaluating printed education materials: model 
+and instrument. Pat Educ Couns, 18:102 -111. 
+ 
+Pengarang 3 -5 Orang  
+Rosa, E. S., Muliani, L., Shobih, S., Hidayat, J., & Yuliarto, B. (2014). Seriesinterconnected 
+plastic dye -sensitized solar cells prepared by low - temperature binder -free titania paste. 
+Makara Journal of Technology, 18:96 -100.  
+ 
+Pengarang Lebih dari Lima Orang  
+Wilkinson, M.J., et al. (2000). A Direct regional scale estimate of transgene movement from 
+genetically modified oilseed rape to its wild progenitors. Mol Ecol, 9:983 - 991.  
+ 
+Pengarang merupakan Organisasi  
+[WHO] World Health Organization. (1999). Guidelines for the management of hypertension. 
+J Hypert, 17:151 -185.  
+ 
+ 
+24  Artikel tanpa Pengarang  
+[Anonim]. (2006). Epidemiology for primary health care. Int J Epidemiol, 5:224 -225.  
+ 
+Terbitan sebagai Suplemen, Sisipan, Edisi Khusus  
+Magni, F.; Rossoni, G.; & Berti, F. (2008). BN -52021 Protects guinea -pig from heart 
+anaphylaxis. Pharm Res Commun Supl, 5:75 -78. 
+ 
+ 
+5. Penulisan Pustaka pada Buku  
+Penyusunan daftar pustaka untuk buku ditulis dengan urutan : nama pengarang, tahun terbit, judul 
+buku, kota tempat penerbitan, dan nama penerbit. Pada dasarnya keterangan untuk menulis nama 
+pengarang dan tahun penerbitan sama seperti pada jurnal, sedangkan  untuk keterangan yang lain akan 
+dijelaskan di bawah ini.  
+a. Judul buku ditulis dengan huruf miring; setiap kata diawali huruf kapital, kecuali kata depan 
+dan kata sambung. Keterangan tentang edisi ditempatkan setelah judul dan ditulis misalnya 
+"Ed ke -8". Walaupun dalam buku aslinya tercantum misalnya "Eighth Editio n", pada 
+penulisan daftar pustaka pasangan kata itu perlu diubah menjadi "Ed ke -8". Tulisan "New 
+revised edition" yang sering kita jumpai pada 33 suatu buku perlu disingkat menjadi "Ed rev". 
+Edisi pertama yang tidak diikuti edisi berikutnya tidak perlu dii dentifikasi sebagai "Ed ke -1", 
+tetapi bila kemudian diketahui terbit edisi baru maka buku edisi pertama itu perlu dinyatakan 
+dengan "Ed ke -1".  
+b. Tempat penerbitan dapat dijumpai pada halaman judul dari buku yang diacu. Bila tercantum 
+beberapa tempat penerbitan, nama tempat yang pertama kali ditulis digunakan untuk 
+menyusun daftar pustaka. Bilamana kota tempat buku diterbitkan tidak tercantum dalam buku, 
+tetapi dapat dikenali dari nama penerbitnya, maka nama kota itu ditulis dalam tanda kurung 
+siku. Bila tempat penerbitan sama sekali tidak diketahui, maka dituliskan tempat tidak 
+diketahui dalam tanda kurung siku: "[tempat tidak diketahui]".  
+c. Penerbit ialah perusahaan komersial atau lembaga pemerintah/swasta yang melaksanakan 
+penerbitan buku. Nama penerbit biasanya tercantum pada halaman judul. Seandainya sama 
+sekali tidak tercantum nama penerbit atau nama yang menunjukkan sebagai penerbit, mak a 
+dituliskan penerbit tidak diketahui dalam tanda kurung siku:[penerbit tidak diketahui]. Contoh 
+penulisan sumber acuan dari buku sebagai berikut:  
+ 
+ 
+25  Satu Pengarang  
+Arikunto, S. (2001). Dasar -dasar Evaluasi Pendidikan. Jakarta: Bumi Aksara.  
+ 
+Buku dengan Lembaga atau Organisasi sebagai Pengarang  
+[Depdiknas] Departemen Pendidikan Nasional. (2001). Kamus Besar Bahasa Indonesia. Ed 
+ke-3. Jakarta: Balai Pustaka.  
+European Centre for the Development of Vocational Training (1996). Vocational Training 
+Glossarium. Thessaloniki: CEDEFOP.  
+Pelczar, M.J. & Chan, E.C.S. (1986). Dasar -dasar Mikrobiologi. Terjemahan oleh 
+Hadioetomo, R.S.; Imas, T.; Tjitrosomo, S.S.; & Angka, S.L. 2000. Jakarta: UI Press.  
+ 
+Buku Terjemahan dengan Editor  
+Luzikov, V.N. (1985). Mitochondrial Biogenesis and Breakdown. Terjemahan oleh Galkin, 
+A.V.; editor oleh Roodyn, D.B. New York: Consultants Bureau.  
+ 
+ 
+6. Penulisan Pustaka pada Prosiding  
+Penyusunan daftar pustaka untuk prosiding ditulis dengan urutan mengikuti penulisan buku, tetapi 
+dengan menampilkan nama pertemuan  : 
+Nama judul ditulis dengan setiap awal katanya menggunakan huruf kapital, kecuali kata 
+sambung. Nama pertemuan dipisahkan dari tempat pelaksanaan pertemuan dengan tanda titik dan 
+spasi, sedangkan tempat dan waktu pelaksanaan dengan tanda koma dan spasi. Wak tu pelaksanaan 
+pertemuan dinyatakan dalam urutan "tanggal bulan tahun", nama bulan disingkat hingga terisi tiga 
+huruf yang pertama dan tanpa tanda titik. Contoh penulisan sumber acuan dari prosiding sebagai 
+berikut: Istiany, A.; Suriah, A.R.; & Asmaa’, M.P . 2005. Evaluasi Penggunaan VCD dan Leaflet 
+tentang Vitamin D dalam Peningkatan Pengetahuan, Sikap dan Perilaku Wanita Posmenopaus 
+Melayu. Di dalam: Mempercepat Terwujudnya Universitas Riset. [Prosiding] Pertemuan Ilmiah 
+Nasional dan Ekspo IPTEKS MIPA; Dep ok, 25 -26 Nov 2005. Depok: Perhimpunan Ahli Matematika 
+dan Ilmu Pengetahuan Alam Indonesia. Hlm 170 -177.  
+ 
+7. Panduan Pustaka pada Skripsi, Tesis, atau Disertasi  
+Urutan cara penulisan acuan yang bersumber dari skripsi, tesis, atau disertasi adalah nama pengarang, 
+tahun terbit, judul [jenis publikasi], tempat institusi: nama institusi tempat tersedianya karya ilmiah 
+tersebut. Contoh cara penulisannya sebagai berikut : 
+26   
+Wibisono, Y.W. 1995. Perbandingan Dua Konfigurasi N -titik: Analisis Pro -crustes [skripsi]. Jakarta: 
+Fakultas Teknik, Universitas Negeri Jakarta.  
+ 
+Astriani, A. 2003. Fungsi Biaya dalam Usa Aa Catering: Kasus Kabupaten Bandung [tesis]. Jakarta: 
+Program Pascasarjana, Universitas Negeri Jakarta.  
+ 
+8. Penulisan Acuan yang bersumber dari Internet atau Online  
+a. Hasil  penelitian, pangkalan data (data base), dan perangkat lunak (soft ware) untuk analisis 
+data saat ini tersedia dalam situs web dengan alamat waring wera wanua (world wide web, 
+WWW) tertentu. Acuan yang bersumber dari internet dapat berupa data resmi yang 
+dikeluarkan oleh lembaga atau instansi yang kredibel dan hasil penelitian dalam bentuk tulisan 
+ilmiah berupa tesis, disertasi, proseding dan artikel ilmiah.  
+b. Hati-hati dalam mengambil acuan dari internet karena tidak semua keterangan pada semua 
+situs web dapat dipertanggungjawabkan dari segi ilmiah dan tidak semua situs permanen. 
+Forum diskusi elektronik (chatting), situs jejaring sosial (seperti facebook, wiki pedia) dan 
+laman blog pribadi tidak dapat digunakan sebagai sumber acuan ilmiah.  
+c. Penulisan acuan bersumber pada internet dapat dilakukan dengan menuliskannya seperti pada 
+penulisan acuan dari sumber jurnal atau publikasi cetak seperti yang diuraikan. Acuan 
+bersumber pada pangkalan data dunia dan perangkat lunak untuk analisis cukup dit uliskan 
+dalam tubuh tulisan dan tidak dimunculkan dalam Daftar Pustaka.  
+d. Hasil penelitian yang dipublikasikan dalam jurnal elektronik diacu seperti halnya mengacu 
+dari jurnal ilmiah dengan menuliskan situs webnya, demikian pula pengacuan abstrak dari 
+suatu jurnal ilmiah dan seminar ilmiah. Kebanyakan abstrak dari suatu publikas i hasil 
+penelitian dapat diakses dengan cuma -cuma, sedangkan publikasi lengkapnya harus 
+dilanggan. Berikut ini adalah contoh cara penulisan daftar pustaka yang bersumber dari 
+internet:  
+ 
+Artikel dari Publikasi Elektronik  
+ 
+Nama pengarang. Tahun penerbitan. Judul artikel. Nama jurnal Volume (nomor): halaman. 
+[tipe media]. Ketersediaan. [Tanggal, bulan, dan tahun akses].  
+ 
+27  Hsu, Y.H. dan To, K.Y. 2000. Cloning of a cDNA. Plant Physiol 122:1457. [terhubung 
+berkala] http://www.tarweed. com/pgr/PGROO -033. html [2 Nov 2000].  
+ 
+Richmond, A.S., & Cummings, R. (2005). Implementing Kolb’s learning styles into online 
+distance education. International Journal of Technology in Teaching and Learning, 1(1), 45 -
+54. http://ijttl.sicet.org/issue0501/Richmond.Vol1.Iss1.pp45 - 54.pdf. Diakses 28 Oktober 
+2008.  
+ 
+Schaller, D.T., S. Allison -Bunnel and M. Borun. (2005). Learning Styles and Online 
+Interactives, in J. Trant and D. Bearman (Eds.). Museums and The Web 2005: Proceedings, 
+Toronto: Archives & Museum Informatics. 
+http://www.archimuse.com/mw2005/papers/schaller/schaller.html. Diakses 28 Oktober 2008 .  
+ 
+Cara penulisan nama pengarang berjumlah 1 orang, 2 orang, 3 -5 orang dan lebih dari 5 orang baik 
+dalam buku atau artikel dari situs web sama dengan cara penulisan yang dicontohkan dalam jurnal.  
+ 
+9. Penulisan  daftar pustaka menggunakan aplikasi Mendeley  
+ 
+[FE]Fakultas Ekonomi. 2004. Panduan penyusunan penulisan  Skripsi Sarjana Pendidikan Ekonomi. 
+Jakarta: Fakultas Ekonomi, Universitas Negeri Jakarta.  
+ 
+[FH] Fakultas Hukum. 2008. Pedoman Penulisan Tugas Akhir, Makalah, Kuliah Kerja Lapang dan 
+Program Pemberdayaan Masyarakat. Malang: Fakultas Hukum, Universitas Brawijaya.  
+ 
+[FT] Fakultas Teknik. 2002. Pedoman Teknis Penulisan dan Pelaksanaan Ujian Skripsi, Makalah, 
+Karya Ilmiah, dan Ketentuan Penyelenggaraan Tugas Akhir Program Diploma. Jakarta: Fakultas 
+Teknik, Universitas Negeri 37 Jakarta.  
+ 
+[FT] Fakultas Teknik. 2009. Pedoman Penulisan Skripsi. Jakarta: Fakultas Teknik, Universitas Negeri 
+Jakarta. Gunawan, A.W., Achmadi, S.S., dan Arianti, L. 2007. Pedoman Penyajian Karya Ilmiah. 
+Bogor: IPB Press.  
+ 
+[PPS] Pusat Pengajian Siswazah. 2006. Panduan penyusunan penulisanTesis Gaya UKM. Malaysia: 
+28  Universiti Kebangsaan Malaysia.  
+ 
+[UNJ] Universitas Negeri Jakarta. 2007. Pedoman Penulisan Tesis dan Disertasi Program Pasca 
+Sarjana. Jakarta: Pasca Sarjana Universitas Negeri Jakarta.  
+ 
+Wibawa, B., et al. 2004. Pedoman Penulisan Skripsi, Pelaksanaan Ujian Skripsi, Karya Inovatif 
+Produktif Makalah, dan Tugas Akhir. Jakarta: Fakultas Teknik Universitas Negeri Jakarta.
+29   BAB V I 
+BENTUK  SKRIPSI  
+ 
+6.1 Bagian  Sampul  Muka  Skripsi  
+Bagian  sampul  skripsi  terdiri  dari : 
+1. Kulit  Muka.  
+Kulit  muka  skripsi  terbuat  dari kertas  hard  paper  dengan  ketebalan  standar  dan warna 
+biru navy  (#372d7a ). 
+2. Judul  Skripsi.  
+Judul  skripsi  merupkan  gambaran  pokok  masalah  yang  akan  ditulis.  
+3. Maksud  dan tujuan  penulisan  dari skripsi.  
+4. Logo  Universitas  Islam  Balitar  Blitar  
+5. Nama  penyusun  skripsi  lengkap  dengan  Nomor  Induk  Mahasiswa  (NIM)  
+6. Tulisan  : Program Studi Teknik Informatika/Sistem Komputer /Teknik Sipil/Teknik 
+Elektro * Fakultas Tekn ik dan  Informa tika Universitas Islam Balitar Blitar  
+7. Tahun  ujian  sidang  skripsi  dilaksanakan.  
+8. Ukuran  sampul  muka  skripsi  terbuat  dari kertas  hard paper  standar  A4 ukuran  
+210 𝑚𝑚 × 297 𝑚𝑚. 
+9. Seluruh  tulisan  pada  bagian  sampul  muka  skripsi  berwarna  kuning  emas.  
+ 
+6.2 Bagian  Awal  Skripsi  
+Bagian  awal  skripsi  terdiri  dari : 
+1. Kulit  Muka.  
+Kulit muka  skripsi  terbuat dari kertas  putih A4 ukuran  210 𝑚𝑚 × 297 𝑚𝑚 dan berat 80 
+GSM.  
+2. Judul  Skripsi  Judul  
+Judul  skripsi  merupkan  gambaran  pokok  masalah  yang  akan  ditulis.  
+3. Maksud  dan tujuan  penulisan  skripsi.  
+4. Logo  Universitas  Islam  Balitar  Blitar.  
+5. Nama  penulis  skripsi /skripsi  lengkap  dengan  Nomor  Induk  Mahasiswa  (NIM)  
+6. Tulisan  : Program Studi Teknik Informatika/Sistem Komputer /Teknik Sipil/Teknik 
+Elektro * Fakultas Tekn ik dan  Informa tika Universitas Islam Balitar Blitar  
+7. Tahun  ujian /sidang  skripsi  dilaksanakan.  
+8. Lembar  Persetujuan  Skripsi  . 
+30  Lembar  persetujuan  skripsi  berisi  tanda  tangan  Dosen Pembimbing I  dan Dosen 
+Pembimbing II sebagai persetujuan bahwa Skripsi tersebut telah disetujui untuk diajukan 
+dalam sidang tim penguji.  
+9. Lembar Pengesahan Skripsi ( dilampirkan pada waktu proses penjilidan skripsi )  
+Lembar halaman ini berisi tanggal dan tanda tangan tim penguji, tanda tangan Ketua 
+Program Studi untuk diketahui dan tanda tangan mengesahkan oleh Dekan Fakultas Tekn ik 
+dan Informa tika Universitas  Islam  Balitar  Blitar  bahwa  skripsi telah  lulus diujikan dan tidak 
+memerlukan revisi lagi.  
+ 
+10. Lembar  catatan penelitian berisi catatan asistensi skripsi oleh D osen Pembimbing Skripsi  
+yang  harus  dilaksanakan  oleh mahasiswa  minimal  8 (delapan ) kali bimbingan  dan bukti 
+setiap bimbingan di -upload secara online pada Siakad Cloud . 
+11. Lembar  motto  dan persembahan  (bila ada). 
+Lembar motto dan persembahan berisi kata -kata bijak dan ungkapan -ungkapan yang 
+dapat membangkitkan semangat. Motto ditulis pada sudut kiri atas dan persembahan 
+dapat berisi nama -nama keluarga atau pihak lain yang perlu dicantumkan oleh penulis dan 
+ditulis pada kanan bawah.  
+12. Kata  Pengantar.  
+Lembar kata pengantar berisi maksud dan manfaat penulisan serta hambatan -hambatan, 
+rasa syukur dan ucapan terima kasih kepeda pihak -pihak yang telah memberi bantuan 
+selama penulsan skripsI, diantaranya :  
+a. Rektor  Universitas  Islam  Balitar  Blitar  
+b. Dekan  Fakultas  Teknologi  Informasi  Unisba  Blitar  
+c. Ketua  Program  Studi  
+d. Pembimbing  skripsi  
+e. Seluruh  Dosen/Tenaga  Pengajar  program  studi 
+f. Seluruh  karyawan  Fakultas  Teknologi  Informasi  Unisba  Blitar  
+g. Keluarga  dari penulis  skripsi  
+h. Rekan  sejawat  yang  perlu  dicantumkan  pada  skripsi  (bila ada) 
+i. Rekan -rekan  mahasiswa  Program  Studi  
+j. Tanda  tangan  penulis  skripsi  Catatan:  
+Lembar pengesahan skripsi dibuat rangkap 6 dengan tanda tangan basah. Pada 
+jilidan skripsi cukup dilampirkan 1 lembar saja. Lembar pengesahan lain tidak ikut 
+dijilid.  
+31  13. Daftar  Isi 
+Daftar  isi skripsi/ skripsi  berisi  sistematika  dan petunjuk  dengan  maksud untuk 
+memberikan gambaran yang  menyeluruh  tentang  isi skripsi/ skripsi , dan dibuat  sesuai 
+dengan ketentuan dalam buku pedoman ini.  
+14. Abstrak.  
+Abstrak dilampirkan pada laporan skripsi ( bukan proposal ). Abstrak adalah sajian cermat 
+dan singkat mengenai inti suatu karya ilmiah tanpa tambahan ataupun kritik dan  
+tanggapan  pembuatnya.  Fungsi  abstrak  agar pembaca  dapat  memutuskan  perlu tidaknya 
+keseluruhan skripsi dibaca atau dipelajari dan kalimat yang dipakai hendaknya bentuk 
+kalimat aktif dengan jumlah kalimat tidak lebih dari 20 kalimat atau sebanyak -banyaknya 
+200 kata.  
+Abstrak  skripsi  berisikan:  
+a. Alasan  dan tujuan  penelitian/analisis/perencanaan  ( 1 s/d 3 kalimat  ). 
+b. Metode  penelitian/analisis/perencanaan  ( 2 s/d 3 kalimat  ). 
+c. Hasil  penelitian  ( 5 s/d 15 kalimat  ). 
+d. Kesimpulan  dan saran -saran  ( 5 s/d 10 kalimat  ). 
+Catatan : Contoh  penulisan  abstrak  disajikan  pada  lampiran  
+ 
+6.3 Bagian Isi  Skripsi  
+6.3.1 Judul  Skripsi   
+Judu l skripsi merupakan  pokok  masalah  yang  akan  dijadikan  bahan tulisan dan 
+judul skripsi tersebut dapat  dibuat  masalah  berupa  pertanyaan  atau kalimat tanya.  
+ 
+6.3.2 Isi Skripsi  
+Isi skripsi terdiri dari bab dan sub -bab yang  menggambarkan  isi tulisan  masalah -
+masalah yang sesuai dengan judul skripsi.  
+ 
+BAB  I  PENDAHULUAN  
+1.1 Latar  Belakang  Masalah  
+Latar  belakang  harus  dapat:  
+a. menggambarkan  masalah  penelitian  yang  digunakan  sebagai  sebab  dilakukannya 
+penelitian;  
+b. penyebab  munculnya  masalah  penelitian;  
+c. memberikan  gambaran  pentingnya  masalah  tersebut  diteliti  baik secara  teoritis maupun 
+32  praktis;  
+d. solusi  untuk  penyelesaian  masalah;  
+e. alasan  ilmiah  yang  mendasari  pengambilan  solusi  permasalahan;  
+f. penelitian -penelitian  sebelumnya  yang  terkait  dengan  masalah  dan solusi  penelitian yang 
+dikemukakan.  
+ 
+1.2 Rumusan  Masalah  
+Rumusan masalah dapat diambil dari judul skripsi /skripsi dan hendaknya diidentifikasi 
+pula sesuai dengan konsentrasi/program peminatan yang diambil. Pokok masalah yang diteliti 
+cukup diambil satu atau dua masalah.  
+ 
+1.3 Hipotesis  Penelitian  (bila ada, umumnya  pada  penelitian  kuantitatif  dan kualitatif ) 
+a. Bila menggunakan jenis penelitian yang bersifat konsepsional, sebaiknya  gunakan 
+hipotesis, yaitu membuktikan dalil yang masih lemah.  
+b. Bila penelitian  bersifat  pemula,  maka  tidak  perlu  ada hipotesis.  
+c. Bila penelitian  bersifat  exploratoris  research , maka tidak diperlukan  hipotesis.  
+d. Hipotesis  harus  dibuktikan  dalam  kesimpulan  bila sifat penelitian menggunakan 
+hipotesis.  
+ 
+1.4 Tujuan  Penelitian  
+Tujuan penelitian disesuaikan dengan rumusan masalah yang telah ditentukan. Tujuan 
+penelitian merupakan tindak lanjut dari rumusan masalah yang dimaksudkan untuk 
+memperoleh data teknik atau pengetahuan teknik, serta mendapatkan informasi tentang 
+perkembang an ilmu pengetahuan di  bidang teknologi informasi.  
+ 
+1.5 Batasan Penelitian atau Definisi Operasional atau Ruang Lingkup Penelitian  
+Pada bagian ini dikemukakan definisi istilah -istilah atau batasan yang digunakan dalam 
+penelitian  yang  dilakukan,  baik dari sisi model  dan prosedur  yang  digunakan  dalam 
+penelitian  ataupun  dari sisi luaran  penelitian  yang  dihasilkan.  Istilah -istilah  yang  perlu  
+diberikan batasan hanyalah yang  memiliki pelua ng ditafsirkan berbeda oleh  pembaca atau 
+pengguna produk. Batasan istilah tersebut harus dirumuskan seoperasional mungkin. Semakin 
+operasional rumusan batasan istilah, makin kecil peluang istilah itu ditafsirkan berbeda oleh 
+pembaca atau pengguna.  
+ 
+33  1.6 Sistematika  Penulisan  
+Sistematika penulisan berisi penjelasan singkat dari isi setiap bab penelitian yang akan 
+dilakukan.  
+ 
+BAB  II  TINJAUAN  PUSTAKA  
+Tinjaun pustaka berisi tentang kajian teori dan kajian pustaka yang merupakan dasar 
+penelitian yang dilakukan. Kajian teori berisi penjelasan yang berkaitan dengan konsep yang 
+dapat dijadikan sebagai ukuran atau parameter pemecahan masalah. Sementara, kaji an pustaka  
+berisi  tentang  penelitian -penelitian  yang  telah  dilakukan  sebelumnya,  yang terkait  dengan  tema  
+penelitian  yang  diangkat. Kajian  pustaka  ditulis  dalam  bentuk  narasi, seperti pada contoh 
+berikut.  
+ 
+Banyaknya  artikel  yang  digunakan  dalam  kajian  penelitian  adalah  8 Jurnal  Nasional  dan 2 
+Jurnal Internasional dengan rentang tahun 10 tahun terakhir . 
+ 
+ 
+BAB  III METODE  PENELITIAN  
+Metode penelitian merupakan penjelasan tentang teknis penelitian mulai dari 
+identifikasi masalah sampai pada penyelesaian masalah. Hal -hal yang dijelaskan pada 
+bagian ini meliputi:  waktu  dan lokasi  penelitian;  jenis  penelitian;  pengumpulan  data  
+Penelitian  ini dilakukan  tidak  terlepas  dari hasil  penelitian -penelitian  terdahulu  yang 
+pernah dilakukan sebagai bahan perbandingan dan kajian. Adapun hasil -hasil penelitian 
+yang dijadikan perbandingan tidak terlepas dari topik penelitian yaitu mengenai sistem 
+SMS conference dimana sistem mengadopsi sistem SMS broadcast . 
+Berdasarkan hasil penelitian yang pernah dilakukan Simon (2019) yang telah 
+melakukan penelitian mengenai penggunaan SMS dalam bidang pengajaran dan 
+pembelajaran, diperoleh informasi bahwa penerapan pengajaran dan pembelajaran pada 
+Hongkong  Institute  of Education  menggunakan  SMS  dengan  implementasi  brainstroming , 
+voting  dan assesment  pada  suatu  kelas,  menunjukkan  bahwa  pengajaran  dan pembelajaran 
+di kelas dapat berjalan lebih aktif dan interaktif. Hal ini sejalan dengan penelitian yang 
+dilakukan oleh Brain (2018),  yang menyatakan bahwa pemanfaatan teknologi untuk 
+menciptakan keaktifan siswa dalam proses belajar dapat dilakukan melalui penerapan 
+sistem SMS broadcast . 
+34  (teknik  pengumpulan data; jenis data; instrumen pengumpulan data; serta tahapan penelitian 
+yang menggambarkan alur penelitian yang dilakukan peneliti mulai dari awal hingga 
+penelitian  selesai.  Isi dari Bab III ini dapat  dikembangkan  atau diubah  sesuai  dengan  jenis 
+penelitian/judul penelitian/tema penelitian yang telah disesuaikan dengan penjurusan 
+masing -masing.  
+ 
+BAB  IV HASIL  DAN  PEMBAHASAN  
+4.1 Hasil  
+Paparan pada poin in i berisi tentang hasil yang didapatkan dari rumusan masalah 
+penelitian.  
+ 
+4.2 Pembahasan  
+Paparan pada poin ini menjelaskan analisis peneliti terhadap hasil penelitian (pada poin 
+4.1) yang dikaitkan dengan kajian teori dan kajian penelitian yang digunakan.  
+ 
+BAB  V PENUTUP  
+5.1 Kesimpulan  
+Kesimpulan  merupakan  jawaban  rumusan  masalah  yang  telah  didefinisikan  pada  Bab I. 
+ 
+5.2 Saran  
+Saran  yang  diberikan  bersifat konstruktif dan saran tersebut  belum pernah diberikan 
+oleh orang lain, atau sebaliknya dipakai pengaruh dari penelitian tersebut terhadap 
+perkembangan  ilmu pengetahuan dan teknologi.  
+ 
+DAFTAR  RUJUKAN  
+Penulisan rujukan menggunakan menu Bibliography , tidak ditulis manual, dan 
+menggunakan style APA  7th. Persentase rujukan yang digunakan adalah 30% buku, 20% 
+jurnal internasional, dan 50% jurnal nasional, dengan tahun terbit jurnal adalah 5 tahun 
+terakhir. Untuk tahun buku yang dijadikan rujukan adalah 10 tahun terakhir, kecuali untuk 
+buku tertentu yang sifatnya merupakan sumber teori dari seorang penemu konsep. Semua 
+buku dan jurnal yang dijadikan rujukan harus  tercantum pada naskah skripsi, dengan 
+ketentuan, jarak penulisan antar rujukan adalah 2 spasi, sementara penulisan tiap rujukan 
+adalah 1 spasi.  
+35   Abriani, A. N. (2016). Peningkatan Pemahaman Konsep Mata Pelajaran Fisika Dengan 
+Menerapkan Model Pembelajaran Evidence Based Learning Dalam Pelaksanaan 
+Guided Inquiry. Jurnal Pendidikan Fisika , 4(1), 40 –43. 
+https://doi.org/10.24252/jpf.v4i1.3285  
+ 
+ 
+Afdila, Nurul, Fajriyati; Roza, Y. M. (2018). Analisis Kesalahan Siswa dalam 
+Menyelesaikan  Soal Aritmatika  Sosial.  LEMMA:  Letters  of Mathematics  Education , 
+5(1), 65 –72. https://doi.org/10.36709/jpm.v11i1.10022  
+ 
+ 
+Agustina, M., Achmad, A., & Yolida, B. (2015). Pengaruh Model Discoverylearning 
+Terhadap Kemampuan Berpikir Kritis Dan Hasil Belajar Siswa. Jurnal Bioterdidik 
+Wahana Ekspresi Ilmiah , 3(6). https://doi.org/10.1017/CBO9781107415324.004  
+36  LAMPIRAN  
+ 
+Lampiran skripsi meliputi dokumentasi atau gambar -gambar yang perlu ditampilkan 
+sesuai dengan desain skripsi serta hal -hal yang  mendukung proses pelaksanaan penelitian 
+mulai dari awal hingga akhir.  
+ 
+Berikut  akan  dipaparkan  lampiran  yang  terdapat  pada  naskah  skripsi.  
+1. Source  Code  (Bukan  screen  shoot ) 
+2. Hasil  Validasi  dari Ahli/Pakar  (asli)  
+3. Hasil  Isian  Angket  
+4. Hasil  Kegiatan  Pengumpulan  Data 
+5. Dokumentasi/Foto  Kegiatan  Penelitian  
+6. Daftar  Riwayat  Hidup  Penulis  (disertai  Foto)  
+7. Hasil perhitungan  aplikasi bantu Teknik sipil (Prodi Teknik Sipil)  
+8. Gambar kerja proyek (apabila ada untuk Prodi Teknik Sipil)
+37  Lampiran  1 : Contoh  Halaman  Sampul  Proposal  
+ 
+ 4 cm dari tepi atas 
+kertas  
+ 
+RANCANG BANGUN APLIKASI E -RAPOR SISWA PAUD  
+PADA KURIKULUM MERDEKA BERBASIS WEB DENGAN  
+INTEGRASI PENILAIAN OBSERVASI  
+(Studi kasus: TK Negeri 2 Sananwetan Kota Blitar)  2,5 cm 
+Uk.font  14pt , 
+spasi 1,  
+Times  New 
+Roman  
+ 
+ 
+2 cm 
+PROPOSAL  0,5 – 1 cm uk.font  
+14pt , TNR  
+ 
+ 
+2 cm 
+Oleh :  
+VIERY NUGROHO   
+NIM. 21104410049  1,5 cm 
+Uk.font  14pt , 
+spasi 1, TNR  
+  
+ 
+ 
+4 cm 
+ 
+  
+ 
+ 
+ 
+4 cm 
+  
+ 
+ 
+4 cm 
+UNIVERSITAS ISLAM BALITAR  
+FAKULTAS TEKNIK DAN INFORMATIKA   
+PROGRAM STUDI TEKNIK INFORMATIKA   
+JULI 2025  2,5 cm 
+Uk.font  14pt, 
+spasi  1, TNR  
+ 3 cm dari tepi 
+bawah  kertas  
+
+38  Lampiran  2 : Contoh  Halaman  Sampul  Skripsi  
+ 
+ 4 cm dari tepi atas 
+kertas  
+ 
+RANCANG BANGUN APLIKASI E -RAPOR SISWA PAUD  
+PADA KURIKULUM MERDEKA BERBASIS WEB DENGAN  
+INTEGRASI PENILAIAN OBSERVASI  
+(Studi kasus: TK Negeri 2 Sananwetan Kota Blitar)  2,5 cm 
+Uk.font  14pt , 
+spasi 1,  
+Times  New 
+Roman  
+ 
+ 
+2 cm 
+SKRIPSI  0,5 – 1 cm uk.font  
+14pt , TNR  
+ 
+ 
+2 cm 
+Oleh :  
+VIERY NUGROHO   
+NIM. 21104410049  1,5 cm 
+Uk.font  14pt , 
+spasi 1, TNR  
+  
+ 
+ 
+4 cm 
+ 
+  
+ 
+ 
+ 
+4 cm 
+  
+ 
+ 
+4 cm 
+UNIVERSITAS ISLAM BALITAR  
+FAKULTAS TEKNIK DAN INFORMATIKA  
+PROGRAM STUDI TEKNIK INFORMATIKA  
+JULI 2025  2,5 cm 
+Uk.font  14pt, 
+spasi  1, TNR  
+ 3 cm dari tepi 
+bawah  kertas  
+
+39  Lampiran  3 : Contoh  Halaman  Judul  Skripsi  Lembar  Kedua  
+ 
+ 
+ 4 cm dari tepi atas 
+kertas  
+ 
+RANCANG BANGUN APLIKASI E -RAPOR SISWA PAUD  
+PADA KURIKULUM MERDEKA BERBASIS WEB DENGAN  
+INTEGRASI PENILAIAN OBSERVASI  
+(Studi kasus: TK Negeri 2 Sananwetan Kota Blitar)  2,5 cm 
+Uk.font  14pt , 
+spasi 1,  
+Times  New 
+Roman  
+ 
+ 
+3,5 cm 
+SKRIPSI  
+Diajukan kepada 
+Universitas  Islam  Balitar  Blitar  
+Untuk  memenuhi  salah  satu persyaratan 
+dalam menyelesaikan program Sarjana   
+3,5 cm uk.font 
+14pt , spasi 1, 
+TNR  
+  
+ 
+ 
+4 cm 
+Oleh :  
+VIERY NUGROHO  
+NIM. 21104410049  1,5 cm 
+Uk.font  14pt , 
+spasi 1, TNR  
+  
+ 
+ 
+4 cm 
+UNIVERSITAS ISLAM BALITAR  
+FAKULTAS TEKNIK DAN INFORMATIKA  
+PROGRAM STUDI TEKNIK INFORMATIKA  
+JULI 2025  2,5 cm 
+Uk.font  14pt, 
+spasi  1, TNR  
+ 
+3 cm dari tepi 
+bawah  kertas  
+40  Lampiran  4 : Contoh  Lembar  Persetujuan  Pembimbing  Skripsi  
+ 
+ 
+ 
+ 
+ 
+Skripsi  oleh ................................ ................  ini 
+telah  diperiksa  dan disetujui  untuk diuji,  
+ 
+ 
+ 
+ 
+ 
+Blitar,  ......................................................  
+Pembimbing  I 
+ 
+ 
+ 
+ 
+ 
+(Nama  Lengkap  dan Gelar)  
+NUPTK . ......................................................  
+ 
+ 
+ 
+ 
+Blitar,  ......................................................  
+Pembimbing  II 
+ 
+ 
+ 
+ 
+ 
+(Nama  Lengkap  dan Gelar)  
+NUPTK . ......................................................  
+41  Lampiran  5 : Contoh  Lembar  Persetujuan  dan Pengesahan  Skripsi  
+ 
+ 
+ 
+Skripsi oleh …………………………  ini 
+telah  dipertahankan  di depan  dewan  penguji 
+pada tanggal …………… .. 
+ 
+ 
+Dewan  Penguji  
+ 
+ 
+ 
+ 
+…………………………………..  , Ketua  (Penguji  I) 
+NUPTK . ……………  
+ 
+ 
+ 
+ 
+…………………………………..  , Anggota  (Penguji  II) 
+NUPTK . ……………  
+ 
+ 
+ 
+ 
+…………………………………..  , Anggota  (Dosen  Pembimbing  I) 
+NUPTK . ……………  
+ 
+ 
+ 
+ 
+…………………………………..  , Anggota  (Dosen  Pembimbing  II) 
+NUPTK . ……………  
+ 
+Mengetahui,  
+Ketua  Program  Studi  …………….  
+ 
+ 
+ 
+ 
+ 
+…………………………………..  
+NUPTK . ……………  Mengesahkan,  
+Dekan  Fakultas  Tekn ik dan Informatika  
+ 
+ 
+ 
+ 
+ 
+…………………………………..  
+NUPTK . ……………  
+ 
+42  Lampiran 6  : Contoh  Penyusunan  dan Penulisan  Abstrak  (Bahasa Indonesia)  
+ 
+ 
+ 
+RANCANG  BANGUN APLIKASI  LAYANAN BERBASIS  LOKASI DENGAN 
+PENERAPAN  AUGMENTED REALITY MENGGUNAKAN METODE 
+MARKERLESS BERBASIS  ANDROID  
+(Studi  Kasus:  Pencarian  Perangkat  Daerah  Kota  Bengkulu)  
+ 
+ 
+Oleh  
+JULIA  PURNAMA  SARI  123234567890  
+E-mail:  julia.purnamasari09@gmail .com  
+ 
+ 
+ 
+ABSTRAK  
+ 
+Penelitian ini  bertujuan  untuk membangun  suatu  aplikasi yang  dapat  membantu  pengguna 
+dalam mencari dan memberikan informasi mengenai perangkat daerah Kota Bengkulu pada 
+android dengan menerapkan augmented reality menggunakan metode markerless . Pada 
+penerapannya augmented reality bisa diimplementasikan pada perangkat yang memiliki 
+kamera, akselerometer, kompas dan GPS. Data koordinat dan data perangkat daerah Kota 
+Bengkulu di download dari server. Aplikasi ini juga memanfaatkan peta dari Google Maps 
+dalam menunjukkan lokasi pengguna ke lokasi perangkat daerah Kota Bengkulu  yang  di 
+cari. Aplikasi ini dibangun dengan menggunakan Wikitude  dan bahasa pemrograman Java  
+for Android dengan IDE Eclipse 3.5. Metode pengembangan sistem yang  digunakan untuk  
+membangun  aplikasi ini adalah  model  sekuensial  linierdan  Unified Modeling Language 
+(UML) sebagai perancangan sistem. Penelitian ini menghasilkan sebuah  aplikasi  layanan  
+berbasis  lokasi  dengan  penerapan  augmented  reality  menggunakan metode markerless 
+berbasis android pada pencarian perangkat daerah Kota Bengkulu.  
+ 
+Kata  kunci:  Augmented  Reality, Markerless , Perangkat  Daerah  Kota  Bengkulu, 
+Android, Google Maps , GPS.  
+43  Lampiran 7  : Contoh  Penyusunan  dan Penulisan  Abstrak  (Bahasa  Inggris)  
+ 
+ 
+ 
+BUILDING DESIGN OF LOCATION -BASED  SERVICE APPLICATION BY 
+IMPLEMENTING  AUGMENTED REALITY USING ANDROID -BASED 
+MARKERLESS METHOD  
+(A Case  Study:  The Search  of Region  Government  of Bengkulu  City)  
+ 
+By 
+JULIA  PURNAMA  SARI  G1A009041  
+E-mail:  julia.purnamasari09@gmail .com  
+ 
+ 
+ 
+ABSTRACT  
+ 
+This research  aims to create  an application  that can help the users  in searching and 
+giving information about the regional government of Bengkulu City on android by 
+implementing  augmented reality using t  he markerless method. On the implementation, 
+augmented reality can be implemented  on the device  that has a  camera,  an accelerometer, a 
+compass, and GPS. The data of the coordinate and the regional government are downloaded  
+from  the server.  The application also makes use of  maps from google maps in showing the 
+users’ location to the location of  the regional government  looked  for. This application is 
+created  by using Wikitude and the programming language Java for Android with  IDE 
+Eclipse  3.5. The system  development method  used to build  the application is t  h e linear 
+sequential model and Unified Modeling Language (UML) as the  system designing. This 
+research produced a location -based service application with the implementation of 
+augmented reality using an android -based markerless method based on the search  of the 
+region government  Bengkulu City.  
+ 
+Keywords:  Augmented  Reality, Markerless,  The Region Government Bengkulu 
+City, Android, Google Maps, GPS.  
+44  Lampiran  8 : Contoh  Riwayat  Hidup  
+ 
+ 
+ 
+ 
+RIWAYAT  HIDUP  
+ 
+ 
+ 
+ Ahmad Faisol lahir pada 28 Oktober  2001 di Blitar, Jawa Timur, 
+sebagai anak ke tiga dari empat  bersaudara dari pasangan Bapak 
+Ahmad Faris dan Ibu Fitri Berlian . Pendidikan formalnya dimulai di 
+SDN 01 Sutojayan  Blitar pada tahun 200 8 dan diselesaikan pada tahun 
+2014. Selanjutnya, ia melanjutkan ke SMP Negeri 1 Blitar dan  
+lulus pada tahun 201 6. Setelah itu, pendidikan menengah atas ditempuh di SMA Negeri 1 
+Blitar dan lulus pada tahun 201 9. Pada jenjang pendidikan tinggi, Ahmad Faisol melanjutkan 
+studi di Universitas Islam Balitar pada Program S istem Komputer.  Selama masa kuliah, ia 
+aktif mengikuti berbagai organisasi di kampus seperti Himaprodi Sistem Komputer, UKM 
+Musik, dan BEM Universitas Islam Balitar.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+45  Lampiran  9 : Daftar Nama Dosen, Gelar Dosen, dan NUPTK Dosen  
+Nama Dosen  NUPTK  Keterangan  
+Mukhlison, ST., MT.  8759767668130322  
+Teknik Elektro  Syamsudin Nur Wahid, S.Si,M.Si.   0160766667130443  
+Sri Widoretno, ST.,MT.   8538752653230082  
+Hanifa Shofia Balqis, M.Tr.T.   2058779680230043  
+Dr.Ir.Kustanto, S.T., M.T., IPM.  7362756658200013  
+Hangga Prima Setiawan, S.ST., M.T.  5536771672130243  
+Teknik Sipil  Ahmad Yufron, S.T., M.M.  7434756656200003  
+Hazairin Nikmatul Lukma, S.Si., M.Pd.  256764665230193  
+Hendrig Sudradjat, ST., MT.  4752763664130272  
+Widha Ardhiansyah, ST., MT.  5049761662137183  
+Sri Lestanti, S.Kom., M.T  1256763664230203  
+Teknik Informatika  Saiful Nur Budiman, S.Kom., M.Kom  4542766667137012  
+M. Taofik Chulkamdi, S.Kom., M.T  4163764665130203  
+Indyah Hartami Santi, S.Kom., M.Kom  1939751652230132  
+Udkhiati Mawaddah, S.Kom., M.Kom  5047767668230353  
+Filda Febrinita, S.Pd., M.Pd  7538764665230252  
+M. Wahyu Rizqi P, M.IT  - 
+Zunita Wulansari, S.Kom., M.T  4940764665230322  
+Sistem Komputer  Abdi Pandu Kusuma, S.Kom., M.T  8842763664130392  
+Haris Yuana, S.T., M.T  4060764665131133  
+Wahyu Dwi Puspitasari, S.Pd., M.Pd  6655767668230372  
+Sabitul Kirom, S.Pd., M.Pd  8035768669130353  
+ 

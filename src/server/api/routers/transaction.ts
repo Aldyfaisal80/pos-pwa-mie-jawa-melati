@@ -105,8 +105,7 @@ export const transactionRouter = createTRPCRouter({
           results.push({ invoiceNumber: trx.invoiceNumber, success: true });
         } catch (error) {
           // Classify the Prisma error so client can decide purge vs retry
-          const msg =
-            error instanceof Error ? error.message.toLowerCase() : "";
+          const msg = error instanceof Error ? error.message.toLowerCase() : "";
           let errorCode = "UNKNOWN";
 
           if (
@@ -347,8 +346,7 @@ export const transactionRouter = createTRPCRouter({
         // Default ke 30 hari terakhir jika tidak ada filter tanggal
         const now = new Date();
         const rawStart =
-          input.startDate ??
-          new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000);
+          input.startDate ?? new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000);
         const rawEnd = input.endDate ?? now;
 
         const startDate = toWIBStartOfDay(rawStart);
@@ -356,10 +354,7 @@ export const transactionRouter = createTRPCRouter({
 
         // Hitung berapa hari yang dicakup
         const diffMs = endDate.getTime() - startDate.getTime();
-        const diffDays = Math.max(
-          1,
-          Math.ceil(diffMs / (1000 * 60 * 60 * 24)),
-        );
+        const diffDays = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
         const useDate = diffDays > 14;
 
         // Prisma.sql allows conditional fragments in tagged template raw queries
@@ -384,9 +379,7 @@ export const transactionRouter = createTRPCRouter({
         `;
 
         const result = Array.from({ length: diffDays }, (_, i) => {
-          const d = new Date(
-            startDate.getTime() + i * 24 * 60 * 60 * 1000,
-          );
+          const d = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
           const wibD = new Date(d.getTime() + 7 * 60 * 60 * 1000);
 
           const label = useDate

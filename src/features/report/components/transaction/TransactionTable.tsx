@@ -42,7 +42,7 @@ import { useTransactionMutations } from "../../hooks/useTransactionMutations";
 import {
   ReportSortBy,
   ReportSortOrder,
-} from "@/server/validations/transaction.validation";
+} from "@/server/validations";
 
 export type Transaction = Exclude<
   RouterOutputs["transaction"]["getTransactionReport"],

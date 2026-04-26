@@ -63,13 +63,14 @@ export const useOfflineSync = () => {
       if (!navigator.onLine) break;
 
       try {
-        const results = await vanillaTrpcClient.transaction.syncOfflineData.mutate(
-          [
+        const results =
+          await vanillaTrpcClient.transaction.syncOfflineData.mutate([
             {
               invoiceNumber: trx.invoiceNumber,
               date: new Date(trx.date),
               totalAmount: trx.totalAmount,
-              paymentMethod: trx.paymentMethod as unknown as ServerPaymentMethod,
+              paymentMethod:
+                trx.paymentMethod as unknown as ServerPaymentMethod,
               paidAmount: trx.paidAmount,
               change: trx.change,
               items: trx.items.map((item) => ({
@@ -81,8 +82,7 @@ export const useOfflineSync = () => {
                 note: item.note ?? null,
               })),
             },
-          ],
-        );
+          ]);
 
         // Server returns per-item result array
         const result = results[0];
@@ -129,7 +129,9 @@ export const useOfflineSync = () => {
       });
     }
     if (failCount > 0) {
-      toast.error(`${failCount} transaksi gagal disinkronkan, coba lagi nanti.`);
+      toast.error(
+        `${failCount} transaksi gagal disinkronkan, coba lagi nanti.`,
+      );
     }
   }, [refreshCount, postMessage]);
 

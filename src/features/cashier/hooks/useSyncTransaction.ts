@@ -1,6 +1,6 @@
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
-import { type PaymentMethod as ServerPaymentMethod } from "@/server/validations/transaction.validation";
+import { type PaymentMethod as ServerPaymentMethod } from "@/server/validations";
 import type { CartItem, PaymentMethod } from "../types/cashier.types";
 import { generateInvoiceNumber } from "../utils/generateInvoice";
 import {

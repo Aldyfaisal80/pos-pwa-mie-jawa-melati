@@ -12,8 +12,7 @@ export const useReportStats = ({
   endDate,
   paymentMethod,
 }: UseReportStatsParams) => {
-  const resolvedMethod =
-    paymentMethod === "ALL" ? undefined : paymentMethod!;
+  const resolvedMethod = paymentMethod === "ALL" ? undefined : paymentMethod!;
 
   return api.transaction.getReportStats.useQuery(
     { startDate, endDate, paymentMethod: resolvedMethod },
