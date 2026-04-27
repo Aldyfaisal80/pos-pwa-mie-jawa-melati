@@ -15,3 +15,10 @@ export const navItems = [
   { id: "laporan", label: "Laporan", icon: BarChart3, href: "/reports" },
   { id: "pengaturan", label: "Pengaturan", icon: Settings2, href: "/settings" },
 ];
+
+export const mobileNavItems = [
+  { id: "home", label: "Beranda", icon: Home, href: "/" },
+  { id: "kasir", label: "Kasir", icon: ShoppingCart, href: "/pos" },
+  { id: "laporan", label: "Laporan", icon: BarChart3, href: "/reports" },
+  { id: "produk", label: "Produk", icon: Package, href: "/products" },
+];

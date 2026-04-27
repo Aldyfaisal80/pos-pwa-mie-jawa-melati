@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { navItems } from "@/lib/config/navigation";
+import { mobileNavItems } from "@/lib/config/navigation";
 import {
   CircleUserRound,
   LogOut,
@@ -45,7 +45,6 @@ export const BottomTabBar = () => {
     router.refresh();
   };
 
-  const mainNavItems = navItems.slice(0, 4);
 
   return (
     <>
@@ -62,7 +61,7 @@ export const BottomTabBar = () => {
         )}
         aria-label="Navigasi Utama"
       >
-        {mainNavItems.map((item) => {
+        {mobileNavItems.map((item) => {
           const Icon = item.icon;
           const isActive =
             pathname === item.href ||
@@ -229,7 +228,7 @@ export const BottomTabBar = () => {
                     Kelola informasi kredensial akun kasir Anda.
                   </DrawerDescription>
                 </DrawerHeader>
-                <div className="overflow-y-auto px-4 py-6 flex-1 bg-muted/10">
+                <div className="overflow-y-auto px-4 pt-6 pb-24 flex-1 bg-muted/10">
                   <AccountProfileForm />
                 </div>
               </div>
