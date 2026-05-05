@@ -37,6 +37,7 @@ yarn-error.log*
 .env.development
 .env.production
 .env*.local
+.env.test
 
 # vercel
 .vercel
@@ -61,4 +62,4 @@ yarn-error.log*
 /public/sw.js
 
 # backup/ directory is intentionally tracked — managed by GitHub Actions
-# Do NOT add /backup to this file
+# Do NOT add /backup to this file
