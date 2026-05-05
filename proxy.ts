@@ -5,7 +5,7 @@ import { env } from "@/env";
 // Routes that don't require authentication
 const PUBLIC_ROUTES = ["/login"];
 
-// Static assets and API routes to skip (middleware won't run on these)
+// Static assets and API routes to skip (proxy won't run on these)
 const SKIP_PREFIXES = [
   "/_next",
   "/api",
@@ -16,7 +16,7 @@ const SKIP_PREFIXES = [
   "/~offline",
 ];
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip static assets and internal Next.js routes
@@ -62,9 +62,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Already authenticated → redirect away from /login
+  // Already authenticated → redirect away from /login (preserve ?redirect param)
   if (user && isPublicRoute) {
-    return NextResponse.redirect(new URL("/", request.url));
+    const redirectParam = request.nextUrl.searchParams.get("redirect");
+    const safeRedirect =
+      redirectParam?.startsWith("/") && !redirectParam.startsWith("//")
+        ? redirectParam
+        : "/";
+    return NextResponse.redirect(new URL(safeRedirect, request.url));
   }
 
   return response;

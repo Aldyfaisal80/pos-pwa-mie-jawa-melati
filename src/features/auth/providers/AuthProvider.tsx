@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
+import { useRouter, usePathname } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { AuthContext } from "../context/auth-context";
 
@@ -11,9 +12,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // useRef is correct here — stable instance, not a derived value
   const supabase = useRef(createSupabaseBrowserClient()).current;
+
+  // Track if user was previously authenticated (to detect session loss)
+  const hadSessionRef = useRef(false);
 
   useEffect(() => {
     // Fetch user (server-validated) and session in parallel
@@ -24,6 +30,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
       ]);
       setUser(userData.user);
       setSession(sessionData.session);
+      hadSessionRef.current = !!userData.user;
       setLoading(false);
     };
 
@@ -32,14 +39,28 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
     // Keep state in sync on login / logout / token refresh
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
       setLoading(false);
+
+      // Redirect to login when session is lost (user was logged in before)
+      const sessionLost =
+        (event === "SIGNED_OUT" || event === "TOKEN_REFRESHED") &&
+        !newSession &&
+        hadSessionRef.current;
+
+      if (sessionLost && pathname !== "/login") {
+        hadSessionRef.current = false;
+        router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+      }
+
+      // Update tracking ref
+      hadSessionRef.current = !!newSession?.user;
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, [supabase, router, pathname]);
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
