@@ -3,7 +3,11 @@
 import { useEffect, useRef, useCallback } from "react";
 
 type BroadcastMessage = {
-  type: "TRANSACTION_CREATED" | "TRANSACTION_SYNCED";
+  type:
+    | "TRANSACTION_CREATED"
+    | "TRANSACTION_SYNCED"
+    | "PRODUCT_UPDATED"
+    | "CATEGORY_UPDATED";
   payload?: unknown;
 };
 

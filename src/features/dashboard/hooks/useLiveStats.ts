@@ -6,34 +6,50 @@ import { supabase } from "@/lib/supabase-client";
 export const useLiveStats = () => {
   const utils = api.useUtils();
 
-  // 1. LOCAL PWA: Listen for transactions created on the same device (Offline/Online)
+  // 1. LOCAL PWA: Listen for CRUD events on the same device / other tabs
   useBroadcastChannel("pos-sync-channel", (message) => {
     if (message.type === "TRANSACTION_CREATED") {
-      // void: intentionally fire-and-forget — suppresses no-floating-promises lint rule
       void utils.transaction.getDashboardStats.invalidate();
       void utils.transaction.getTransactionReport.invalidate();
+      void utils.transaction.getReportStats.invalidate();
       void utils.transaction.getRevenueChart.invalidate();
+    }
+    if (message.type === "PRODUCT_UPDATED") {
+      void utils.product.getAll.invalidate();
+    }
+    if (message.type === "CATEGORY_UPDATED") {
+      void utils.category.getAll.invalidate();
     }
   });
 
-  // 2. SERVER REALTIME: Listen for changes from OTHER devices (e.g. Cashier on PC → Owner on Tablet)
+  // 2. SERVER REALTIME: Listen for changes from OTHER devices via Supabase postgres_changes
   useEffect(() => {
-    // NOTE: `utils` from api.useUtils() is referentially stable (tRPC guarantees this),
-    // so including it in deps is safe and does NOT cause repeated subscribe/unsubscribe cycles.
+    const invalidateTransactions = () => {
+      void utils.transaction.getDashboardStats.invalidate();
+      void utils.transaction.getTransactionReport.invalidate();
+      void utils.transaction.getReportStats.invalidate();
+      void utils.transaction.getRevenueChart.invalidate();
+    };
+
     const channel = supabase
-      .channel("supabase_realtime")
+      .channel("pos-realtime")
       .on(
         "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "Transaction",
-        },
+        { event: "*", schema: "public", table: "Transaction" },
+        invalidateTransactions,
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "Product" },
         () => {
-          // void: intentionally fire-and-forget — suppresses no-floating-promises lint rule
-          void utils.transaction.getDashboardStats.invalidate();
-          void utils.transaction.getTransactionReport.invalidate();
-          void utils.transaction.getRevenueChart.invalidate();
+          void utils.product.getAll.invalidate();
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "Category" },
+        () => {
+          void utils.category.getAll.invalidate();
         },
       )
       .subscribe();
