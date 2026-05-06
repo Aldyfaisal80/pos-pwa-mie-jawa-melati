@@ -63,3 +63,26 @@ yarn-error.log*
 
 # backup/ directory is intentionally tracked — managed by GitHub Actions
 # Do NOT add /backup to this file
+
+# ── Thesis backup & temp files ──
+docs/wireframe/*_backup*.docx
+docs/wireframe/*_Rev*.docx
+docs/wireframe/*_bk*.docx
+docs/wireframe/backup_*.docx
+docs/wireframe/*copy*.docx
+docs/wireframe/Penulisan_Rule.md
+~$*.docx
+
+# One-off thesis scripts
+docs/wireframe/scripts/
+docs/wireframe/*.py
+docs/wireframe/pdf_text.txt
+docs/wireframe/export_wireframes.cjs
+docs/generate_uat_docx.py
+
+# Reference books (too large for git)
+docs/buku referensi/
+
+# Misc temp files
+tunnel-log.txt
+pdf_text.txt
