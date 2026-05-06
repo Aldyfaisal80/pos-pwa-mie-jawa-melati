@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "../fragments/AppSidebar";
 import { BottomTabBar } from "../fragments/BottomTabBar";
+import { RealtimeProvider } from "../providers/RealtimeProvider";
 
 type AppProviderProps = React.ComponentProps<"main">;
 
@@ -53,6 +54,7 @@ export const AppProvider = forwardRef<
         <MainLoading />
       ) : (
         <>
+          <RealtimeProvider />
           <Suspense fallback={<MainLoading />}>
             <SidebarProvider
               defaultOpen={isSidebarOpen}

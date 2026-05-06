@@ -9,6 +9,7 @@ export const useTransactionMutations = () => {
   // Invalidasi cache agar tabel/grafik refresh
   const invalidateQueries = () => {
     void utils.transaction.getTransactionReport.invalidate();
+    void utils.transaction.getReportStats.invalidate();
     void utils.transaction.getDashboardStats.invalidate();
     void utils.transaction.getRevenueChart.invalidate();
 

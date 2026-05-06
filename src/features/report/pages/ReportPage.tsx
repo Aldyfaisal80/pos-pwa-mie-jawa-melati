@@ -10,11 +10,8 @@ import { TransactionTable } from "../components/transaction/TransactionTable";
 import { ReportFilterBar } from "../components/analytics/ReportFilterBar";
 import { ReportPagination } from "../components/analytics/ReportPagination";
 import { ReportStatsCards } from "../components/analytics/ReportStatsCards";
-import { useLiveStats } from "@/features/dashboard/hooks/useLiveStats";
 
 export const ReportPage = () => {
-  useLiveStats();
-
   const {
     search,
     startDate,

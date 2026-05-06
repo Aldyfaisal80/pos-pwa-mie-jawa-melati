@@ -13,7 +13,16 @@ const withSerwist = withSerwistInit({
 });
 
 const config = {
+  allowedDevOrigins: ["192.168.2.47", "*.devtunnels.ms", "*.trycloudflare.com"],
   serverExternalPackages: ["pg", "@prisma/adapter-pg", "@prisma/client"],
+  // When running dev:test, force client-side env vars from process.env
+  // (set by scripts/dev-test.mjs) so Turbopack inlines the correct values
+  ...(process.env.NEXT_ENV === "test" && {
+    env: {
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    },
+  }),
   async headers() {
     return [
       {

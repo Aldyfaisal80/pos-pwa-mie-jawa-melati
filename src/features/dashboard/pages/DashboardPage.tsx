@@ -8,12 +8,8 @@ import { StatsCard } from "../components/StatsCard";
 import { RevenueChart } from "../components/RevenueChart";
 import { TopProducts } from "../components/TopProducts";
 import { useDashboardStats } from "../hooks/useDashboardStats";
-import { useLiveStats } from "../hooks/useLiveStats";
 
 export const DashboardPage = () => {
-  // Activate Supabase Realtime listener for live stat updates
-  useLiveStats();
-
   const { data: stats, isLoading } = useDashboardStats();
   const topProduct = stats?.topProducts?.[0];
 

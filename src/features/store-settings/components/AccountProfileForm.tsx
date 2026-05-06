@@ -132,7 +132,6 @@ export const AccountProfileForm = () => {
               </div>
               <Form {...nameForm}>
                 <form
-                  id="display-name-form"
                   onSubmit={nameForm.handleSubmit(onDisplayNameSubmit)}
                   noValidate
                   className="space-y-6"
@@ -157,7 +156,6 @@ export const AccountProfileForm = () => {
                   />
                   <Button
                     type="submit"
-                    form="display-name-form"
                     disabled={updateDisplayName.isPending || !nameForm.formState.isDirty}
                     size="sm"
                     className="flex w-full items-center gap-2 sm:w-auto"
@@ -180,7 +178,6 @@ export const AccountProfileForm = () => {
             </div>
             <Form {...passwordForm}>
               <form
-                id="change-password-form"
                 onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
                 noValidate
                 className="space-y-3"
@@ -277,7 +274,6 @@ export const AccountProfileForm = () => {
 
                 <Button
                   type="submit"
-                  form="change-password-form"
                   disabled={changePassword.isPending}
                   size="sm"
                   variant="outline"
