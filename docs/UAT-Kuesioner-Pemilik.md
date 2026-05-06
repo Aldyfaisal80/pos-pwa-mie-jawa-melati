@@ -31,7 +31,7 @@ Berikut ini terdapat sejumlah pernyataan mengenai aplikasi POS PWA yang telah di
 
 ### Tabel 1 — Keterangan Skala Penilaian
 
-Kuesioner ini menggunakan Skala Likert dengan 5 (lima) tingkatan penilaian sebagai berikut (Sugiyono, 2019):
+Kuesioner ini menggunakan Skala Likert dengan 5 (lima) tingkatan penilaian sebagai berikut:
 
 | Keterangan | Skor |
 |:---|:---:|
@@ -73,7 +73,7 @@ Kuesioner ini menggunakan Skala Likert dengan 5 (lima) tingkatan penilaian sebag
 
 ### Tabel 3 — Skala Interpretasi Persentase Kelayakan
 
-Interpretasi persentase hasil UAT mengacu pada kriteria berikut (Sugiyono, 2019):
+Interpretasi persentase hasil UAT mengacu pada kriteria berikut:
 
 | Persentase | Kategori |
 |:---:|:---|

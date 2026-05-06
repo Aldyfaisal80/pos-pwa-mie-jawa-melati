@@ -1,5 +1,5 @@
-$url = 'https://hrzvdledrengvxuzmsbk.supabase.co/auth/v1/token?grant_type=password'
-$anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyenZkbGVkcmVuZ3Z4dXptc2JrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMzc0OTQsImV4cCI6MjA4ODYxMzQ5NH0.TE2D9UjDbRu8DmYqsx4bjT8Pn5SaySVwwAAXfYAzq1k'
+$url = 'https://nfdfbepjzfhuohxhubwv.supabase.co/auth/v1/token?grant_type=password'
+$anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZGZiZXBqemZodW9oeGh1Ynd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTcwODgsImV4cCI6MjA5Mjc5MzA4OH0.yKhfuvWlH49Pg0AOOLSmlgqSQx1CQkHEmYxFUpqxKrw'
 
 Write-Host '=== ATTACK 1: Auth Brute Force (15 attempts, 300ms gap) ===' -ForegroundColor Red
 

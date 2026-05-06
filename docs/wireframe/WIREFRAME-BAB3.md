@@ -217,14 +217,14 @@ Halaman Pengaturan Toko merupakan pusat pengelolaan konfigurasi sistem yang terp
 
 *Gambar 3.23 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Pengaturan Printer*
 
-**Tampilan Panel Profil Akun** digunakan untuk mengelola data pengguna dan pengaturan keamanan akun pada perangkat komputer. Antarmuka ini dirancang dengan memisahkan bagian informasi dasar, seperti alamat *email* dan nama tampilan, dari bagian pengaturan kata sandi. Pemisahan tersebut bertujuan untuk mencegah kesalahan saat pengguna ingin memperbarui data, sekaligus menjaga keamanan kredensial akun.
+**Tampilan Panel Profil Akun** berfungsi sebagai antarmuka utama untuk mengelola informasi pengguna dan pengaturan keamanan akun pada perangkat komputer. Desain antarmuka ini secara fungsional memisahkan bagian informasi dasar—seperti alamat *email* dan nama tampilan—dari bagian konfigurasi kata sandi. Pemisahan tata letak ini diterapkan guna meminimalisasi risiko kesalahan *input* saat pengguna melakukan pembaruan data, serta untuk meningkatkan lapis keamanan pada pengelolaan kredensial akses pengguna.
 
 <!-- SISIPKAN: Gambar 3.24 — WF-05-AC.png (lebar 10 cm, center) -->
 ![Gambar 3.24 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Profil Akun](export/WF-05-AC.png)
 
 *Gambar 3.24 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Panel Profil Akun*
 
-**Tampilan Menu Akun Ponsel** menggunakan komponen menu yang muncul dari bagian bawah layar (*bottom sheet overlay*) pada antarmuka perangkat bergerak. Menu ini berfungsi untuk mengelompokkan opsi pengaturan profil pengguna agar tidak memenuhi area kerja utama aplikasi. Selain itu, tombol keluar dari aplikasi (*logout*) diberikan warna merah sebagai peringatan visual agar pengguna lebih berhati-hati sebelum menekannya.
+**Tampilan Menu Akun Ponsel** memanfaatkan komponen menu sorong bawah (*bottom sheet overlay*) untuk mengakomodasi keterbatasan layar pada perangkat bergerak. Implementasi menu ini bertujuan untuk mengelompokkan berbagai opsi konfigurasi profil agar tidak mendominasi ruang kerja utama antarmuka. Sebagai tambahan, tombol keluar (*logout*) secara visual direpresentasikan dengan warna merah untuk memberikan sinyal kewaspadaan bagi pengguna sebelum mengambil tindakan yang dapat mengakhiri sesi aktif aplikasi.
 
 <!-- SISIPKAN: Gambar 3.25 — WF-05-AS.png (lebar 6 cm, center) -->
 ![Gambar 3.25 Rancangan Antarmuka Halaman Pengaturan Toko — Tampilan Menu Akun Ponsel](export/WF-05-AS.png)

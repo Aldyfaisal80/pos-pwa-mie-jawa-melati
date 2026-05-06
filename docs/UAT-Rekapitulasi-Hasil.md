@@ -49,7 +49,7 @@
 
 ### Tabel 3 — Perhitungan Persentase Kelayakan
 
-Berdasarkan data rekapitulasi di atas, perhitungan persentase kelayakan sistem dihitung menggunakan rumus berikut (Sugiyono, 2019):
+Berdasarkan data rekapitulasi di atas, perhitungan persentase kelayakan sistem dihitung menggunakan rumus berikut:
 
 $$\text{Persentase Kelayakan} = \frac{\text{Skor Diperoleh}}{\text{Skor Ideal}} \times 100\%$$
 
@@ -66,7 +66,7 @@ $$\text{Persentase Kelayakan} = \frac{\text{Skor Diperoleh}}{\text{Skor Ideal}} 
 
 ### Tabel 4 — Skala Interpretasi Hasil UAT
 
-Interpretasi persentase kelayakan mengacu pada kriteria berikut (Sugiyono, 2019):
+Interpretasi persentase kelayakan mengacu pada kriteria berikut:
 
 | Persentase | Kategori |
 |:---:|:---|
@@ -92,7 +92,7 @@ Nilai persentase tersebut berada pada rentang **....%** yang termasuk dalam kate
 
 > *Dokumen ini merupakan bagian dari pengujian User Acceptance Test (UAT) yang hasil analisisnya dibahas pada Bab IV Laporan Skripsi.*  
 > *Pengisian kuesioner dilakukan oleh: Pemilik Mie Jawa Melati (1 responden).*  
-> *Referensi: Sugiyono. (2019). Metode Penelitian Kuantitatif, Kualitatif, dan R&D. Alfabeta.*
+> *Referensi: Metode Penelitian Kuantitatif, Kualitatif, dan R&D. Alfabeta.*
 
 ---
 

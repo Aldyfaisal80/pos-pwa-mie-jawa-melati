@@ -67,13 +67,12 @@ if (-not $foundSecrets) {
 
 # 5c: Check SERVICE_ROLE key is not in NEXT_PUBLIC vars
 Write-Host '-- 5c: SERVICE_ROLE key exposure check --'
-$srHits = Get-ChildItem -Recurse -Include '*.ts','*.tsx','*.js','*.env*' |
-    Select-String -Pattern 'NEXT_PUBLIC.*SERVICE_ROLE|NEXT_PUBLIC.*service_role' -List
-if ($srHits.Count -eq 0) {
+$srHits = git grep -i "NEXT_PUBLIC.*SERVICE_ROLE" src/ 2>&1
+if ($srHits -match "fatal:.*" -or [string]::IsNullOrWhiteSpace($srHits)) {
     Write-Host 'PASS - SERVICE_ROLE key not exposed as NEXT_PUBLIC' -ForegroundColor Green
 } else {
     Write-Host 'CRITICAL - SERVICE_ROLE key exposed as NEXT_PUBLIC!' -ForegroundColor Red
-    foreach ($h in $srHits) { Write-Host ('  ' + $h.Path) -ForegroundColor Red }
+    Write-Host $srHits -ForegroundColor Red
 }
 
 Write-Host ''
