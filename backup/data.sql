@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict zeEBrLbLuoR5liaZvmrFomYZyUiytaksn9IxQOuf7ikFEmDNYNb0U4oH1M10ho2
+\restrict Xh0dTfEh2Zn6gvgWZpwiowbsIJUkoYvWJL2yIMN5YbiRhBPgYZxPT2QysQryUbJ
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.9 (Ubuntu 17.9-1.pgdg24.04+1)
@@ -50,7 +50,7 @@ e44f6ade-11e0-4d38-b987-615c53ae4400	Strup Hangat	\N	4000.00	\N	t	2	2026-04-20 0
 2201befb-d03b-432b-8faf-83f442b7d3b2	Jeruk Hangat	\N	4000.00	\N	t	2	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
 3e867b42-3522-4bf5-b296-3d7b80517d3b	Telur	Tambahan Telur	3000.00	\N	t	3	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
 ae35a958-9393-4359-a40c-0bc869b26331	Krupuk	Tambahan Krupuk	1000.00	\N	t	3	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-ac33d84e-d717-4aac-87aa-a42b2f13b765	Aqua		1000.00		t	2	2026-04-20 12:48:43.06	2026-04-20 12:48:43.06
+ac33d84e-d717-4aac-87aa-a42b2f13b765	Aqua		1000.00		t	2	2026-04-20 12:48:43.06	2026-05-12 06:01:28.674
 \.
 
 
@@ -931,5 +931,5 @@ SELECT pg_catalog.setval('"public"."Category_id_seq"', 3, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict zeEBrLbLuoR5liaZvmrFomYZyUiytaksn9IxQOuf7ikFEmDNYNb0U4oH1M10ho2
+\unrestrict Xh0dTfEh2Zn6gvgWZpwiowbsIJUkoYvWJL2yIMN5YbiRhBPgYZxPT2QysQryUbJ
 
