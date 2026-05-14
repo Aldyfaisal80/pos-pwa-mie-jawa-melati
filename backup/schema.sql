@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict q6CANKc0UdnxqUcxH45J9qNtHlo8V55TYt37GBGlTwidDhdhzE2rQUoBc2RtLoo
+\restrict JuS5ZddmR0zbhU1kwmrOmViAsCPbvVERbwLMbyL8KYaOLZlQdMWiz1222WnpZ7b
 
 -- Dumped from database version 17.6
--- Dumped by pg_dump version 17.9 (Ubuntu 17.9-1.pgdg24.04+1)
+-- Dumped by pg_dump version 17.10 (Ubuntu 17.10-1.pgdg24.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -315,5 +315,5 @@ ALTER TABLE "public"."TransactionItem" ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict q6CANKc0UdnxqUcxH45J9qNtHlo8V55TYt37GBGlTwidDhdhzE2rQUoBc2RtLoo
+\unrestrict JuS5ZddmR0zbhU1kwmrOmViAsCPbvVERbwLMbyL8KYaOLZlQdMWiz1222WnpZ7b
 

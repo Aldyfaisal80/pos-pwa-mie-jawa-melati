@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict tweguo6xVQoeXekHbT7oIacXeGMGistMh5y4sRaSgflnCfjmrfx8N9RLPYPpE5B
+\restrict I1gv9g1eAon0T3ZORjxJ4Wr4Cv7WkaF7toEE21eO73fEiRqKwYa7UwwVSe8yldV
 
 -- Dumped from database version 17.6
--- Dumped by pg_dump version 17.9 (Ubuntu 17.9-1.pgdg24.04+1)
+-- Dumped by pg_dump version 17.10 (Ubuntu 17.10-1.pgdg24.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -955,5 +955,5 @@ SELECT pg_catalog.setval('"public"."Category_id_seq"', 3, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict tweguo6xVQoeXekHbT7oIacXeGMGistMh5y4sRaSgflnCfjmrfx8N9RLPYPpE5B
+\unrestrict I1gv9g1eAon0T3ZORjxJ4Wr4Cv7WkaF7toEE21eO73fEiRqKwYa7UwwVSe8yldV
 
