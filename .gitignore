@@ -50,6 +50,9 @@ yarn-error.log*
 
 # agent files
 .agent
+.claude
+.mcp.json
+.kiro
 
 # local planning files (keep docs/ tracked)
 /docs/PLAN-*.md
