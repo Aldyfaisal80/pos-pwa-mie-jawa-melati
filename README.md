@@ -222,10 +222,10 @@ npm run clean:cache && npm run dev
 
 ## 🧪 Blackbox Testing
 
-This project includes a comprehensive manual blackbox testing suite — **104 test cases** covering all
+This project includes a comprehensive manual black-box testing suite — **125 test cases** covering all
 7 functional modules, validated using Equivalence Partitioning and Boundary Value Analysis methods.
 
-**Pass Rate: 100% (104/104 TC)** — See [`docs/PENGUJIAN-BLACKBOX.md`](./docs/PENGUJIAN-BLACKBOX.md) for full results.
+**Pass Rate: 100% (125/125 TC)** — See [`docs/PENGUJIAN-BLACKBOX.md`](./docs/PENGUJIAN-BLACKBOX.md) for full results.
 
 ### Running Automated Tests
 
@@ -235,17 +235,16 @@ npm run test:blackbox
 
 ### Manual Blackbox Test Coverage
 
-| Module | Code | Test Cases | Pass Rate |
-|--------|------|------------|-----------|
-| Authentication | F-01 | 10 | 100% |
-| Home Hub (Beranda) | F-02 | 9 | 100% |
-| Analytics Dashboard | F-03 | 7 | 100% |
-| Cashier — Cart | F-04a | 12 | 100% |
-| Cashier — Checkout & Offline | F-04b | 14 | 100% |
-| Product Management | F-05 | 17 | 100% |
-| Reports | F-06 | 11 | 100% |
-| Settings | F-07 | 24 | 100% |
-| **Total** | — | **104** | **100%** |
+| Module | Code | Test Cases | Passed | Failed | Pass Rate |
+|--------|------|-----------:|-------:|-------:|----------:|
+| Authentication | F-01 | 10 | 10 | 0 | 100% |
+| Home / Beranda | F-02 | 13 | 13 | 0 | 100% |
+| Analytics Dashboard | F-03 | 7 | 7 | 0 | 100% |
+| Cashier / Point of Sale | F-04 | 27 | 27 | 0 | 100% |
+| Product Management | F-05 | 23 | 23 | 0 | 100% |
+| Reports | F-06 | 16 | 16 | 0 | 100% |
+| Settings | F-07 | 29 | 29 | 0 | 100% |
+| **Total** | — | **125** | **125** | **0** | **100%** |
 
 ### Playwright E2E Test Files
 
