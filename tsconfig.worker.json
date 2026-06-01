@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["webworker", "es2020"],
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "target": "es2020",
+    "noEmit": true
+  }
+}

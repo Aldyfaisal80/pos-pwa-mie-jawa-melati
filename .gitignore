@@ -1,0 +1,119 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# database
+/prisma/db.sqlite
+/prisma/db.sqlite-journal
+db.sqlite
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+# do not commit any .env files to git, except for the .env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
+.env
+.env.development
+.env.production
+.env*.local
+.env.test
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
+# idea files
+.idea
+
+# agent files
+.agent
+.claude
+.mcp.json
+.kiro
+
+# local planning files (keep docs/ tracked)
+/docs/PLAN-*.md
+/design-system
+
+# prisma generated files
+/generated
+
+# generated PWA files
+/public/sw.js
+
+# backup/ directory is intentionally tracked — managed by GitHub Actions
+# Do NOT add /backup to this file
+
+# ── Thesis backup & temp files ──
+docs/wireframe/*_backup*.docx
+docs/wireframe/*_Rev*.docx
+docs/wireframe/*_bk*.docx
+docs/wireframe/backup_*.docx
+docs/wireframe/*copy*.docx
+docs/wireframe/Penulisan_Rule.md
+~$*.docx
+
+# One-off thesis scripts
+docs/wireframe/scripts/
+docs/wireframe/*.py
+docs/wireframe/pdf_text.txt
+docs/wireframe/export_wireframes.cjs
+docs/generate_uat_docx.py
+
+# Reference books (too large for git)
+docs/buku referensi/
+
+# Misc temp files
+tunnel-log.txt
+pdf_text.txt
+
+# ── Thesis / skripsi artifacts — kept ONLY in docx/laporan-skripsi branch ──
+# Folder skripsi penuh
+/docs/assets/
+/docs/blackbox/
+/docs/diagrams/
+/docs/screenshots/
+/docs/wireframe/
+/docs/laporan/
+/docs/_arsip/
+/docs/rule-penulisan/
+/public/wireframe/
+/scratch/
+/backup/reports/
+# Dokumen skripsi (docx & bab)
+/docs/*.docx
+/docs/BAB*.md
+/docs/*BLACKBOX*.md
+/docs/*UAT*.md
+/docs/UML.md
+/docs/NARASI-BAB4.md
+/docs/MAPPING-BLACKBOX.md
+/docs/pedoman_skripsi_extracted.txt
+/docs/blackbox-testing-mobile-logout.md
+# Diagram skripsi (uml-*.png), BUKAN data-flow/erd/offline-sync (dipakai app docs)
+/docs/uml-*.png
+# Generator docx skripsi
+/docs/generate_blackbox_docx.py

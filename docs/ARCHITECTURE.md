@@ -1,0 +1,254 @@
+# Architecture — Post PWA (POS Offline-First)
+
+> Modern offline-first Point of Sales PWA built on the T3 Stack.
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Framework | Next.js (App Router) | 16+ |
+| API | tRPC | 11 |
+| Validation | Zod | 4 |
+| ORM | Prisma | 7 |
+| Database | PostgreSQL (Supabase) | — |
+| Styling | Tailwind CSS | 4 |
+| UI Components | Shadcn UI + Radix UI | — |
+| PWA Engine | Serwist | 9 |
+| State / Data Fetching | TanStack React Query | 5 |
+| Charts | Recharts | 2 |
+| Drawer (Mobile UX) | Vaul | 1 |
+| Theme | next-themes | 0.4 |
+| Toast | Sonner | 2 |
+
+---
+
+## Directory Structure
+
+```
+src/
+├── app/                    # Next.js App Router (pages & API)
+│   ├── api/                # tRPC HTTP handler
+│   ├── cashier/            # /cashier route
+│   ├── product/            # /product route
+│   ├── report/             # /report route
+│   ├── store-settings/     # /store-settings route
+│   ├── ~offline/           # Offline fallback page
+│   ├── layout.tsx          # Root layout (providers, sidebar)
+│   ├── page.tsx            # Dashboard (/) route
+│   └── sw.ts               # Serwist Service Worker entry
+│
+├── components/
+│   ├── config/             # App-wide config components
+│   ├── elements/           # Shared elements (Header, etc.)
+│   ├── form/               # Reusable form components
+│   ├── fragments/          # Layout fragments (AppSidebar)
+│   ├── icons/              # Custom SVG icon components
+│   ├── layouts/            # Layout wrappers
+│   └── ui/                 # Shadcn UI primitives (21 components)
+│
+├── features/               # Feature modules (domain-driven)
+│   ├── cashier/            # POS cashier feature
+│   ├── dashboard/          # Dashboard & analytics
+│   ├── product/            # Product management
+│   ├── report/             # Transaction reports & export
+│   └── storeSettings/      # Store configuration
+│
+├── hooks/                  # Global custom hooks
+├── lib/                    # Utilities & shared libraries
+├── server/                 # Backend layer
+│   ├── api/
+│   │   ├── routers/        # tRPC route handlers
+│   │   ├── root.ts         # Router aggregation
+│   │   └── trpc.ts         # tRPC context & middleware
+│   ├── filters/            # Error filters
+│   ├── services/           # Business services
+│   └── validations/        # Zod schemas
+│
+├── styles/                 # Global CSS
+└── trpc/                   # Client-side tRPC setup
+    ├── query-client.ts     # TanStack Query client
+    ├── react.tsx            # React tRPC provider
+    └── server.ts           # Server-side tRPC caller
+```
+
+---
+
+## Feature Module Pattern
+
+Each feature under `src/features/` follows a consistent structure:
+
+```
+features/<feature>/
+├── components/     # Feature-specific UI components
+├── hooks/          # Feature-specific custom hooks
+├── pages/          # Page-level components (mounted by App Router)
+├── types/          # TypeScript types/interfaces
+├── utils/          # Helper functions
+└── constants/      # Static values (where applicable)
+```
+
+**Key principle:** Features are self-contained. Shared components live in `src/components/`, shared hooks in `src/hooks/`.
+
+---
+
+## Data Flow
+
+![Post PWA — System Data Flow](./data-flow-diagram.png)
+
+<details>
+<summary>📝 Mermaid Text Version</summary>
+
+```mermaid
+graph LR
+    subgraph Client
+        A["React Components"] --> B["tRPC React Hooks"]
+        B --> C["TanStack Query Cache"]
+    end
+
+    subgraph API Layer
+        C --> D["tRPC Router"]
+        D --> E["Zod Validation"]
+        E --> F["Prisma ORM"]
+    end
+
+    subgraph Database
+        F --> G[("PostgreSQL")]
+    end
+
+    subgraph Offline
+        A --> H["IndexedDB"]
+        H -->|"Online"| I["Background Sync"]
+        I --> D
+    end
+```
+
+</details>
+
+---
+
+## Offline-First Architecture
+
+The application uses a **queue-and-sync** pattern:
+
+![Post PWA — Offline Sync Flow](./offline-sync-diagram.png)
+
+<details>
+<summary>📝 Mermaid Text Version</summary>
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI
+    participant IDB as IndexedDB
+    participant SW as Serwist SW
+    participant Server as tRPC Server
+    participant DB as Supabase
+
+    User->>UI: Process transaction
+    UI->>IDB: Save locally
+    UI->>UI: Update pending counter
+
+    Note over SW: Network restored
+    SW-->>UI: Online event
+    UI->>IDB: Read pending transactions
+    UI->>Server: syncOfflineData batch
+    Server->>DB: Prisma transaction create
+    DB-->>Server: Success
+    Server-->>UI: Synced
+    UI->>IDB: Mark as synced
+    UI->>UI: Reset pending counter
+```
+
+</details>
+
+**Key components:**
+- `src/lib/offline-db.ts` — IndexedDB wrapper (Dexie-like API)
+- `src/hooks/use-offline-sync.ts` — Sync orchestrator hook
+- `src/hooks/useNetworkStatus.ts` — Online/offline state detector
+- `src/app/sw.ts` — Serwist Service Worker (asset caching)
+
+---
+
+## UI Component Layers
+
+```
+Layer 1: Shadcn UI Primitives (src/components/ui/)
+         ↓ composed into
+Layer 2: Shared Elements (src/components/elements/, form/, fragments/)
+         ↓ composed into
+Layer 3: Feature Components (src/features/*/components/)
+         ↓ assembled into
+Layer 4: Pages (src/features/*/pages/ → mounted by src/app/)
+```
+
+**Mobile UX:** Responsive Drawer/Dialog pattern using Vaul — modals render as bottom sheets on mobile, standard dialogs on desktop.
+
+---
+
+## Key Design Decisions
+
+### ADR-001: T3 Stack Foundation
+**Decision:** Built on create-t3-app with Next.js + tRPC + Prisma.  
+**Rationale:** Full type safety from database to UI, single language (TypeScript), minimal boilerplate.
+
+### ADR-002: Offline-First with IndexedDB
+**Decision:** Queue transactions locally in IndexedDB, batch sync on reconnect.  
+**Rationale:** POS systems must work without internet. IndexedDB provides reliable, browser-native persistence with large storage.
+
+### ADR-003: Feature-Based Module Structure
+**Decision:** Organize by feature domain rather than technical layer.  
+**Rationale:** Colocation of related code reduces context switching, makes features independently maintainable.
+
+### ADR-004: Soft Delete for Products
+**Decision:** Products are "deleted" by setting `isAvailable = false`, not removed from database.  
+**Rationale:** Transaction history must preserve product data for reporting integrity.
+
+### ADR-005: Vaul Drawer for Mobile Interactions
+**Decision:** Use Vaul to render modals as bottom sheets on mobile.  
+**Rationale:** Native-feeling swipeable drawers provide better mobile ergonomics than centered modals, especially with virtual keyboards.
+
+### ADR-006: No User Authentication (Single-User POS)
+**Status:** Accepted  
+**Context:** Sistem POS ini didesain untuk **satu pengguna (pemilik toko)** yang mengoperasikan aplikasi di perangkat pribadinya. Penambahan fitur login (email/password/OAuth) perlu dievaluasi dari sisi kebutuhan aktual vs kompleksitas tambahan.
+
+**Decision:** Tidak mengimplementasikan authentication system (login/register). Aplikasi langsung dapat digunakan tanpa proses autentikasi.
+
+**Rationale:**
+1. **Analisis Kebutuhan** — Berdasarkan analisis, hanya ada 1 aktor (pemilik toko/kasir). Menambah login justru menghambat kecepatan operasional kasir pada setiap sesi penggunaan.
+2. **Prinsip YAGNI (You Aren't Gonna Need It)** — Membangun fitur autentikasi multi-user untuk aplikasi single-user merupakan over-engineering yang bertentangan dengan prinsip software engineering.
+3. **Preseden Industri** — POS retail single-user seperti Square POS dan Moka POS versi dasar juga tidak menggunakan login tradisional untuk operator tunggal.
+4. **Deployment Model** — Aplikasi di-deploy untuk penggunaan internal/lokal, bukan sebagai SaaS publik multi-tenant.
+
+**Keamanan Tetap Dijaga Melalui:**
+- Input validation Zod pada setiap endpoint API (mencegah malformed data)
+- Prisma ORM parameterized queries (mencegah SQL Injection)
+- Environment variables untuk credential database (`.env` di-gitignore)
+- Build-time env validation via `@t3-oss/env-nextjs`
+
+**Consequences:**
+- ✅ UX lebih cepat — kasir langsung operasional tanpa barrier
+- ✅ Arsitektur lebih sederhana dan maintainable
+- ⚠️ Jika kebutuhan berubah menjadi multi-user, authentication middleware dapat ditambahkan pada layer tRPC tanpa mengubah business logic (karena arsitektur sudah berbasis procedure middleware)
+
+### ADR-007: WIB Local Time Storage for Transaction.date
+**Status:** Accepted
+
+**Context:** The `Transaction.date` column is `timestamp WITHOUT time zone`. Prisma + node-postgres pass the value through as-is without tz conversion. The client sends `new Date().toISOString()` (UTC), while all chart/stats queries use `DATE(date AT TIME ZONE 'Asia/Jakarta')` to bucket by WIB calendar day.
+
+**Problem:** Because `timestamp WITHOUT tz` is interpreted as naive local time by Postgres (server tz = `Asia/Jakarta`/UTC+7), storing a UTC value like `21:54 UTC` is read back as `21:54 local (WIB)`. However `DATE('21:54' AT TIME ZONE 'Asia/Jakarta')` would subtract 7h, producing `14:54 UTC` → date = previous day — an off-by-one error for all transactions created between WIB midnight and WIB 07:00.
+
+**Decision:** In the `syncOfflineData` tRPC mutation, pre-shift the incoming UTC `Date` to WIB wall-clock time before storing:
+```typescript
+const toWIBLocal = (utcDate: Date): Date =>
+  new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
+// stored value = WIB local time, matching what DATE(...AT TIME ZONE) expects
+```
+
+**Chart query:** Use `TO_CHAR(DATE(date AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD')` instead of `DATE(...)` to return a string, avoiding node-postgres re-parsing the returned `DATE` type with unexpected UTC-midnight offsets.
+
+**Consequences:**
+- ✅ `DATE(date AT TIME ZONE 'Asia/Jakarta')` always resolves the correct WIB calendar day
+- ✅ Dashboard stats, revenue chart, and report date filters are consistent
+- ⚠️ Stored timestamps are NOT UTC — developers must remember this convention when writing raw SQL
