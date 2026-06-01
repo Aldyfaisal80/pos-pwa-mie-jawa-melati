@@ -1,7 +1,7 @@
 # Diagram Alur Aplikasi POS Mie Jawa Melati
 
 > Dokumen ini berisi diagram-diagram alur yang menggambarkan navigasi dan proses utama dalam aplikasi POS PWA.
-> Cocok untuk dimasukkan ke laporan skripsi sebagai lampiran diagram atau di dalam BAB IV.
+> Cocok sebagai dokumentasi teknis untuk memahami alur sistem dan proses bisnis aplikasi.
 
 ---
 
