@@ -2,8 +2,8 @@
 
 | Field | Value |
 |-------|-------|
-| **Timestamp UTC** | 2026-05-31T19:21:12Z |
-| **Timestamp WIB** | 2026-06-01 02:21 WIB |
+| **Timestamp UTC** | 2026-06-01T21:36:21Z |
+| **Timestamp WIB** | 2026-06-02 04:36 WIB |
 | **Trigger** | schedule |
 | **Files** | schema.sql, data.sql |
 
