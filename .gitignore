@@ -89,3 +89,31 @@ docs/buku referensi/
 # Misc temp files
 tunnel-log.txt
 pdf_text.txt
+
+# ── Thesis / skripsi artifacts — kept ONLY in docx/laporan-skripsi branch ──
+# Folder skripsi penuh
+/docs/assets/
+/docs/blackbox/
+/docs/diagrams/
+/docs/screenshots/
+/docs/wireframe/
+/docs/laporan/
+/docs/_arsip/
+/docs/rule-penulisan/
+/public/wireframe/
+/scratch/
+/backup/reports/
+# Dokumen skripsi (docx & bab)
+/docs/*.docx
+/docs/BAB*.md
+/docs/*BLACKBOX*.md
+/docs/*UAT*.md
+/docs/UML.md
+/docs/NARASI-BAB4.md
+/docs/MAPPING-BLACKBOX.md
+/docs/pedoman_skripsi_extracted.txt
+/docs/blackbox-testing-mobile-logout.md
+# Diagram skripsi (uml-*.png), BUKAN data-flow/erd/offline-sync (dipakai app docs)
+/docs/uml-*.png
+# Generator docx skripsi
+/docs/generate_blackbox_docx.py
