@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict KRBKs4xzZQwmfkN18JCezyeOoPaPzdyyiiooQcU6GfZgOsJAwbYYfXM5VZ4Sw8a
+\restrict O3eTo5ZoNIiR90DYtSEkszXF8aVEuzQfedoCb0SFqCIbZmzKDNHWXErKXujAfAA
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.10 (Ubuntu 17.10-1.pgdg24.04+1)
@@ -1559,5 +1559,5 @@ SELECT pg_catalog.setval('"public"."Category_id_seq"', 3, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict KRBKs4xzZQwmfkN18JCezyeOoPaPzdyyiiooQcU6GfZgOsJAwbYYfXM5VZ4Sw8a
+\unrestrict O3eTo5ZoNIiR90DYtSEkszXF8aVEuzQfedoCb0SFqCIbZmzKDNHWXErKXujAfAA
 
