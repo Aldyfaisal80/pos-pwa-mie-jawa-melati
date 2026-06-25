@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict MRdB5fCSXgZmaEJVAC2CLeGcTfK9swD3jPsgL20L2h4b9QL7JdeP5lBOFAfVau4
+\restrict wsmXnMAvGETFFHAYCBl7esrYic8CKVVWsvLOEKPuwOUVgHcMUVrzmLhYoDPmq3D
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.10 (Ubuntu 17.10-1.pgdg24.04+1)
@@ -315,5 +315,5 @@ ALTER TABLE "public"."TransactionItem" ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict MRdB5fCSXgZmaEJVAC2CLeGcTfK9swD3jPsgL20L2h4b9QL7JdeP5lBOFAfVau4
+\unrestrict wsmXnMAvGETFFHAYCBl7esrYic8CKVVWsvLOEKPuwOUVgHcMUVrzmLhYoDPmq3D
 
