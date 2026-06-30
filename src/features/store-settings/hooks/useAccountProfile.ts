@@ -12,11 +12,16 @@ export const useAccountProfile = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-      setLoading(false);
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        setUser(user);
+      } catch {
+        // Offline or session expired — keep null
+      } finally {
+        setLoading(false);
+      }
     };
     void fetchUser();
   }, [supabase]);

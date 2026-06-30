@@ -151,7 +151,15 @@ export const useBluetoothPrinter = () => {
           });
         }
         return true;
-      } catch {
+      } catch (e: unknown) {
+        if (!silent) {
+          toast.error(
+            e instanceof Error
+              ? `Gagal terhubung: ${e.message}`
+              : "Gagal terhubung ke printer",
+            { id: "bt-connect" },
+          );
+        }
         return false;
       }
     },
@@ -192,8 +200,6 @@ export const useBluetoothPrinter = () => {
           devices.find((d) => d.name === savedPrinterNameLS);
 
         if (!target) return;
-
-        console.log(`[BT] Auto-reconnecting to "${target.name ?? target.id}"…`);
         const ok = await attachToDevice(target, true);
         if (ok) {
           toast.success(
@@ -201,8 +207,8 @@ export const useBluetoothPrinter = () => {
             { duration: 2500 },
           );
         }
-      } catch (err) {
-        console.warn("[BT] Auto-reconnect failed:", err);
+      } catch {
+        // Auto-reconnect failed — silent
       }
     };
 

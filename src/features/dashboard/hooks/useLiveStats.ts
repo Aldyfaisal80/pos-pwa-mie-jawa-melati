@@ -52,10 +52,7 @@ export const useLiveStats = () => {
           void utils.category.getAll.invalidate();
         },
       )
-      .subscribe((status, err) => {
-        console.log("[Realtime] pos-realtime status:", status);
-        if (err) console.error("[Realtime] Error:", err);
-      });
+      .subscribe();
 
     return () => {
       void supabase.removeChannel(channel);

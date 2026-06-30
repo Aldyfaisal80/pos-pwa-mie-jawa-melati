@@ -12,13 +12,80 @@ import { type AppRouter } from "@/server/api/types";
 import { createQueryClient } from "./query-client";
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined;
+let isHydrated = false;
+const PERSIST_KEY = "pos-rq-cache";
+
 const getQueryClient = () => {
   if (typeof window === "undefined") {
-    // Server: always make a new query client
     return createQueryClient();
   }
-  // Browser: use singleton pattern to keep the same query client
   clientQueryClientSingleton ??= createQueryClient();
+
+  // Hydrate + subscribe only once per page lifecycle
+  if (!isHydrated) {
+    isHydrated = true;
+
+    // Hydrate from localStorage on first access (survives refresh)
+    try {
+      const cached = localStorage.getItem(PERSIST_KEY);
+      if (cached) {
+        const parsed: unknown = JSON.parse(cached);
+        if (!Array.isArray(parsed)) throw new Error("Invalid cache format");
+        for (const entry of parsed as { queryKey: unknown[]; data: string; dataUpdatedAt: number }[]) {
+          if (
+            !entry ||
+            !Array.isArray(entry.queryKey) ||
+            typeof entry.data !== "string"
+          )
+            continue;
+          const data = SuperJSON.parse(entry.data);
+          clientQueryClientSingleton.setQueryData(entry.queryKey, data, {
+            updatedAt: entry.dataUpdatedAt,
+          });
+        }
+      }
+    } catch {
+      // Corrupted cache — clear so it doesn't block future persist
+      localStorage.removeItem(PERSIST_KEY);
+    }
+
+    // Persist on cache changes (debounced)
+    let saveTimer: ReturnType<typeof setTimeout> | undefined;
+    clientQueryClientSingleton.getQueryCache().subscribe(() => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        try {
+          const state = clientQueryClientSingleton!.getQueryCache().getAll();
+          const persistable = state
+            .filter((q) => q.state.status === "success")
+            .map((q) => ({
+              queryKey: q.queryKey,
+              data: SuperJSON.stringify(q.state.data),
+              dataUpdatedAt: q.state.dataUpdatedAt,
+            }));
+          localStorage.setItem(PERSIST_KEY, JSON.stringify(persistable));
+        } catch {
+          // Quota exceeded — drop oldest entries and retry once
+          try {
+            const state = clientQueryClientSingleton!
+              .getQueryCache()
+              .getAll()
+              .filter((q) => q.state.status === "success")
+              .slice(-3);
+            const minimal = state.map((q) => ({
+              queryKey: q.queryKey,
+              data: SuperJSON.stringify(q.state.data),
+              dataUpdatedAt: q.state.dataUpdatedAt,
+            }));
+            localStorage.setItem(PERSIST_KEY, JSON.stringify(minimal));
+          } catch {
+            // Still failing — clear to prevent repeated throws
+            localStorage.removeItem(PERSIST_KEY);
+          }
+        }
+      }, 500);
+    });
+  }
 
   return clientQueryClientSingleton;
 };

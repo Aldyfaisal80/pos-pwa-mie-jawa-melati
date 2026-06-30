@@ -5,7 +5,7 @@ import type {
   SerwistGlobalConfig,
   RuntimeCaching,
 } from "serwist";
-import { Serwist, NetworkFirst } from "serwist";
+import { Serwist, NetworkFirst, StaleWhileRevalidate } from "serwist";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -16,12 +16,13 @@ declare global {
 declare const self: ServiceWorkerGlobalScope;
 
 const runtimeCaching: RuntimeCaching[] = [
-  ...defaultCache,
-  // Cache HTML Pages explicitly so they load instantly when offline
+  // Custom handlers FIRST — Serwist is first-match-wins.
+  // defaultCache has a catch-all "others" that would shadow these if placed first.
   {
     matcher: ({ request }) => request.destination === "document",
     handler: new NetworkFirst({
       cacheName: "html-pages-cache",
+      networkTimeoutSeconds: 3,
       plugins: [
         {
           cacheWillUpdate: async ({ response }) => {
@@ -34,10 +35,13 @@ const runtimeCaching: RuntimeCaching[] = [
       ],
     }),
   },
-  // Cache all tRPC Data
   {
-    matcher: ({ url }) => url.pathname.startsWith("/api/trpc/"),
-    handler: new NetworkFirst({
+    // tRPC GET queries (if any use GET). httpBatchStreamLink uses POST,
+    // which SWR cannot cache. Offline data comes from React Query cache
+    // (networkMode: offlineFirst) + IndexedDB merge.
+    matcher: ({ url, request }) =>
+      url.pathname.startsWith("/api/trpc/") && request.method === "GET",
+    handler: new StaleWhileRevalidate({
       cacheName: "trpc-api-cache",
       plugins: [
         {
@@ -51,7 +55,27 @@ const runtimeCaching: RuntimeCaching[] = [
       ],
     }),
   },
+  // defaultCache LAST — static assets, RSC, fonts, images
+  ...defaultCache,
 ];
+
+// Precache all app routes + offline page at SW install so they're always
+// available offline without requiring manual visit.
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open("html-pages-cache").then((cache) =>
+      Promise.allSettled([
+        "/",
+        "/dashboard",
+        "/pos",
+        "/reports",
+        "/products",
+        "/settings",
+        "/~offline",
+      ].map((url) => cache.add(new Request(url, { cache: "reload" })))),
+    ),
+  );
+});
 
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,

@@ -29,8 +29,10 @@ import {
   Eye,
   Trash2,
   Receipt,
+  CloudUpload,
 } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import {
   formatDateTime,
   getPaymentMethodBadge,
@@ -142,10 +144,24 @@ const TransactionRow = ({
   onDeleteRequest: (id: string) => void;
 }) => {
   const { date, time } = formatDateTime(trx.date);
+  const isOffline = trx.isSynced === false;
   return (
-    <TableRow className="hover:bg-muted/50 transition-colors">
+    <TableRow
+      className={cn(
+        "transition-colors hover:bg-muted/50",
+        isOffline && "bg-amber-50/50 hover:bg-amber-50/70 dark:bg-amber-900/10 dark:hover:bg-amber-900/20",
+      )}
+    >
       <TableCell className="text-foreground font-mono text-xs font-medium md:text-sm">
-        {trx.invoiceNumber}
+        <div className="flex items-center gap-1.5">
+          {trx.invoiceNumber}
+          {isOffline && (
+            <span className="inline-flex items-center gap-0.5 rounded-full border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[9px] font-semibold text-amber-700 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+              <CloudUpload className="h-2 w-2" />
+              Pending
+            </span>
+          )}
+        </div>
       </TableCell>
       <TableCell className="text-muted-foreground text-xs">
         <div className="text-foreground font-medium">{date}</div>
@@ -180,6 +196,7 @@ const TransactionRow = ({
             size="icon"
             className="text-muted-foreground hover:text-destructive h-8 w-8"
             onClick={() => onDeleteRequest(trx.id)}
+            disabled={isOffline}
           >
             <Trash2 className="h-4 w-4" />
           </Button>

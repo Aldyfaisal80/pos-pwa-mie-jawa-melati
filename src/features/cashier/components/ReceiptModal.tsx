@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { UtensilsCrossed } from "lucide-react";
+import { UtensilsCrossed, CloudUpload } from "lucide-react";
 import type { RouterOutputs } from "@/trpc/react";
 import { formatRupiah } from "@/lib/format";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ interface ReceiptModalProps {
   paymentAmount: string;
   invoiceNumber: string;
   transactionDate: Date;
+  wasOffline?: boolean;
   onFinish: () => void;
 }
 
@@ -35,6 +36,7 @@ export const ReceiptModal = ({
   paymentAmount,
   invoiceNumber,
   transactionDate,
+  wasOffline,
   onFinish,
 }: ReceiptModalProps) => {
   type StoreProfile = NonNullable<RouterOutputs["store"]["getProfile"]>;
@@ -70,8 +72,6 @@ export const ReceiptModal = ({
           const converted = await getBase64ImageFromUrl(store.logoUrl);
           if (converted) {
             b64Logo = converted;
-          } else {
-            console.warn("[Print] Logo conversion failed — printing without logo.");
           }
         }
       }
@@ -119,7 +119,6 @@ export const ReceiptModal = ({
     autoPrintTriggeredRef.current = true;
     // 1200ms: gives store tRPC query AND logo fetch enough time to complete
     const timerId = setTimeout(() => {
-      console.log("[AutoPrint] Triggering print...");
       void handlePrintRef.current();
     }, 1200);
     return () => clearTimeout(timerId);
@@ -175,6 +174,14 @@ export const ReceiptModal = ({
               <div>
                 <p>No: #{invoiceNumber}</p>
                 <p>Kasir: Admin</p>
+                {wasOffline && (
+                  <div className="mt-1.5">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+                      <CloudUpload className="h-2.5 w-2.5" />
+                      Menunggu Sync
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="text-right">
                 <p>{transactionDate.toLocaleDateString("id-ID")}</p>

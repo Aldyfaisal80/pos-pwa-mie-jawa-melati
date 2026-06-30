@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import { formatRupiah, formatRupiahShort } from "@/lib/format";
 import type { PaymentMethod } from "@/server/validations";
-import { useReportChart } from "../../hooks/useReportChart";
+import { useOfflineAwareReportChart } from "../../hooks/useOfflineAwareReportChart";
 
 interface ReportChartProps {
   startDate?: Date;
@@ -62,7 +62,7 @@ export const ReportChart = ({
   endDate,
   paymentMethod,
 }: ReportChartProps) => {
-  const { data: chartData, isLoading } = useReportChart({
+  const { data: chartData, isLoading } = useOfflineAwareReportChart({
     startDate,
     endDate,
     paymentMethod,

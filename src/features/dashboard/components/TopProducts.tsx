@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useDashboardStats } from "../hooks/useDashboardStats";
+import { useOfflineAwareDashboardStats } from "../hooks/useOfflineAwareDashboardStats";
 
 // Agent 3 (performance-optimizer): memo prevents re-render when parent re-renders
 const TopProductsSkeleton = memo(() => (
@@ -20,7 +20,7 @@ const TopProductsSkeleton = memo(() => (
 TopProductsSkeleton.displayName = "TopProductsSkeleton";
 
 export const TopProducts = () => {
-  const { data: stats, isLoading } = useDashboardStats();
+  const { data: stats, isLoading } = useOfflineAwareDashboardStats();
   // Fallback to 1 prevents division by zero when computing bar widths
   const maxSold = stats?.topProducts?.[0]?.sold ?? 1;
 

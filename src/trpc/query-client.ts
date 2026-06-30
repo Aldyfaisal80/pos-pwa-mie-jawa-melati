@@ -28,9 +28,12 @@ export const createQueryClient = () =>
     }),
     defaultOptions: {
       queries: {
-        // above 0 to avoid refetching immediately on the client
-        staleTime: 30 * 1000,
-        networkMode: "always", // Delegating offline capability to Service Worker
+        // 5 min staleTime: cached data is fresh enough for offline use.
+        // Prefetch warms cache, localStorage persists across refresh.
+        staleTime: 5 * 60 * 1000,
+        // offlineFirst: return cached data when network fails (offline mode).
+        // Prefetch hook warms cache after login, so queries have data available.
+        networkMode: "offlineFirst",
         retry: (failureCount, error) => {
           // Don't retry UNAUTHORIZED errors — session is dead
           if (

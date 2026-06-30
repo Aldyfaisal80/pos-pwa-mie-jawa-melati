@@ -9,6 +9,7 @@ interface StatsCardProps {
   isLoading: boolean;
   value: React.ReactNode;
   description: React.ReactNode;
+  hasOffline?: boolean;
 }
 
 export const StatsCard = ({
@@ -18,12 +19,19 @@ export const StatsCard = ({
   isLoading,
   value,
   description,
+  hasOffline,
 }: StatsCardProps) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-muted-foreground text-sm font-medium">
+        <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-sm font-medium">
           {title}
+          {hasOffline && (
+            <span
+              className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 motion-reduce:animate-none"
+              title="Termasuk data offline"
+            />
+          )}
         </CardTitle>
         <div
           className={`flex h-8 w-8 items-center justify-center rounded-lg ${iconColorClass}`}

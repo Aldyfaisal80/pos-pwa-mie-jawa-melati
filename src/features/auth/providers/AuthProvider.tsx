@@ -24,13 +24,23 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
   useEffect(() => {
     // Fetch user (server-validated) and session in parallel
     const initAuth = async () => {
-      const [{ data: userData }, { data: sessionData }] = await Promise.all([
-        supabase.auth.getUser(),
-        supabase.auth.getSession(),
-      ]);
-      setUser(userData.user);
-      setSession(sessionData.session);
-      hadSessionRef.current = !!userData.user;
+      try {
+        // Fetch user (server-validated) and session in parallel
+        const [{ data: userData }, { data: sessionData }] = await Promise.all([
+          supabase.auth.getUser(),
+          supabase.auth.getSession(),
+        ]);
+        setUser(userData.user);
+        setSession(sessionData.session);
+        hadSessionRef.current = !!userData.user;
+      } catch {
+        // Network error (offline) — fall back to local session so
+        // user stays logged in and can use offline features
+        const { data } = await supabase.auth.getSession();
+        setSession(data.session);
+        setUser(data.session?.user ?? null);
+        hadSessionRef.current = !!data.session?.user;
+      }
       setLoading(false);
     };
 

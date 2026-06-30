@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatRupiah } from "@/lib/format";
 import type { PaymentMethod } from "@/server/validations";
-import { useReportStats } from "../../hooks/useReportStats";
+import { useOfflineAwareReportStats } from "../../hooks/useOfflineAwareReportStats";
 
 interface ReportStatsCardsProps {
   startDate?: Date;
@@ -20,6 +20,7 @@ interface StatCardProps {
   icon: React.ElementType;
   iconClass: string;
   isLoading: boolean;
+  hasOffline?: boolean;
 }
 
 const StatCard = ({
@@ -29,11 +30,18 @@ const StatCard = ({
   icon: Icon,
   iconClass,
   isLoading,
+  hasOffline,
 }: StatCardProps) => (
   <Card>
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle className="text-muted-foreground text-sm font-medium">
+      <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-sm font-medium">
         {title}
+        {hasOffline && (
+          <span
+            className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 motion-reduce:animate-none"
+            title="Termasuk data offline"
+          />
+        )}
       </CardTitle>
       <div
         className={`flex h-8 w-8 items-center justify-center rounded-lg ${iconClass}`}
@@ -62,36 +70,41 @@ export const ReportStatsCards = ({
   endDate,
   paymentMethod,
 }: ReportStatsCardsProps) => {
-  const { data, isLoading } = useReportStats({ startDate, endDate, paymentMethod });
+  const { data, isLoading, pendingBreakdown } = useOfflineAwareReportStats({ startDate, endDate, paymentMethod });
 
   const hasDateFilter = !!startDate || !!endDate;
   const periodLabel = hasDateFilter ? "Periode terpilih" : "Semua waktu";
+  const hasOffline = pendingBreakdown.count > 0;
+  const offlineLabel = `Termasuk ${pendingBreakdown.count} transaksi offline`;
 
   return (
     <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
       <StatCard
         title="Total Pendapatan"
         value={formatRupiah(data?.totalOmzet ?? 0)}
-        description={periodLabel}
+        description={hasOffline ? offlineLabel : periodLabel}
         icon={DollarSign}
         iconClass="bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
         isLoading={isLoading}
+        hasOffline={hasOffline}
       />
       <StatCard
         title="Jumlah Transaksi"
         value={String(data?.totalTransactions ?? 0)}
-        description={`${data?.totalTransactions ?? 0} nota`}
+        description={hasOffline ? offlineLabel : `${data?.totalTransactions ?? 0} nota`}
         icon={Receipt}
         iconClass="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
         isLoading={isLoading}
+        hasOffline={hasOffline}
       />
       <StatCard
         title="Rata-rata / Transaksi"
         value={formatRupiah(data?.avgPerTransaction ?? 0)}
-        description="Per nota"
+        description={hasOffline ? "Termasuk data offline" : "Per nota"}
         icon={TrendingUp}
         iconClass="bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
         isLoading={isLoading}
+        hasOffline={hasOffline}
       />
     </div>
   );

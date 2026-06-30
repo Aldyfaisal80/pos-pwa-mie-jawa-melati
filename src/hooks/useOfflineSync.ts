@@ -88,14 +88,14 @@ export const useOfflineSync = () => {
         const result = results[0];
 
         if (result?.success) {
-          await removePendingTransaction(trx.invoiceNumber);
+          try { await removePendingTransaction(trx.invoiceNumber); } catch { /* IndexedDB error — keep in queue */ }
           successCount++;
         } else if (
           result?.errorCode &&
           UNRECOVERABLE_SERVER_CODES.has(result.errorCode)
         ) {
           // Unrecoverable: purge dari antrian tanpa retry
-          await removePendingTransaction(trx.invoiceNumber);
+          try { await removePendingTransaction(trx.invoiceNumber); } catch { /* IndexedDB error — will retry purge next sync */ }
           purgedCount++;
         } else {
           // Transient/unknown error — biarkan di queue untuk retry berikutnya
@@ -104,7 +104,7 @@ export const useOfflineSync = () => {
       } catch (error) {
         // Network/tRPC-level error (bukan aplikasi error)
         if (isLegacyUnrecoverableError(error)) {
-          await removePendingTransaction(trx.invoiceNumber);
+          try { await removePendingTransaction(trx.invoiceNumber); } catch { /* IndexedDB error */ }
           purgedCount++;
         } else {
           failCount++;
@@ -118,6 +118,7 @@ export const useOfflineSync = () => {
 
     if (successCount > 0) {
       postMessage({ type: "TRANSACTION_CREATED" });
+      window.dispatchEvent(new CustomEvent("pos-pending-changed"));
       toast.success(`Sinkronisasi Berhasil`, {
         description: `${successCount} transaksi offline berhasil diunggah ke server.`,
       });
@@ -135,7 +136,7 @@ export const useOfflineSync = () => {
     }
   }, [refreshCount, postMessage]);
 
-  // Auto-sync saat koneksi kembali online
+  // Auto-sync saat koneksi kembali online + instant refresh on same-tab event
   useEffect(() => {
     void refreshCount();
 
@@ -144,8 +145,14 @@ export const useOfflineSync = () => {
       void syncNow();
     };
 
+    const handlePendingChanged = () => void refreshCount();
+
     window.addEventListener("online", handleOnline);
-    return () => window.removeEventListener("online", handleOnline);
+    window.addEventListener("pos-pending-changed", handlePendingChanged);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("pos-pending-changed", handlePendingChanged);
+    };
   }, [refreshCount, syncNow]);
 
   // Polling jumlah pending setiap 10 detik (kalau ada antrian)

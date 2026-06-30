@@ -244,6 +244,7 @@ export const CashierPage = () => {
             paymentAmount={receiptData.paymentAmount}
             invoiceNumber={receiptData.invoiceNumber}
             transactionDate={receiptData.transactionDate}
+            wasOffline={receiptData.wasOffline}
             onFinish={handleFinish}
           />
         </div>

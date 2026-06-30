@@ -9,6 +9,7 @@ import { SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "../fragments/AppSidebar";
 import { BottomTabBar } from "../fragments/BottomTabBar";
 import { RealtimeProvider } from "../providers/RealtimeProvider";
+import { usePrefetchAppData } from "@/hooks/usePrefetchAppData";
 
 type AppProviderProps = React.ComponentProps<"main">;
 
@@ -25,6 +26,8 @@ export const AppProvider = forwardRef<
 >(({ children, className, ...props }, ref) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  usePrefetchAppData();
 
   useEffect(() => {
     setIsMounted(true);

@@ -20,7 +20,7 @@ import {
 } from "recharts";
 import { formatRupiah, formatRupiahShort } from "@/lib/format";
 import { PERIOD_OPTIONS, type PeriodDays } from "../constants/periodOptions";
-import { useRevenueChart } from "../hooks/useRevenueChart";
+import { useOfflineAwareRevenueChart } from "../hooks/useOfflineAwareRevenueChart";
 
 // Chart display config — centralises all magic numbers in one place
 const CHART_CONFIG = {
@@ -75,7 +75,7 @@ ChartSkeleton.displayName = "ChartSkeleton";
 
 export const RevenueChart = () => {
   const [selectedDays, setSelectedDays] = useState<PeriodDays>(7);
-  const { data: chartData, isLoading } = useRevenueChart(selectedDays);
+  const { data: chartData, isLoading } = useOfflineAwareRevenueChart(selectedDays);
 
   const isLargePeriod = selectedDays > CHART_CONFIG.largePeriodThreshold;
   const skeletonBars = isLargePeriod ? 10 : selectedDays;

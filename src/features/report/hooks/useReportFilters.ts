@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
   PaymentMethod,
@@ -9,6 +9,7 @@ import {
 import { api } from "@/trpc/react";
 import { useTransactionReport } from "./useTransactionReport";
 import { exportToCSV } from "../utils/reportUtils";
+import { useOfflinePending } from "@/hooks/useOfflinePending";
 
 export const useReportFilters = () => {
   const [search, setSearch] = useState("");
@@ -26,6 +27,7 @@ export const useReportFilters = () => {
   const [page, setPage] = useState(1);
 
   const utils = api.useUtils();
+  const { pending } = useOfflinePending();
 
   const { data, isLoading, isFetching } = useTransactionReport(
     startDate,
@@ -38,9 +40,73 @@ export const useReportFilters = () => {
     page,
   );
 
-  const transactions = data?.transactions ?? [];
-  const totalCount = data?.totalCount ?? 0;
-  const totalPages = data?.totalPages ?? 1;
+  // Merge pending transactions into the report on page 1
+  const { transactions, totalCount, totalPages } = useMemo(() => {
+    const serverTrx = data?.transactions ?? [];
+    const serverCount = data?.totalCount ?? 0;
+    const serverPages = data?.totalPages ?? 1;
+
+    if (pending.length === 0) {
+      return { transactions: serverTrx, totalCount: serverCount, totalPages: serverPages };
+    }
+
+    // Filter pending by active filters
+    const filtered = pending.filter((trx) => {
+      const d = new Date(trx.date);
+      if (startDate && d < startDate) return false;
+      if (endDate) {
+        const eod = new Date(endDate);
+        eod.setHours(23, 59, 59, 999);
+        if (d > eod) return false;
+      }
+      if (paymentMethod !== "ALL" && trx.paymentMethod !== (paymentMethod as string)) return false;
+      if (search && !trx.invoiceNumber.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      return { transactions: serverTrx, totalCount: serverCount, totalPages: serverPages };
+    }
+
+    // Convert pending to match Transaction shape (for table rendering).
+    // SuperJSON deserializes Prisma Decimal → number on the client,
+    // so using plain numbers here matches the deserialized shape.
+    const pendingRows = filtered.map((trx) => ({
+      id: `pending-${trx.invoiceNumber}`,
+      invoiceNumber: trx.invoiceNumber,
+      date: new Date(trx.date),
+      totalAmount: trx.totalAmount,
+      paymentMethod: trx.paymentMethod as unknown as ServerPaymentMethod,
+      paidAmount: trx.paidAmount,
+      change: trx.change,
+      isSynced: false,
+      deletedAt: null,
+      items: trx.items.map((item) => ({
+        id: `pending-item-${trx.invoiceNumber}-${item.productId}`,
+        transactionId: `pending-${trx.invoiceNumber}`,
+        productId: item.productId,
+        productName: item.productName,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        subTotal: item.subTotal,
+        note: item.note ?? null,
+      })),
+    }));
+
+    const mergedCount = serverCount + filtered.length;
+    const mergedPages = Math.ceil(mergedCount / limit);
+
+    // Only prepend pending rows on page 1
+    const mergedTrx = page === 1
+      ? [...pendingRows, ...serverTrx]
+      : serverTrx;
+
+    return {
+      transactions: mergedTrx as typeof serverTrx,
+      totalCount: mergedCount,
+      totalPages: mergedPages,
+    };
+  }, [data, pending, startDate, endDate, paymentMethod, search, page, limit]);
 
   // Clamp page when totalPages shrinks
   useEffect(() => {

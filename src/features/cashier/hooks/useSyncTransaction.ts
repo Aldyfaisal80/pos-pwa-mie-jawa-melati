@@ -55,7 +55,13 @@ export const useSyncTransaction = () => {
 
     if (typeof window !== "undefined" && navigator.onLine) {
       // Simpan dulu ke IndexedDB, hapus setelah server konfirmasi
-      void addPendingTransaction(payload);
+      void addPendingTransaction(payload)
+        .then(() => {
+          window.dispatchEvent(new CustomEvent("pos-pending-changed"));
+        })
+        .catch(() => {
+          toast.error("Gagal menyimpan transaksi lokal");
+        });
 
       syncMutation.mutate(
         [
@@ -69,7 +75,13 @@ export const useSyncTransaction = () => {
         {
           onSuccess: () => {
             // Hapus dari antrian setelah berhasil tersimpan di server
-            void removePendingTransaction(invoiceNumber);
+            void removePendingTransaction(invoiceNumber)
+              .then(() => {
+                window.dispatchEvent(new CustomEvent("pos-pending-changed"));
+              })
+              .catch(() => {
+                // Non-critical: data already on server
+              });
             void utils.transaction.invalidate();
             postMessage({ type: "TRANSACTION_CREATED" });
             onSuccess(invoiceNumber, false); // online = wasOffline: false
@@ -82,10 +94,15 @@ export const useSyncTransaction = () => {
         },
       );
     } else {
-      void addPendingTransaction(payload).then(() => {
-        postMessage({ type: "TRANSACTION_CREATED" });
-        onSuccess(invoiceNumber, true); // offline = wasOffline: true
-      });
+      void addPendingTransaction(payload)
+        .then(() => {
+          window.dispatchEvent(new CustomEvent("pos-pending-changed"));
+          postMessage({ type: "TRANSACTION_CREATED" });
+          onSuccess(invoiceNumber, true);
+        })
+        .catch(() => {
+          toast.error("Gagal menyimpan transaksi offline");
+        });
     }
   };
 
