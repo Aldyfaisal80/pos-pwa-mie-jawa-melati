@@ -50,9 +50,12 @@ yarn-error.log*
 
 # agent files
 .agent
+.agents
 .claude
+.gemini
 .mcp.json
 .kiro
+.vscode
 
 # local planning files (keep docs/ tracked)
 /docs/PLAN-*.md
@@ -103,6 +106,13 @@ pdf_text.txt
 /public/wireframe/
 /scratch/
 /backup/reports/
+
+# DB injection tools — NEVER push to main
+/public/pesanan-manual*
+/public/css/pm-style.css
+/public/js/pm-*.js
+/scripts/parse-backup.cjs
+/scripts/restore-backup.cjs
 # Dokumen skripsi (docx & bab)
 /docs/*.docx
 /docs/BAB*.md
