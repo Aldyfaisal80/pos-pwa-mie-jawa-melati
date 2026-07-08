@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict pHJX2gJz8hLHVr2UhwsX0nwmIDNYTuakQ8k2MBfGOf1Hzi0CNhX8JYmZaZPaPlT
+\restrict nz1kZ2S05BfsZPyyW4oT86P9nDztD4aSVdubkUUeNPX51aQhtsbWeEXLKlBMyZu
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.10 (Ubuntu 17.10-1.pgdg24.04+1)
@@ -24,9 +24,9 @@ SET row_security = off;
 --
 
 COPY "public"."Category" ("id", "name", "createdAt", "updatedAt") FROM stdin;
-1	Makanan	2026-04-20 09:49:42.428	2026-04-20 09:49:42.428
 2	Minuman	2026-04-20 09:49:42.428	2026-04-20 09:49:42.428
 3	Tambahan	2026-04-20 09:49:42.428	2026-04-20 09:49:42.428
+1	Makanan	2026-04-20 09:49:42.428	2026-07-08 05:44:27.017
 \.
 
 
@@ -35,23 +35,23 @@ COPY "public"."Category" ("id", "name", "createdAt", "updatedAt") FROM stdin;
 --
 
 COPY "public"."Product" ("id", "name", "description", "price", "image", "isAvailable", "categoryId", "createdAt", "updatedAt") FROM stdin;
-d952ef9d-c5a4-4c5b-af88-0264be713100	Nasi Goreng	\N	12000.00	\N	t	1	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-e5ee3b78-1bdb-4eb9-ac68-40c181ad80ad	Nasi Mawut	\N	12000.00	\N	t	1	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-6641fb46-c43c-43e2-be2b-49e96f15963b	Nasi Mie Godog	\N	12000.00	\N	t	1	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-b4ecf77f-2700-4251-aaab-b2e5b6d43a43	Sop Sayur	\N	12000.00	\N	t	1	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-65f3a54f-f6e6-4a68-8944-f8ae17679609	Mie Goreng	\N	12000.00	\N	t	1	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-7b665859-3e5f-4c15-9577-088e8da75977	Mie Kuah	\N	12000.00	\N	t	1	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-37d09618-d64e-4f43-9cdd-831d73d37df0	Mie Nyemek	\N	12000.00	\N	t	1	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-0defbad8-d841-4e95-a811-9355271951a0	Es Jeruk	\N	4000.00	\N	t	2	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-7097335c-d2eb-4cc8-8a47-a1ec0f6b6bd6	Es Teh	\N	4000.00	\N	t	2	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-df44f68f-eecc-4bb7-bc64-a268606541bf	Teh Hangat	\N	4000.00	\N	t	2	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-ab451486-becf-49bf-bcba-7152c369caf0	Es Strup	\N	4000.00	\N	t	2	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-e44f6ade-11e0-4d38-b987-615c53ae4400	Strup Hangat	\N	4000.00	\N	t	2	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-2201befb-d03b-432b-8faf-83f442b7d3b2	Jeruk Hangat	\N	4000.00	\N	t	2	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-3e867b42-3522-4bf5-b296-3d7b80517d3b	Telur	Tambahan Telur	3000.00	\N	t	3	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-ae35a958-9393-4359-a40c-0bc869b26331	Krupuk	Tambahan Krupuk	1000.00	\N	t	3	2026-04-20 09:49:54.321	2026-04-20 09:49:54.321
-ac33d84e-d717-4aac-87aa-a42b2f13b765	Aqua		1000.00		t	2	2026-04-20 12:48:43.06	2026-05-12 06:01:28.674
-f4903034-edd5-489b-baf9-6b36c32dd961	Nasi goreng	Putih	12000.00		t	1	2026-05-15 13:59:01.583	2026-05-15 13:59:01.583
+65f3a54f-f6e6-4a68-8944-f8ae17679609	Mie Goreng		12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488624912-wbi7ga0vzha.jpeg	t	1	2026-04-20 09:49:54.321	2026-07-08 05:30:24.583
+7b665859-3e5f-4c15-9577-088e8da75977	Mie Kuah		12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488658492-t2nxkkwkm1.webp	t	1	2026-04-20 09:49:54.321	2026-07-08 05:30:57.974
+37d09618-d64e-4f43-9cdd-831d73d37df0	Mie Nyemek		12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488691889-z6zd8uvqu8h.jpg	t	1	2026-04-20 09:49:54.321	2026-07-08 05:31:31.526
+f4903034-edd5-489b-baf9-6b36c32dd961	Nasi goreng	Putih	12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488799873-y9yk613je3g.avif	f	1	2026-05-15 13:59:01.583	2026-07-08 05:33:35.559
+ac33d84e-d717-4aac-87aa-a42b2f13b765	Aqua		1000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783487804941-rb6ajcc0d09.webp	t	2	2026-04-20 12:48:43.06	2026-07-08 05:16:45.087
+0defbad8-d841-4e95-a811-9355271951a0	Es Jeruk		4000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783487869591-1z7t7ekn4wr.jpg	t	2	2026-04-20 09:49:54.321	2026-07-08 05:17:49.037
+d952ef9d-c5a4-4c5b-af88-0264be713100	Nasi Goreng		12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488882313-olz5n29htmc.avif	t	1	2026-04-20 09:49:54.321	2026-07-08 05:34:45.502
+ab451486-becf-49bf-bcba-7152c369caf0	Es Sirup		4000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488035548-joe791tr9bl.jpg	t	2	2026-04-20 09:49:54.321	2026-07-08 05:20:35.253
+e5ee3b78-1bdb-4eb9-ac68-40c181ad80ad	Nasi Mawut		12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488984330-t2k0plq2p6.jpeg	t	1	2026-04-20 09:49:54.321	2026-07-08 05:36:25.343
+6641fb46-c43c-43e2-be2b-49e96f15963b	Nasi Mie Godog		12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783489087135-tccd9jeeab.webp	t	1	2026-04-20 09:49:54.321	2026-07-08 05:38:10.477
+7097335c-d2eb-4cc8-8a47-a1ec0f6b6bd6	Es Teh		4000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488217150-23lnhc4qvrf.jpg	t	2	2026-04-20 09:49:54.321	2026-07-08 05:23:37.908
+2201befb-d03b-432b-8faf-83f442b7d3b2	Jeruk Hangat		4000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488296356-bscgdsm8y58.jpg	t	2	2026-04-20 09:49:54.321	2026-07-08 05:24:57.14
+ae35a958-9393-4359-a40c-0bc869b26331	Krupuk	Tambahan Krupuk	1000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783488408231-owshpdax0i9.jpg	t	3	2026-04-20 09:49:54.321	2026-07-08 05:26:48.158
+b4ecf77f-2700-4251-aaab-b2e5b6d43a43	Sop Sayur		12000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783489121103-6t7t6mc0oei.jpeg	t	1	2026-04-20 09:49:54.321	2026-07-08 05:38:43.868
+e44f6ade-11e0-4d38-b987-615c53ae4400	Sirup Hangat		4000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783489300194-uhgyxhu4gw.webp	t	2	2026-04-20 09:49:54.321	2026-07-08 05:41:43.824
+3e867b42-3522-4bf5-b296-3d7b80517d3b	Telur	Tambahan Telur	3000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783489365394-yrchw1ukh6h.jpg	t	3	2026-04-20 09:49:54.321	2026-07-08 05:42:49.861
+df44f68f-eecc-4bb7-bc64-a268606541bf	Teh Hangat		4000.00	https://hrzvdledrengvxuzmsbk.supabase.co/storage/v1/object/public/pos-assets/uploads/1783489413780-5y1v3dk2fzj.jpg	t	2	2026-04-20 09:49:54.321	2026-07-08 05:43:36.52
 \.
 
 
@@ -590,6 +590,9 @@ e4c836f1-c232-4c44-b690-4c0358b450dc	INV-20260701-5363	2026-07-01 13:09:35.468	1
 340b0574-cc7d-4c8d-86aa-a97c858b9003	INV-20260707-1286	2026-07-07 12:04:39.849	39000.00	CASH	50000.00	11000.00	t	2026-07-07 12:04:42.178	2026-07-07 12:04:42.178	\N
 caa2cfad-98a7-4b59-8d6e-1b7705b96acf	INV-20260707-4201	2026-07-07 12:05:31.84	36000.00	CASH	50000.00	14000.00	t	2026-07-07 12:05:34.16	2026-07-07 12:05:34.16	\N
 3124ee2f-ce93-470a-9e37-ebb64661beca	INV-20260707-9594	2026-07-07 12:06:06.025	24000.00	QRIS	24000.00	0.00	t	2026-07-07 12:06:08.086	2026-07-07 12:06:08.086	\N
+28a4d478-2bcc-4cd8-90b5-c48c7b983134	INV-20260708-7686	2026-07-08 10:57:22.088	60000.00	CASH	60000.00	0.00	t	2026-07-08 10:57:24.513	2026-07-08 10:57:24.513	\N
+cc754561-3f1e-4098-8c8b-885015dcdda8	INV-20260708-1213	2026-07-08 11:01:47.93	12000.00	CASH	12000.00	0.00	t	2026-07-08 11:01:50.443	2026-07-08 11:01:50.443	\N
+0a77eb82-6267-4caa-b964-76bdbb569b45	INV-20260708-7628	2026-07-08 12:27:21.406	64000.00	CASH	64000.00	0.00	t	2026-07-08 12:27:24.087	2026-07-08 12:27:24.087	\N
 \.
 
 
@@ -1277,6 +1280,7 @@ e7357dfb-766a-4236-aae1-3d7315e95638	340b0574-cc7d-4c8d-86aa-a97c858b9003	3e867b
 14546df0-1168-4e39-b800-5110bfa69cb4	caa2cfad-98a7-4b59-8d6e-1b7705b96acf	65f3a54f-f6e6-4a68-8944-f8ae17679609	Mie Goreng	1	12000.00	12000.00	\N
 c6baa8db-05cb-4389-86aa-7b531c27431c	caa2cfad-98a7-4b59-8d6e-1b7705b96acf	f4903034-edd5-489b-baf9-6b36c32dd961	Nasi goreng	2	12000.00	24000.00	\N
 9422a665-ade4-4617-8fa7-28212553e943	3124ee2f-ce93-470a-9e37-ebb64661beca	e5ee3b78-1bdb-4eb9-ac68-40c181ad80ad	Nasi Mawut	2	12000.00	24000.00	\N
+cf360b10-6d64-4168-ac17-16f2ca5df46e	cc754561-3f1e-4098-8c8b-885015dcdda8	37d09618-d64e-4f43-9cdd-831d73d37df0	Mie Nyemek	1	12000.00	12000.00	Pedas, Bungkus
 bf59e386-5938-48a5-96d2-c411ce26699e	ba41c26c-a803-4914-be03-143ac34daa60	b4ecf77f-2700-4251-aaab-b2e5b6d43a43	Sop Sayur	2	12000.00	24000.00	Pedas, Kuah Banyak
 4d0316ba-9544-42be-89dd-88dbdecff2f0	ba41c26c-a803-4914-be03-143ac34daa60	ab451486-becf-49bf-bcba-7152c369caf0	Es Strup	2	4000.00	8000.00	\N
 47ebfd15-efc3-4b84-9ed1-828ca66076e0	ba41c26c-a803-4914-be03-143ac34daa60	3e867b42-3522-4bf5-b296-3d7b80517d3b	Telur	2	3000.00	6000.00	\N
@@ -1876,6 +1880,10 @@ bfac44ed-a017-42b1-9920-ff642b2ad34a	e4e73eec-e05f-4e7c-a14b-bf83282d7e2d	37d096
 808d01be-7107-469e-9bd3-2a7a9f19c0b7	5b0182ec-8400-43dd-82b2-3a67535361cb	65f3a54f-f6e6-4a68-8944-f8ae17679609	Mie Goreng	1	12000.00	12000.00	Sedang, Bungkus
 b1fd6488-30cb-4ed6-8793-93210b5f419c	5b0182ec-8400-43dd-82b2-3a67535361cb	37d09618-d64e-4f43-9cdd-831d73d37df0	Mie Nyemek	1	12000.00	12000.00	Sedang, Bungkus
 a7e52429-d431-4254-88a4-48dbf186c869	5b0182ec-8400-43dd-82b2-3a67535361cb	f4903034-edd5-489b-baf9-6b36c32dd961	Nasi goreng	4	12000.00	48000.00	Sedang, Bungkus
+d465188c-edd5-4f33-beae-4c8c81f3be95	28a4d478-2bcc-4cd8-90b5-c48c7b983134	f4903034-edd5-489b-baf9-6b36c32dd961	Nasi goreng	4	12000.00	48000.00	Pedas, Bungkus
+e3ce176c-03a2-4308-a80e-bac49fe50f6b	28a4d478-2bcc-4cd8-90b5-c48c7b983134	65f3a54f-f6e6-4a68-8944-f8ae17679609	Mie Goreng	1	12000.00	12000.00	Pedas, Bungkus
+ed2cfab0-e3d4-4466-9391-df9eac931734	0a77eb82-6267-4caa-b964-76bdbb569b45	d952ef9d-c5a4-4c5b-af88-0264be713100	Nasi Goreng	4	12000.00	48000.00	\N
+57f2ca94-78bc-433d-b664-ec45d5eef146	0a77eb82-6267-4caa-b964-76bdbb569b45	7097335c-d2eb-4cc8-8a47-a1ec0f6b6bd6	Es Teh	4	4000.00	16000.00	\N
 \.
 
 
@@ -1890,5 +1898,5 @@ SELECT pg_catalog.setval('"public"."Category_id_seq"', 3, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict pHJX2gJz8hLHVr2UhwsX0nwmIDNYTuakQ8k2MBfGOf1Hzi0CNhX8JYmZaZPaPlT
+\unrestrict nz1kZ2S05BfsZPyyW4oT86P9nDztD4aSVdubkUUeNPX51aQhtsbWeEXLKlBMyZu
 
