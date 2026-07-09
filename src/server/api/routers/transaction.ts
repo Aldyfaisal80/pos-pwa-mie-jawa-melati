@@ -9,7 +9,6 @@ import {
   ReportSortBy,
 } from "@/server/validations";
 import { errorFilter } from "@/server/filters/error.filter";
-import { ErrorTRPCService } from "@/server/services/error.service";
 import { toWIBStartOfDay, toWIBEndOfDay, todayWIBStart } from "@/lib/timezone";
 
 const buildReportWhereClause = (input: {
@@ -142,8 +141,9 @@ export const transactionRouter = createTRPCRouter({
           select: { deletedAt: true },
         });
 
-        if (!trx) ErrorTRPCService.throw("NOT_FOUND");
-        if (trx.deletedAt) ErrorTRPCService.throw("CONFLICT", "sudah dihapus");
+        // Idempotent: if already deleted or not found, treat as success
+        if (!trx) return { id: input.id, deletedAt: new Date() };
+        if (trx.deletedAt) return { id: input.id, deletedAt: trx.deletedAt };
 
         return await ctx.db.transaction.update({
           where: { id: input.id },
