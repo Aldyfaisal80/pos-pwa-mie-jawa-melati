@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "build": "next build --webpack",
-    "build:test": "dotenv -e .env.test -- next build --webpack",
     "check": "next lint && tsc --noEmit",
     "clean:cache": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && echo '.next cache cleared'",
     "db:generate": "prisma migrate dev",
@@ -29,7 +28,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "npm run build && next start",
-    "preview:test": "npm run build:test && dotenv -e .env.test -- next start",
+    "preview:test": "dotenv -e .env.test -- npm run build && dotenv -e .env.test -- next start",
     "safe-audit": "npm audit",
     "safe-audit:fix": "npm run clean:cache && npm audit fix && npm run dev",
     "start": "next start",
