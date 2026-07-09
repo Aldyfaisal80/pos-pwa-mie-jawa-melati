@@ -8,6 +8,7 @@ export const useTransactionMutations = () => {
 
   // Invalidasi cache agar tabel/grafik refresh
   const invalidateQueries = () => {
+    console.log("[TX-DELETE] Invalidating: getTransactionReport, getReportStats, getDashboardStats, getRevenueChart");
     void utils.transaction.getTransactionReport.invalidate();
     void utils.transaction.getReportStats.invalidate();
     void utils.transaction.getDashboardStats.invalidate();
@@ -19,12 +20,15 @@ export const useTransactionMutations = () => {
 
   const deleteTransaction = api.transaction.deleteTransaction.useMutation({
     onSuccess: () => {
+      console.log("[TX-DELETE] ✅ Delete SUCCESS — invalidating queries...");
       toast.success("Transaksi dihapus", {
         description: "Data transaksi berhasil dihapus secara permanen.",
       });
       invalidateQueries();
+      console.log("[TX-DELETE] invalidateQueries() called, broadcasting TRANSACTION_CREATED");
     },
     onError: (error) => {
+      console.error("[TX-DELETE] ❌ Delete FAILED", error);
       toast.error("Gagal menghapus", {
         description: error.message,
       });
