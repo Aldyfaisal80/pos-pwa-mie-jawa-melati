@@ -16,8 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { formatRupiah } from "@/lib/format";
-import { useOfflineAwareDashboardStats } from "@/features/dashboard/hooks/useOfflineAwareDashboardStats";
-import { SyncStatusBadge, type SyncState } from "./SyncStatusBadge";
+import { api } from "@/trpc/react";
 
 interface StatusPopoverProps {
   isOnline: boolean;
@@ -32,7 +31,7 @@ export const StatusPopover = ({
   isSyncing,
   onSync,
 }: StatusPopoverProps) => {
-  const { data: stats } = useOfflineAwareDashboardStats();
+  const { data: stats } = api.transaction.getDashboardStats.useQuery();
   const transactionCount = stats?.totalTransactions ?? 0;
   const totalOmzet = stats?.totalOmzet ?? 0;
   return (
@@ -42,7 +41,8 @@ export const StatusPopover = ({
           <Bell className="h-5 w-5" />
           {(pendingUpload > 0 || !isOnline) && (
             <Badge
-              className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center border-2 border-white p-0 text-[10px] shadow-sm dark:border-gray-950 bg-amber-100 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/40 dark:text-amber-300 motion-reduce:transition-none"
+              variant="destructive"
+              className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center border-2 border-white p-0 text-[10px] shadow-sm dark:border-gray-950"
             >
               {pendingUpload > 0 ? pendingUpload : "!"}
             </Badge>
@@ -55,12 +55,16 @@ export const StatusPopover = ({
       >
         <div className="bg-muted flex items-center justify-between rounded-t-md border-b px-4 py-3">
           <h3 className="text-sm font-semibold">Pusat Status</h3>
-          <SyncStatusBadge
-            state={(isOnline
-              ? pendingUpload > 0 ? "pending" : "synced"
-              : "offline") as SyncState}
-            pendingCount={pendingUpload}
-          />
+          <Badge
+            variant={isOnline ? "default" : "secondary"}
+            className={`text-[10px] tracking-wider uppercase ${
+              isOnline
+                ? "bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400"
+            }`}
+          >
+            {isOnline ? "ONLINE" : "OFFLINE"}
+          </Badge>
         </div>
 
         <div className="space-y-3 p-3">
@@ -136,7 +140,7 @@ export const StatusPopover = ({
           <div className="bg-muted rounded-b-md border-t p-3">
             <Button
               variant="outline"
-              className="w-full text-xs font-semibold transition-all duration-200 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100"
+              className="w-full text-xs font-semibold"
               onClick={onSync}
               disabled={!isOnline || isSyncing}
             >

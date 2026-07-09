@@ -36,122 +36,141 @@ async function main() {
     data: { name: "Tambahan" },
   });
 
-  console.log("Membuat Produk Realistis...");
+  console.log("Membuat Produk (sesuai DB dev)...");
   const products = await Promise.all([
     // Makanan
     prisma.product.create({
       data: {
-        name: "Sego Mie Godog",
-        description: "Mie godog dicampur nasi (magelangan) khas Jawa",
-        price: 15000,
-        categoryId: catMakanan.id,
-      },
-    }),
-    prisma.product.create({
-      data: {
-        name: "Mie Godog",
-        description: "Mie rebus khas Jawa dengan kuah kental",
-        price: 13000,
-        categoryId: catMakanan.id,
-      },
-    }),
-    prisma.product.create({
-      data: {
         name: "Mie Goreng",
-        description: "Mie goreng manis gurih",
-        price: 13000,
+        price: 12000,
         categoryId: catMakanan.id,
+        image: "/images/products/mie-goreng.jpg",
       },
     }),
     prisma.product.create({
       data: {
-        name: "Nasi Goreng Mawut",
-        description: "Nasi goreng campur mie",
-        price: 14000,
+        name: "Mie Kuah",
+        price: 12000,
         categoryId: catMakanan.id,
+        image: "/images/products/mie-kuah.jpg",
       },
     }),
     prisma.product.create({
       data: {
-        name: "Sop Tunjang",
-        description: "Sop balungan/tunjang sapi",
-        price: 20000,
+        name: "Mie Nyemek",
+        price: 12000,
         categoryId: catMakanan.id,
+        image: "/images/products/mie-nyemek.jpg",
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: "Nasi Goreng",
+        price: 12000,
+        categoryId: catMakanan.id,
+        image: "/images/products/nasi-goreng.jpg",
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: "Nasi Mawut",
+        price: 12000,
+        categoryId: catMakanan.id,
+        image: "/images/products/nasi-mawut.jpg",
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: "Nasi Mie Godog",
+        price: 12000,
+        categoryId: catMakanan.id,
+        image: "/images/products/nasi-mie-godog.jpg",
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: "Sop Sayur",
+        price: 12000,
+        categoryId: catMakanan.id,
+        image: "/images/products/sop-sayur.jpg",
       },
     }),
 
     // Minuman
     prisma.product.create({
       data: {
-        name: "Es Teh Manis / Panas",
-        price: 3000,
+        name: "Aqua",
+        price: 1000,
         categoryId: catMinuman.id,
+        image: "/images/products/aqua.jpg",
       },
     }),
     prisma.product.create({
       data: {
-        name: "Es Jeruk / Panas",
+        name: "Es Jeruk",
         price: 4000,
         categoryId: catMinuman.id,
+        image: "/images/products/es-jeruk.jpg",
       },
     }),
     prisma.product.create({
       data: {
-        name: "Es Kampul",
-        description: "Teh kampul khas Solo",
-        price: 5000,
-        categoryId: catMinuman.id,
-      },
-    }),
-    prisma.product.create({
-      data: {
-        name: "Kopi Hitam",
+        name: "Es Strup",
         price: 4000,
         categoryId: catMinuman.id,
+        image: "/images/products/es-strup.jpg",
       },
     }),
     prisma.product.create({
       data: {
-        name: "Kopi Susu",
-        price: 5000,
+        name: "Es Teh",
+        price: 4000,
         categoryId: catMinuman.id,
+        image: "/images/products/es-teh.jpg",
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: "Jeruk Hangat",
+        price: 4000,
+        categoryId: catMinuman.id,
+        image: "/images/products/jeruk-hangat.jpg",
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: "Strup Hangat",
+        price: 4000,
+        categoryId: catMinuman.id,
+        image: "/images/products/strup-hangat.jpg",
+      },
+    }),
+    prisma.product.create({
+      data: {
+        name: "Teh Hangat",
+        price: 4000,
+        categoryId: catMinuman.id,
+        image: "/images/products/teh-hangat.jpg",
       },
     }),
 
     // Tambahan
     prisma.product.create({
       data: {
-        name: "Krupuk Uyel",
+        name: "Krupuk",
+        description: "Tambahan Krupuk",
         price: 1000,
         categoryId: catTambahan.id,
+        image: "/images/products/krupuk.jpg",
       },
     }),
     prisma.product.create({
       data: {
-        name: "Sate Usus",
-        price: 2500,
-        categoryId: catTambahan.id,
-      },
-    }),
-    prisma.product.create({
-      data: {
-        name: "Sate Telur Puyuh",
+        name: "Telur",
+        description: "Tambahan Telur",
         price: 3000,
         categoryId: catTambahan.id,
-      },
-    }),
-    prisma.product.create({
-      data: {
-        name: "Sate Hati Ampela",
-        price: 3500,
-        categoryId: catTambahan.id,
-      },
-    }),
-    prisma.product.create({
-      data: {
-        name: "Gorengan",
-        price: 1000,
-        categoryId: catTambahan.id,
+        image: "/images/products/telur.jpg",
       },
     }),
   ]);

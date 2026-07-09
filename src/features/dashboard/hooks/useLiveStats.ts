@@ -8,7 +8,10 @@ export const useLiveStats = () => {
 
   // 1. LOCAL PWA: Listen for CRUD events on the same device / other tabs
   useBroadcastChannel("pos-sync-channel", (message) => {
-    if (message.type === "TRANSACTION_CREATED") {
+    if (
+      message.type === "TRANSACTION_CREATED" ||
+      message.type === "TRANSACTION_SYNCED"
+    ) {
       void utils.transaction.getDashboardStats.invalidate();
       void utils.transaction.getTransactionReport.invalidate();
       void utils.transaction.getReportStats.invalidate();
