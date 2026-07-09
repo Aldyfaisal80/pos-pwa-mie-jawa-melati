@@ -57,7 +57,9 @@ const getQueryClient = () => {
         try {
           const state = clientQueryClientSingleton!.getQueryCache().getAll();
           const persistable = state
-            .filter((q) => q.state.status === "success")
+            .filter(
+              (q) => q.state.status === "success" && !q.state.isInvalidated,
+            )
             .map((q) => ({
               queryKey: q.queryKey,
               data: SuperJSON.stringify(q.state.data),
@@ -70,7 +72,9 @@ const getQueryClient = () => {
             const state = clientQueryClientSingleton!
               .getQueryCache()
               .getAll()
-              .filter((q) => q.state.status === "success")
+              .filter(
+                (q) => q.state.status === "success" && !q.state.isInvalidated,
+              )
               .slice(-3);
             const minimal = state.map((q) => ({
               queryKey: q.queryKey,

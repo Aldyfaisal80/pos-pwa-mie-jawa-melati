@@ -16,6 +16,6 @@ export const useReportStats = ({
 
   return api.transaction.getReportStats.useQuery(
     { startDate, endDate, paymentMethod: resolvedMethod },
-    { staleTime: 0 },
+    { staleTime: 0, refetchOnMount: "always" },
   );
 };
