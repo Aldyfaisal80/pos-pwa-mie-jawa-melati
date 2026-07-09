@@ -11,7 +11,7 @@ const createPrismaClient = () => {
   // DIRECT_URL (port 5432) is ONLY for prisma migrate.
   const pool = new Pool({
     connectionString: String(env.DATABASE_URL),
-    max: 3, // Low limit — PgBouncer handles actual DB connections
+    max: 5, // Handle 5 parallel query refetches after invalidate
     idleTimeoutMillis: 20000,
     connectionTimeoutMillis: 10000,
   });

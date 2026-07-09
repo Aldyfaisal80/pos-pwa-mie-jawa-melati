@@ -6,7 +6,6 @@ export const useTransactionMutations = () => {
   const utils = api.useUtils();
   const { postMessage } = useBroadcastChannel("pos-sync-channel");
 
-  // Invalidasi cache agar tabel/grafik refresh
   const invalidateQueries = () => {
     void utils.transaction.getTransactionReport.invalidate();
     void utils.transaction.getReportStats.invalidate();
@@ -14,9 +13,7 @@ export const useTransactionMutations = () => {
     void utils.transaction.getRevenueChart.invalidate();
     void utils.transaction.getReportChart.invalidate();
 
-    // Beritahu PWA tab lain (seperti Dashboard) agar instan terupdate
     postMessage({ type: "TRANSACTION_CREATED", payload: null });
-    // Same-tab notification (BroadcastChannel doesn't deliver to sender)
     window.dispatchEvent(
       new CustomEvent("pos-sync-channel", {
         detail: { type: "TRANSACTION_CREATED" },
@@ -25,13 +22,38 @@ export const useTransactionMutations = () => {
   };
 
   const deleteTransaction = api.transaction.deleteTransaction.useMutation({
+    // Optimistic update: update dashboard stats cache BEFORE server confirms
+    onMutate: async () => {
+      await utils.transaction.getDashboardStats.cancel();
+
+      const prevDashboard = utils.transaction.getDashboardStats.getData();
+
+      if (prevDashboard) {
+        utils.transaction.getDashboardStats.setData(undefined, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            totalTransactions: Math.max(0, old.totalTransactions - 1),
+          };
+        });
+      }
+
+      return { prevDashboard };
+    },
     onSuccess: () => {
       toast.success("Transaksi dihapus", {
         description: "Data transaksi berhasil dihapus secara permanen.",
       });
       invalidateQueries();
     },
-    onError: (error) => {
+    onError: (error, _vars, ctx) => {
+      // Rollback dashboard stats
+      if (ctx?.prevDashboard) {
+        utils.transaction.getDashboardStats.setData(
+          undefined,
+          ctx.prevDashboard,
+        );
+      }
       toast.error("Gagal menghapus", {
         description: error.message,
       });

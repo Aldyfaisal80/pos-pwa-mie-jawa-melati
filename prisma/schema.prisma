@@ -68,6 +68,7 @@ model Transaction {
     @@index([date])
     @@index([isSynced])
     @@index([deletedAt])
+    @@index([isSynced, deletedAt, date])
 }
 
 
