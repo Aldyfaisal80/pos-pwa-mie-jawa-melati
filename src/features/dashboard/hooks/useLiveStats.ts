@@ -15,6 +15,7 @@ export const useLiveStats = () => {
       void utils.transaction.getDashboardStats.invalidate();
       void utils.transaction.getTransactionReport.invalidate();
       void utils.transaction.getReportStats.invalidate();
+      void utils.transaction.getReportChart.invalidate();
       void utils.transaction.getRevenueChart.invalidate();
     }
     if (message.type === "PRODUCT_UPDATED") {
@@ -31,6 +32,7 @@ export const useLiveStats = () => {
       void utils.transaction.getDashboardStats.invalidate();
       void utils.transaction.getTransactionReport.invalidate();
       void utils.transaction.getReportStats.invalidate();
+      void utils.transaction.getReportChart.invalidate();
       void utils.transaction.getRevenueChart.invalidate();
     };
 

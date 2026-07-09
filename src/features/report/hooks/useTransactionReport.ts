@@ -28,6 +28,7 @@ export const useTransactionReport = (
     },
     {
       placeholderData: (previousData) => previousData,
+      staleTime: 0,
     },
   );
 };

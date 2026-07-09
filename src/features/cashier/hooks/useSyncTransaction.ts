@@ -63,7 +63,6 @@ export const useSyncTransaction = () => {
           toast.error("Gagal menyimpan transaksi lokal");
         });
 
-      console.log("[TX] Attempting sync to server...", { invoiceNumber, totalAmount: cartTotal });
       syncMutation.mutate(
         [
           {
@@ -75,7 +74,6 @@ export const useSyncTransaction = () => {
         ],
         {
           onSuccess: () => {
-            console.log("[TX] ✅ Server sync SUCCESS — invalidating queries...");
             // Hapus dari antrian setelah berhasil tersimpan di server
             void removePendingTransaction(invoiceNumber)
               .then(() => {
@@ -84,15 +82,24 @@ export const useSyncTransaction = () => {
               .catch(() => {
                 // Non-critical: data already on server
               });
-            void utils.transaction.invalidate();
-            console.log("[TX] invalidate() called, broadcasting TRANSACTION_CREATED");
+            void utils.transaction.getDashboardStats.invalidate();
+            void utils.transaction.getTransactionReport.invalidate();
+            void utils.transaction.getReportStats.invalidate();
+            void utils.transaction.getReportChart.invalidate();
+            void utils.transaction.getRevenueChart.invalidate();
             postMessage({ type: "TRANSACTION_CREATED" });
+            window.dispatchEvent(new CustomEvent("pos-sync-channel", { detail: { type: "TRANSACTION_CREATED" } }));
             onSuccess(invoiceNumber, false); // online = wasOffline: false
           },
-          onError: (error) => {
+          onError: (_error) => {
             // Tetap tampilkan struk; data tersimpan di IndexedDB untuk di-sync nanti
-            console.error("[TX] ❌ Server sync FAILED — cache NOT invalidated", error);
+            void utils.transaction.getDashboardStats.invalidate();
+            void utils.transaction.getTransactionReport.invalidate();
+            void utils.transaction.getReportStats.invalidate();
+            void utils.transaction.getReportChart.invalidate();
+            void utils.transaction.getRevenueChart.invalidate();
             postMessage({ type: "TRANSACTION_CREATED" });
+            window.dispatchEvent(new CustomEvent("pos-sync-channel", { detail: { type: "TRANSACTION_CREATED" } }));
             onSuccess(invoiceNumber, true); // server error = wasOffline: true
           },
         },
@@ -101,8 +108,8 @@ export const useSyncTransaction = () => {
       void addPendingTransaction(payload)
         .then(() => {
           window.dispatchEvent(new CustomEvent("pos-pending-changed"));
-          console.log("[TX] 📡 Offline mode — saved to IndexedDB, broadcasting");
           postMessage({ type: "TRANSACTION_CREATED" });
+          window.dispatchEvent(new CustomEvent("pos-sync-channel", { detail: { type: "TRANSACTION_CREATED" } }));
           onSuccess(invoiceNumber, true);
         })
         .catch(() => {

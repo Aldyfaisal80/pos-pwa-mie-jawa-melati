@@ -16,6 +16,6 @@ export const useReportChart = ({
 
   return api.transaction.getReportChart.useQuery(
     { startDate, endDate, paymentMethod: resolvedMethod },
-    { staleTime: 30_000 },
+    { staleTime: 0 },
   );
 };

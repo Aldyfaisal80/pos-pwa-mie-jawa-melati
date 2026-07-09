@@ -34,8 +34,17 @@ export const useBroadcastChannel = (
       onMessageRef.current?.(event.data as BroadcastMessage);
     };
 
+    // Also listen for same-tab CustomEvents (BroadcastChannel doesn't deliver to sender)
+    const handleWindowEvent = (event: Event) => {
+      if (event instanceof CustomEvent && event.detail) {
+        onMessageRef.current?.(event.detail as BroadcastMessage);
+      }
+    };
+    window.addEventListener(channelName, handleWindowEvent);
+
     return () => {
       bc.close();
+      window.removeEventListener(channelName, handleWindowEvent);
       channelRef.current = null;
     };
   }, [channelName]); // ← only channelName, NOT onMessage

@@ -116,6 +116,9 @@ export const useOfflineSync = () => {
 
     if (successCount > 0) {
       postMessage({ type: "TRANSACTION_SYNCED" });
+      // BroadcastChannel doesn't deliver to the sending tab itself.
+      // Dispatch a CustomEvent so useLiveStats in THIS tab can invalidate cache.
+      window.dispatchEvent(new CustomEvent("pos-sync-channel", { detail: { type: "TRANSACTION_SYNCED" } }));
       toast.success(`Sinkronisasi Berhasil`, {
         description: `${successCount} transaksi offline berhasil diunggah ke server.`,
       });
