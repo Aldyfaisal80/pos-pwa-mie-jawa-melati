@@ -10,9 +10,14 @@ import {
 import { type PaymentMethod as ServerPaymentMethod } from "@/server/validations/transaction.validation";
 import { useBroadcastChannel } from "./useBroadcastChannel";
 import { vanillaTrpcClient } from "@/trpc/vanilla-client";
+import { generateInvoiceNumber } from "@/features/cashier/utils/generateInvoice";
 
-// Error codes that are never recoverable — server returns these via errorCode field
-const UNRECOVERABLE_SERVER_CODES = new Set(["DUPLICATE", "FK_VIOLATION"]);
+// FK_VIOLATION is never recoverable — server returns this via errorCode field
+// DUPLICATE is handled separately with retry + invoice regeneration
+const UNRECOVERABLE_SERVER_CODES = new Set(["FK_VIOLATION"]);
+
+// Max retry attempts for duplicate invoice before purging
+const MAX_DUPLICATE_RETRIES = 3;
 
 // Fallback: inspect tRPCClientError message for legacy/unclassified server errors
 const isLegacyUnrecoverableError = (error: unknown): boolean => {
@@ -62,52 +67,74 @@ export const useOfflineSync = () => {
       // Hentikan loop jika koneksi putus di tengah sync
       if (!navigator.onLine) break;
 
-      try {
-        const results =
-          await vanillaTrpcClient.transaction.syncOfflineData.mutate([
-            {
-              invoiceNumber: trx.invoiceNumber,
-              date: new Date(trx.date),
-              totalAmount: trx.totalAmount,
-              paymentMethod:
-                trx.paymentMethod as unknown as ServerPaymentMethod,
-              paidAmount: trx.paidAmount,
-              change: trx.change,
-              items: trx.items.map((item) => ({
-                productId: item.productId,
-                productName: item.productName,
-                quantity: item.quantity,
-                unitPrice: item.unitPrice,
-                subTotal: item.subTotal,
-                note: item.note ?? null,
-              })),
-            },
-          ]);
+      let currentInvoice = trx.invoiceNumber;
+      let duplicateRetries = 0;
+      let settled = false;
 
-        // Server returns per-item result array
-        const result = results[0];
+      while (!settled && duplicateRetries <= MAX_DUPLICATE_RETRIES) {
+        try {
+          const results =
+            await vanillaTrpcClient.transaction.syncOfflineData.mutate([
+              {
+                invoiceNumber: currentInvoice,
+                date: new Date(trx.date),
+                totalAmount: trx.totalAmount,
+                paymentMethod:
+                  trx.paymentMethod as unknown as ServerPaymentMethod,
+                paidAmount: trx.paidAmount,
+                change: trx.change,
+                items: trx.items.map((item) => ({
+                  productId: item.productId,
+                  productName: item.productName,
+                  quantity: item.quantity,
+                  unitPrice: item.unitPrice,
+                  subTotal: item.subTotal,
+                  note: item.note ?? null,
+                })),
+              },
+            ]);
 
-        if (result?.success) {
-          await removePendingTransaction(trx.invoiceNumber);
-          successCount++;
-        } else if (
-          result?.errorCode &&
-          UNRECOVERABLE_SERVER_CODES.has(result.errorCode)
-        ) {
-          // Unrecoverable: purge dari antrian tanpa retry
-          await removePendingTransaction(trx.invoiceNumber);
-          purgedCount++;
-        } else {
-          // Transient/unknown error — biarkan di queue untuk retry berikutnya
-          failCount++;
-        }
-      } catch (error) {
-        // Network/tRPC-level error (bukan aplikasi error)
-        if (isLegacyUnrecoverableError(error)) {
-          await removePendingTransaction(trx.invoiceNumber);
-          purgedCount++;
-        } else {
-          failCount++;
+          // Server returns per-item result array
+          const result = results[0];
+
+          if (result?.success) {
+            await removePendingTransaction(trx.invoiceNumber);
+            successCount++;
+            settled = true;
+          } else if (result?.errorCode === "DUPLICATE") {
+            // Regenerate invoice number and retry
+            duplicateRetries++;
+            if (duplicateRetries <= MAX_DUPLICATE_RETRIES) {
+              currentInvoice = generateInvoiceNumber();
+            } else {
+              // Max retries reached — purge to avoid infinite loop
+              await removePendingTransaction(trx.invoiceNumber);
+              purgedCount++;
+              settled = true;
+            }
+          } else if (
+            result?.errorCode &&
+            UNRECOVERABLE_SERVER_CODES.has(result.errorCode)
+          ) {
+            // Unrecoverable: purge dari antrian tanpa retry
+            await removePendingTransaction(trx.invoiceNumber);
+            purgedCount++;
+            settled = true;
+          } else {
+            // Transient/unknown error — biarkan di queue untuk retry berikutnya
+            failCount++;
+            settled = true;
+          }
+        } catch (error) {
+          // Network/tRPC-level error (bukan aplikasi error)
+          if (isLegacyUnrecoverableError(error)) {
+            await removePendingTransaction(trx.invoiceNumber);
+            purgedCount++;
+            settled = true;
+          } else {
+            failCount++;
+            settled = true;
+          }
         }
       }
     }

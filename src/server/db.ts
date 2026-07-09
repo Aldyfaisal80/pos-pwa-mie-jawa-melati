@@ -7,9 +7,11 @@ import { type Prisma, PrismaClient } from "../../generated/prisma";
 export type DBClient = PrismaClient | Prisma.TransactionClient;
 
 const createConnectionPool = () => {
+  // Use DIRECT_URL (port 5432, no pgbouncer) for runtime — supports writes.
+  // DATABASE_URL (port 6543, pgbouncer) is only for Prisma migrations.
   return new Pool({
-    connectionString: env.DATABASE_URL,
-    max: 20,
+    connectionString: env.DIRECT_URL ?? env.DATABASE_URL,
+    max: 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 10000,
   });
