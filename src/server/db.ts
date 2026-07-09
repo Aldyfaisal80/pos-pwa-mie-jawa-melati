@@ -10,7 +10,7 @@ const createConnectionPool = () => {
   // Use DIRECT_URL (port 5432, no pgbouncer) for runtime — supports writes.
   // DATABASE_URL (port 6543, pgbouncer) is only for Prisma migrations.
   return new Pool({
-    connectionString: env.DIRECT_URL ?? env.DATABASE_URL,
+    connectionString: String(env.DIRECT_URL ?? env.DATABASE_URL),
     max: 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 10000,
