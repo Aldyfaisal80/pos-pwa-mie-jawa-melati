@@ -20,7 +20,7 @@ export const useTransactionMutations = () => {
   const deleteTransaction = api.transaction.deleteTransaction.useMutation({
     onSuccess: () => {
       toast.success("Transaksi dihapus", {
-        description: "Data transaksi berhasil dibatalkan secara permanen.",
+        description: "Data transaksi berhasil dihapus secara permanen.",
       });
       invalidateQueries();
     },
