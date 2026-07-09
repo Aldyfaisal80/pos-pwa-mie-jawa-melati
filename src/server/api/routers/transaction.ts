@@ -80,8 +80,21 @@ export const transactionRouter = createTRPCRouter({
 
       for (const trx of input) {
         try {
-          await ctx.db.transaction.create({
-            data: {
+          // Use upsert: if transaction exists (even if soft-deleted), restore it.
+          // If new, create it. This prevents duplicate retries from resurrecting
+          // deleted transactions with new invoice numbers.
+          await ctx.db.transaction.upsert({
+            where: { invoiceNumber: trx.invoiceNumber },
+            update: {
+              deletedAt: null, // Restore if was soft-deleted
+              date: trx.date,
+              totalAmount: trx.totalAmount,
+              paymentMethod: trx.paymentMethod,
+              paidAmount: trx.paidAmount,
+              change: trx.change,
+              isSynced: true,
+            },
+            create: {
               invoiceNumber: trx.invoiceNumber,
               date: trx.date,
               totalAmount: trx.totalAmount,
@@ -108,18 +121,15 @@ export const transactionRouter = createTRPCRouter({
           let errorCode = "UNKNOWN";
 
           if (
-            msg.includes("unique constraint") ||
-            msg.includes("p2002") ||
-            msg.includes("invoicenumber")
-          ) {
-            errorCode = "DUPLICATE";
-          } else if (
             msg.includes("foreign key") ||
             msg.includes("p2003") ||
             msg.includes("p2025")
           ) {
             errorCode = "FK_VIOLATION";
           }
+
+          // Note: DUPLICATE is no longer possible with upsert.
+          // Any unique constraint error is unexpected and treated as UNKNOWN.
 
           results.push({
             invoiceNumber: trx.invoiceNumber,
